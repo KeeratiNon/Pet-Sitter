@@ -6,7 +6,7 @@ import CurveBlue from "../assets/svgs/curve-blue.svg";
 import Google from "../assets/svgs/logo-google.svg";
 import Facebook from "../assets/svgs/logo-facebook.svg";
 import { Formik, Form, Field } from "formik";
-import { signinSchema } from "../schemas/signUp-signIn";
+import { signinSchema } from "../schemas/SignUpAndSignIn";
 
 const initialValues = {
   email: "",
