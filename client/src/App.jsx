@@ -1,12 +1,13 @@
 import "./App.css";
-import Footer from "./components/Footer";
-import Linktologin from "./components/Linktologin";
+import LoginPage from "./pages/LoginPage";
+
 
 
 function App() {
   return (
     <>
-   
+      <LoginPage />
+     
     </>
   );
 }
