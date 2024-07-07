@@ -86,55 +86,69 @@ const MainContent = () => {
           </div>
         </div>
       </div>
+
       <section className="flex flex-col gap-10 lg:flex-row justify-center items-center my-[40px] mx-[16px] lg:space-x-4 flex-grow">
-      {/* Card 1 */}
-      <article className="flex flex-col items-center w-full lg:max-w-[416px] mb-[40px] sm:mb-[0]">
-        <figure className="w-[200px] h-[200px] lg:w-[268px] lg:h-[268px] mb-[46px] mx-[71.5] lg:mx-[76]">
-          <img src={imgMainBtLeft} alt="logo" className="w-full h-full object-cover rounded-full"/>
-        </figure>
-        <header className="text-center mx-[24px]">
-          <h3 className="text-black text-[24px] leading-[32px] font-bold mb-[12px]">
-            <span className="text-secondarygreen-200">Connect</span> With
-            Sitters
-          </h3>
-          <p className="text-primarygray-500 text-[18px] leading-[26px] font-medium ">
-            Find a verified and reviewed sitter who’ll keep your pets company
-            and give time.
-          </p>
-        </header>
-      </article>
-      {/* Card 2 */}
-      <article className="flex flex-col items-center w-full lg:max-w-[416px] mb-[40px] sm:mb-[0]">
-        <figure className="w-[200px] h-[200px] lg:w-[268px] lg:h-[268px] mb-[46px] mx-[71.5] lg:mx-[76]">
-          <img src={imgMainBtMid} alt="logo"  className="w-full h-full object-cover rounded-full" />
-        </figure>
-        <header className="text-center mx-[24px]">
-          <h3 className="text-black text-[24px] leading-[32px] font-bold mb-[12px]">
-            <span className="text-secondaryblue-200">Better</span> For Your Pets
-          </h3>
-          <p className="text-primarygray-500 text-[18px] leading-[26px] font-medium">
-            Pets stay happy at home with a sitter who gives them loving care and
-            companionship.
-          </p>
-        </header>
-      </article>
-      {/* Card 3 */}
-      <article className="flex flex-col items-center  w-full lg:max-w-[416px] mb-[40px] sm:mb-[0]">
-        <figure className="w-[200px] h-[200px] lg:w-[268px] lg:h-[268px] mb-[46px] mx-[71.5] lg:mx-[76]">
-          <img src={imgMainBtRight} alt="logo"  className="w-full h-full object-cover rounded-full" />
-        </figure>
-        <header className="text-center mx-[24px]">
-          <h3 className="text-black text-[24px] leading-[32px] font-bold mb-[12px]">
-            <span className="text-primaryorange-500">Calling</span> All Pets
-          </h3>
-          <p className="text-primarygray-500 text-[18px] leading-[26px] font-medium">
-            {" "}
-            Stay for free with adorable animals in unique homes around the
-            world.
-          </p>
-        </header>
-      </article>
-    </section>
+        {/* Card 1 */}
+        <article className="flex flex-col items-center w-full lg:max-w-[416px] mb-[40px] sm:mb-[0]">
+          <figure className="w-[200px] h-[200px] lg:w-[268px] lg:h-[268px] mb-[46px] mx-[71.5] lg:mx-[76]">
+            <img
+              src={imgMainBtLeft}
+              alt="logo"
+              className="w-full h-full object-cover rounded-full"
+            />
+          </figure>
+          <header className="text-center mx-[24px]">
+            <h3 className="text-black text-[24px] leading-[32px] font-bold mb-[12px]">
+              <span className="text-secondarygreen-200">Connect</span> With
+              Sitters
+            </h3>
+            <p className="text-primarygray-500 text-[18px] leading-[26px] font-medium ">
+              Find a verified and reviewed sitter who’ll keep your pets company
+              and give time.
+            </p>
+          </header>
+        </article>
+        {/* Card 2 */}
+        <article className="flex flex-col items-center w-full lg:max-w-[416px] mb-[40px] sm:mb-[0]">
+          <figure className="w-[200px] h-[200px] lg:w-[268px] lg:h-[268px] mb-[46px] mx-[71.5] lg:mx-[76]">
+            <img
+              src={imgMainBtMid}
+              alt="logo"
+              className="w-full h-full object-cover rounded-full"
+            />
+          </figure>
+          <header className="text-center mx-[24px]">
+            <h3 className="text-black text-[24px] leading-[32px] font-bold mb-[12px]">
+              <span className="text-secondaryblue-200">Better</span> For Your
+              Pets
+            </h3>
+            <p className="text-primarygray-500 text-[18px] leading-[26px] font-medium">
+              Pets stay happy at home with a sitter who gives them loving care
+              and companionship.
+            </p>
+          </header>
+        </article>
+        {/* Card 3 */}
+        <article className="flex flex-col items-center  w-full lg:max-w-[416px] mb-[40px] sm:mb-[0]">
+          <figure className="w-[200px] h-[200px] lg:w-[268px] lg:h-[268px] mb-[46px] mx-[71.5] lg:mx-[76]">
+            <img
+              src={imgMainBtRight}
+              alt="logo"
+              className="w-full h-full object-cover rounded-full"
+            />
+          </figure>
+          <header className="text-center mx-[24px]">
+            <h3 className="text-black text-[24px] leading-[32px] font-bold mb-[12px]">
+              <span className="text-primaryorange-500">Calling</span> All Pets
+            </h3>
+            <p className="text-primarygray-500 text-[18px] leading-[26px] font-medium">
+              {" "}
+              Stay for free with adorable animals in unique homes around the
+              world.
+            </p>
+          </header>
+        </article>
+      </section>
     </main>
   );
 };

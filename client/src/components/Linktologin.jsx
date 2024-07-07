@@ -5,9 +5,9 @@ import star1 from "../assets/svgs/star1.svg";
 const Linktologin = () => {
   return (
     <div className="lg:flex lg:justify-center lg:p-[80px]">
-      <body className="flex justify-center  bg-secondaryyellow-100 lg:rounded-[16px] w-[100%] max-w-[1280px]  relative overflow-hidden px-[15px] pb-[106px] pt-[123px]">
+      <body className="flex justify-center overflow-hidden  bg-secondaryyellow-100 lg:rounded-[16px] w-[100%] max-w-[1280px]  relative px-[15px] pb-[106px] pt-[123px]">
         <img
-          className="rounded-bl-lg absolute bottom-0 left-[-28px]  w-[248px] h-[124px] lg:w-[337px] lg:h-[168px]"
+          className="rounded-bl-lg absolute bottom-0 left-[-28px] w-[248px] h-[124px] lg:w-[337px] lg:h-[168px]"
           src={ellpesb}
           alt="half circle"
         />
@@ -29,13 +29,12 @@ const Linktologin = () => {
         <img
           src={ellpesa}
           alt="circle"
-          className="rounded-tr-lg absolute w-[133.76px] h-[133.81px] lg:w-[229px] lg:h-[229px] rotate-[15.01deg] top-[-70.98px]  right-[-18px] border-2"
+          className="rounded-tr-lg absolute w-[133.76px] h-[133.81px] lg:w-[229px] lg:h-[229px] rotate-[15.01deg] top-[-70.98px]  right-[-18px]  lg:rotate-[0] lg:right-[-26px] lg:top-[-30px]"
         />
-
         <img
           src={star1}
           alt="star"
-          className="absolute top-[31px] right-[52.12px] rotate-[-5.5deg] w-[111.57px] h-[108.68px] lg:w-[191px] lg:h-[186px]  border-2 "
+          className="absolute top-[28px] right-[62.12px] rotate-[0deg] w-[111.57px] h-[108.68px] lg:w-[191px] lg:h-[186px]  lg:right-[100px] lg:top-[145px] "
         />
       </body>
     </div>
