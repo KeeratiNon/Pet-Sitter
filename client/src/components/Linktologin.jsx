@@ -6,7 +6,7 @@ import star1 from "../assets/svgs/star1.svg";
 const Linktologin = () => {
   return (
     <main
-      className="  flex justify-center items-center  p-0  md:p-[80px]  object-cover  bg-slate-500  "
+      className="  flex justify-center items-center  p-0  md:p-[80px]  object-cover"
     >
       <body className=" container overflow-hidden bg-secondaryyellow-100 rounded-none w-[375px] h-[469px]  flex flex-col-reverse  relative md:rounded-[10px] md:w-[608px] lg:w-[864px] xl:w-[1280px] xl:h-[448px] ">
         <div className="  absolute w-[248px] h-[124px]  left-[-28px]  md:left-[0px] xl:w-[337px] xl:h-[168px]  ">
