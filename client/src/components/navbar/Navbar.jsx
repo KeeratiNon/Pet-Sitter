@@ -80,6 +80,7 @@ const Navbar = () => {
           </li>
         </ul>
       )}
+
       <ul className="flex-col py-10 px-4 md:hidden">
         <li className="flex gap-3 p-4">
           <img src={iconProfile} alt="icon-profile" />
