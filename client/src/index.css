@@ -1,6 +1,17 @@
+@import url("https://fonts.cdnfonts.com/css/satoshi");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  * {
+    font-family: "satoshi";
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+  }
+}
 
 @layer components {
     .btn-primary {
