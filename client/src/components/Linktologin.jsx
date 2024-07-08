@@ -1,6 +1,7 @@
 import ellpesb from "../assets/svgs/ellipesb.svg";
 import ellpesa from "../assets/svgs/ellipesa.svg";
 import star1 from "../assets/svgs/star1.svg";
+import { Link } from "react-router-dom";
 
 const Linktologin = () => {
   return (
@@ -17,12 +18,12 @@ const Linktologin = () => {
             Perfect Pet Sitter <br /> <span>For Your Pet</span>
           </h1>
           <div className="flex flex-col gap-[16px] items-center sm:flex-row sm:justify-center">
-            <button className="btn-ghost text-[16px] leading-[24px] font-bold  ">
+            <Link to="/auth/login/petsitter" className="btn-ghost text-[16px] leading-[24px] font-bold  ">
               Become a Pet Sitter
-            </button>
-            <button className="btn-primary text-[16px] leading-[24px] font-bold w-[344px] sm:w-[168px]">
+            </Link>
+            <Link to="/auth/login/user" className="btn-primary text-[16px] leading-[24px] font-bold w-[344px] sm:w-[168px]">
               Find A Pet Sitter
-            </button>
+            </Link>
           </div>
         </div>
 

@@ -1,4 +1,4 @@
-import { useAuth } from "../contexts/authentication";
+import React from "react";
 import DogFoot from "../assets/svgs/dog-foot.svg";
 import DogFootLg from "../assets/svgs/dog-foot-lg.svg";
 import StarGreen from "../assets/svgs/star-green.svg";
@@ -6,27 +6,27 @@ import CurveBlue from "../assets/svgs/curve-blue.svg";
 import Google from "../assets/svgs/logo-google.svg";
 import Facebook from "../assets/svgs/logo-facebook.svg";
 import { Formik, Form, Field } from "formik";
-import { signupSchema } from "../schemas/SignUpAndSignIn";
+import { signinSchema } from "../schemas/SignUpAndSignIn";
+import { useAuth } from "../contexts/authentication";
 import { Link } from "react-router-dom";
 
 const initialValues = {
   email: "",
-  phone: "",
   password: "",
 };
 
-const RegisterPetSitterPage = () => {
-  const { registerPetSitter, state } = useAuth();
+const LoginOwnerPetPage = () => {
+  const { loginUser, state } = useAuth();
 
   const onSubmit = (values, actions) => {
-    registerPetSitter(values);
+    loginUser(values);
     actions.resetForm();
   };
 
   return (
     <Formik
       initialValues={initialValues}
-      validationSchema={signupSchema}
+      validationSchema={signinSchema}
       onSubmit={onSubmit}
     >
       {({ errors, touched }) => (
@@ -45,7 +45,7 @@ const RegisterPetSitterPage = () => {
             <div className="w-[100%] flex flex-col items-center max-w-[440px] min-w-[343px] z-10">
               <header className="flex flex-col items-center justify-center gap-[8px] mb-[40px]">
                 <h1 className="text-black text-[36px] sm:text-[56px] leading-[44px] sm:leading-[64px] font-bold">
-                  Join Us!
+                  Welcome back!
                 </h1>
                 <h3 className="text-gray-400 text-[18px] sm:text-[24px] leading-[26px] sm:leading-[32px] font-medium sm:font-bold">
                   Find your perfect pet sitter with us
@@ -73,23 +73,6 @@ const RegisterPetSitterPage = () => {
                 </div>
                 <div className="flex flex-col gap-[4px] w-[100%]">
                   <label
-                    htmlFor="phone"
-                    className="font-medium text-[16px] leading-[24px]"
-                  >
-                    Phone
-                  </label>
-                  <Field
-                    type="tel"
-                    name="phone"
-                    placeholder="Your phone number"
-                    className="border border-gray-200 rounded-[8px] h-[48px] p-[12px] text-[16px] leading-[24px] font-normal"
-                  />
-                  {errors.phone && touched.phone && (
-                    <p className="text-red-600">{errors.phone}</p>
-                  )}
-                </div>
-                <div className="flex flex-col gap-[4px] w-[100%]">
-                  <label
                     htmlFor="password"
                     className="font-medium text-[16px] leading-[24px]"
                   >
@@ -106,7 +89,7 @@ const RegisterPetSitterPage = () => {
                   )}
                 </div>
                 <button type="submit" className="btn-primary">
-                  Register
+                  Login
                 </button>
                 <div className="w-[100%] flex gap-[20px] items-center">
                   <span className="flex flex-1 h-[1px] bg-gray-200"></span>
@@ -131,10 +114,10 @@ const RegisterPetSitterPage = () => {
                 </div>
                 <div className="flex justify-center items-center gap-[8px]">
                   <span>
-                    <p>Already have an account?</p>
+                    <p>Don't have an account?</p>
                   </span>
                   <span>
-                    <Link to="/auth/login/petsitter" className="btn-ghost">Login</Link>
+                    <Link to="/auth/register/user" className="btn-ghost">Register</Link>
                   </span>
                 </div>
               </main>
@@ -156,4 +139,4 @@ const RegisterPetSitterPage = () => {
   );
 };
 
-export default RegisterPetSitterPage;
+export default LoginOwnerPetPage;
