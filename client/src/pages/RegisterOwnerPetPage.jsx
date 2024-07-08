@@ -1,4 +1,4 @@
-import React from "react";
+import { useAuth } from "../contexts/authentication";
 import DogFoot from "../assets/svgs/dog-foot.svg";
 import DogFootLg from "../assets/svgs/dog-foot-lg.svg";
 import StarGreen from "../assets/svgs/star-green.svg";
@@ -7,6 +7,7 @@ import Google from "../assets/svgs/logo-google.svg";
 import Facebook from "../assets/svgs/logo-facebook.svg";
 import { Formik, Form, Field } from "formik";
 import { signupSchema } from "../schemas/SignUpAndSignIn";
+import { Link } from "react-router-dom";
 
 const initialValues = {
   email: "",
@@ -15,10 +16,13 @@ const initialValues = {
 };
 
 const RegisterOwnerPetPage = () => {
+  const { registerUser, state } = useAuth();
+
   const onSubmit = (values, actions) => {
-    console.log(values);
+    registerUser(values);
     actions.resetForm();
   };
+
   return (
     <Formik
       initialValues={initialValues}
@@ -48,6 +52,8 @@ const RegisterOwnerPetPage = () => {
                 </h3>
               </header>
               <main className="flex flex-col items-center justify-center gap-[32px] w-[100%]">
+                {state.error && <p className="text-red-600">{state.error}</p>}
+                {state.loading && <p>Loading...</p>}
                 <div className="flex flex-col gap-[4px] w-[100%]">
                   <label
                     htmlFor="email"
@@ -61,15 +67,13 @@ const RegisterOwnerPetPage = () => {
                     placeholder="email@company.com"
                     className="border border-gray-200 rounded-[8px] h-[48px] p-[12px] text-[16px] leading-[24px] font-normal"
                   />
-                  <div>
-                    {errors.email && touched.email && (
-                      <p className="text-red-600">{errors.email}</p>
-                    )}
-                  </div>
+                  {errors.email && touched.email && (
+                    <p className="text-red-600">{errors.email}</p>
+                  )}
                 </div>
                 <div className="flex flex-col gap-[4px] w-[100%]">
                   <label
-                    htmlFor="tel"
+                    htmlFor="phone"
                     className="font-medium text-[16px] leading-[24px]"
                   >
                     Phone
@@ -80,11 +84,9 @@ const RegisterOwnerPetPage = () => {
                     placeholder="Your phone number"
                     className="border border-gray-200 rounded-[8px] h-[48px] p-[12px] text-[16px] leading-[24px] font-normal"
                   />
-                  <div>
-                    {errors.phone && touched.phone && (
-                      <p className="text-red-600">{errors.phone}</p>
-                    )}
-                  </div>
+                  {errors.phone && touched.phone && (
+                    <p className="text-red-600">{errors.phone}</p>
+                  )}
                 </div>
                 <div className="flex flex-col gap-[4px] w-[100%]">
                   <label
@@ -99,11 +101,9 @@ const RegisterOwnerPetPage = () => {
                     placeholder="Create your password"
                     className="border border-gray-200 rounded-[8px] h-[48px] p-[12px] text-[16px] leading-[24px] font-normal"
                   />
-                  <div>
-                    {errors.password && touched.password && (
-                      <p className="text-red-600">{errors.password}</p>
-                    )}
-                  </div>
+                  {errors.password && touched.password && (
+                    <p className="text-red-600">{errors.password}</p>
+                  )}
                 </div>
                 <button type="submit" className="btn-primary">
                   Register
@@ -131,10 +131,10 @@ const RegisterOwnerPetPage = () => {
                 </div>
                 <div className="flex justify-center items-center gap-[8px]">
                   <span>
-                    <p className="">Already have an account?</p>
+                    <p>Already have an account?</p>
                   </span>
                   <span>
-                    <button className="btn-ghost">Login</button>
+                    <Link to="/auth/login/user" className="btn-ghost">Login</Link>
                   </span>
                 </div>
               </main>

@@ -7,17 +7,22 @@ import Google from "../assets/svgs/logo-google.svg";
 import Facebook from "../assets/svgs/logo-facebook.svg";
 import { Formik, Form, Field } from "formik";
 import { signinSchema } from "../schemas/SignUpAndSignIn";
+import { useAuth } from "../contexts/authentication";
+import { Link } from "react-router-dom";
 
 const initialValues = {
   email: "",
   password: "",
 };
 
-const LoginPage = () => {
+const LoginPetSitterPage = () => {
+  const { loginPetSitter, state } = useAuth();
+
   const onSubmit = (values, actions) => {
-    console.log(values);
+    loginPetSitter(values);
     actions.resetForm();
   };
+
   return (
     <Formik
       initialValues={initialValues}
@@ -47,6 +52,8 @@ const LoginPage = () => {
                 </h3>
               </header>
               <main className="flex flex-col items-center justify-center gap-[32px] w-[100%]">
+                {state.error && <p className="text-red-600">{state.error}</p>}
+                {state.loading && <p>Loading...</p>}
                 <div className="flex flex-col gap-[4px] w-[100%]">
                   <label
                     htmlFor="email"
@@ -60,11 +67,9 @@ const LoginPage = () => {
                     placeholder="email@company.com"
                     className="border border-gray-200 rounded-[8px] h-[48px] p-[12px] text-[16px] leading-[24px] font-normal"
                   />
-                  <div>
-                    {errors.email && touched.email && (
-                      <p className="text-red-600">{errors.email}</p>
-                    )}
-                  </div>
+                  {errors.email && touched.email && (
+                    <p className="text-red-600">{errors.email}</p>
+                  )}
                 </div>
                 <div className="flex flex-col gap-[4px] w-[100%]">
                   <label
@@ -79,11 +84,9 @@ const LoginPage = () => {
                     placeholder="Create your password"
                     className="border border-gray-200 rounded-[8px] h-[48px] p-[12px] text-[16px] leading-[24px] font-normal"
                   />
-                  <div>
-                    {errors.password && touched.password && (
-                      <p className="text-red-600">{errors.password}</p>
-                    )}
-                  </div>
+                  {errors.password && touched.password && (
+                    <p className="text-red-600">{errors.password}</p>
+                  )}
                 </div>
                 <button type="submit" className="btn-primary">
                   Login
@@ -111,10 +114,10 @@ const LoginPage = () => {
                 </div>
                 <div className="flex justify-center items-center gap-[8px]">
                   <span>
-                    <p className="">Don't have any account?</p>
+                    <p>Don't have an account?</p>
                   </span>
                   <span>
-                    <button className="btn-ghost">Register</button>
+                    <Link to="/auth/register/petsitter" className="btn-ghost">Register</Link>
                   </span>
                 </div>
               </main>
@@ -136,4 +139,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default LoginPetSitterPage;
