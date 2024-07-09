@@ -4,7 +4,7 @@ import MainContent from "../components/MainContent";
 import Linktologin from "../components/Linktologin";
 import Footer from "../components/Footer";
 
-const Homepage = () => {
+const HomePage = () => {
   return (
     <>
       <Navbar />
@@ -16,4 +16,4 @@ const Homepage = () => {
   );
 };
 
-export default Homepage;
+export default HomePage;
