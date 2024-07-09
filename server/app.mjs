@@ -1,5 +1,4 @@
 import express from "express"
-import dotenv from "dotenv"
 import { authRouter } from "./routes/auth.mjs";
 import cors from "cors"
 
