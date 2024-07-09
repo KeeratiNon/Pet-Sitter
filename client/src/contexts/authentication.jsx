@@ -2,7 +2,7 @@ import React, { useState, createContext, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {jwtDecode} from "jwt-decode";
 import axios from "axios";
-import { getGoogleToken, getToken, removeAllTokens, removeUserToken, setUserToken } from "../utils/localStorage.mjs";
+import {  getToken, removeAllTokens, setUserToken } from "../utils/localStorage.mjs";
 import { SERVER_API_URL } from "../core/config.mjs";
 
 const AuthContext = createContext();
@@ -23,8 +23,6 @@ const AuthProvider = ({ children }) => {
         try {
           const tokenData = jwtDecode(token);
           const expiredIn = tokenData?.exp || tokenData?.expiredIn
-          console.log(tokenData)
-          console.log(expiredIn)
           if (expiredIn * 1000 < Date.now()) {
             // Token expired
             removeAllTokens()
