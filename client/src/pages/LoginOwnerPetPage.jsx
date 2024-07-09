@@ -11,6 +11,8 @@ import Box from "@mui/material/Box";
 import LinearProgress from "@mui/material/LinearProgress";
 import LoginFacebook from "../components/LoginFacebook";
 import LoginGoogle from "../components/LoginGoogle";
+import FacebookLogo from "../assets/svgs/logo-facebook.svg"
+import GoogleLogo from "../assets/svgs/logo-google.svg"
 
 const initialValues = {
   email: "",
@@ -107,6 +109,18 @@ const LoginOwnerPetPage = () => {
                 <div className="w-[100%] flex justify-center items-center gap-[12px]">
                   <LoginFacebook />
                   <LoginGoogle />
+                  {/* <button className="btn-social">
+                    <span>
+                      <img src={FacebookLogo} alt="Facebook" />
+                    </span>
+                    <span>Facebook</span>
+                  </button>
+                  <button className="btn-social">
+                    <span>
+                      <img src={GoogleLogo} alt="Google" />
+                    </span>
+                    <span>Google</span>
+                  </button> */}
                 </div>
                 <div className="flex justify-center items-center gap-[8px]">
                   <span>
