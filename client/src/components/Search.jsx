@@ -107,7 +107,7 @@ const Search = () => {
                     {renderStars(rating)}
                   </button>
                 ))}
-                {selectedRatings.join(', ')}
+      
               </div>
               </div>
 
