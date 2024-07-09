@@ -5,8 +5,8 @@ import { Link } from "react-router-dom";
 
 const Linktologin = () => {
   return (
-    <div className="lg:flex lg:justify-center lg:p-[80px]">
-      <body className="flex justify-center overflow-hidden  bg-secondaryyellow-100 lg:rounded-[16px] w-[100%] max-w-[1280px]  relative px-[15px] pb-[106px] pt-[123px]">
+    <section className="lg:flex lg:justify-center lg:p-[80px]">
+      <div className="flex justify-center overflow-hidden  bg-secondaryyellow-100 lg:rounded-[16px] w-[100%] max-w-[1280px]  relative px-[15px] pb-[106px] pt-[123px]">
         <img
           className="rounded-bl-lg absolute bottom-0 left-[-28px] w-[248px] h-[124px] lg:w-[337px] lg:h-[168px]"
           src={ellpesb}
@@ -37,8 +37,8 @@ const Linktologin = () => {
           alt="star"
           className="absolute top-[28px] right-[62.12px] rotate-[0deg] w-[111.57px] h-[108.68px] lg:w-[191px] lg:h-[186px]  lg:right-[100px] lg:top-[145px] "
         />
-      </body>
-    </div>
+      </div>
+    </section>
   );
 };
 

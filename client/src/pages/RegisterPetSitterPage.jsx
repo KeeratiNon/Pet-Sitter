@@ -8,6 +8,8 @@ import Facebook from "../assets/svgs/logo-facebook.svg";
 import { Formik, Form, Field } from "formik";
 import { signupSchema } from "../schemas/SignUpAndSignIn";
 import { Link } from "react-router-dom";
+import Box from "@mui/material/Box";
+import LinearProgress from "@mui/material/LinearProgress";
 
 const initialValues = {
   email: "",
@@ -53,7 +55,11 @@ const RegisterPetSitterPage = () => {
               </header>
               <main className="flex flex-col items-center justify-center gap-[32px] w-[100%]">
                 {state.error && <p className="text-red-600">{state.error}</p>}
-                {state.loading && <p>Loading...</p>}
+                {state.loading && (
+                  <Box sx={{ width: "100%" }}>
+                    <LinearProgress />
+                  </Box>
+                )}
                 <div className="flex flex-col gap-[4px] w-[100%]">
                   <label
                     htmlFor="email"
@@ -134,7 +140,9 @@ const RegisterPetSitterPage = () => {
                     <p>Already have an account?</p>
                   </span>
                   <span>
-                    <Link to="/auth/login/petsitter" className="btn-ghost">Login</Link>
+                    <Link to="/auth/login/petsitter" className="btn-ghost">
+                      Login
+                    </Link>
                   </span>
                 </div>
               </main>
