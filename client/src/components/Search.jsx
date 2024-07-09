@@ -29,7 +29,7 @@ const Search = () => {
         : [...prevSelectedRatings, rating]
     );
   };
-
+  //ดึงรูปเข้าไปใน array
   const renderStars = (count) => {
     return Array.from({ length: count }, (_, index) => (
       <img key={index} src={star2} alt={`${count} star`} className="size-[20px]  "  />
@@ -95,19 +95,19 @@ const Search = () => {
             
               <div className="flex flex-col  gap-[12px] p-4 md:flex-row  ">
               <label className="  text-[16px]  leading-6 font-bold md:ml-5 ">Rating:</label>
+              {/* วนรูปตามจำนวนเลข */}
                <div className="flex flex-wrap gap-[8px]  "> 
                 {[5, 4, 3, 2, 1].map((rating, index) => (
                   <button
                     className="  gap-[3px] pt-[4] pr-[8px] pb-[4px] pl-[8px]   text-[16px] leading-7 flex flex-wrap items-center border-gray-200 rounded-[8px] border  md:ml-1 "
                     key={index}
-                    onClick={() => handleRatingChange(rating)}
-                    
+                    onClick={() => handleRatingChange(rating)}                  
                   >
                     {rating}
                     {renderStars(rating)}
                   </button>
                 ))}
-              
+                {selectedRatings.join(', ')}
               </div>
               </div>
 
