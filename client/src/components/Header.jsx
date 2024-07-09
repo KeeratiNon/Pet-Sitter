@@ -4,6 +4,7 @@ import headerRightSmall from "../assets/images/header-right-s.png";
 import headerLeftLarge from "../assets/images/header-left-l.png";
 import headerRightLarge from "../assets/images/header-right-l.png";
 
+
 const Header = () => {
   return (
     <div className="flex justify-center items-start relative h-[565px]">
@@ -50,7 +51,9 @@ const Header = () => {
         alt="Dog"
         className="hidden absolute right-[0] top-[80px] xl:flex"
       ></img>
+     
     </div>
+    
   );
 };
 
