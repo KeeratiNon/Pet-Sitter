@@ -9,6 +9,8 @@ import { Formik, Form, Field } from "formik";
 import { signinSchema } from "../schemas/SignUpAndSignIn";
 import { useAuth } from "../contexts/authentication";
 import { Link } from "react-router-dom";
+import Box from "@mui/material/Box";
+import LinearProgress from "@mui/material/LinearProgress";
 
 const initialValues = {
   email: "",
@@ -53,7 +55,11 @@ const LoginPetSitterPage = () => {
               </header>
               <main className="flex flex-col items-center justify-center gap-[32px] w-[100%]">
                 {state.error && <p className="text-red-600">{state.error}</p>}
-                {state.loading && <p>Loading...</p>}
+                {state.loading && (
+                  <Box sx={{ width: "100%" }}>
+                    <LinearProgress />
+                  </Box>
+                )}
                 <div className="flex flex-col gap-[4px] w-[100%]">
                   <label
                     htmlFor="email"
@@ -117,7 +123,9 @@ const LoginPetSitterPage = () => {
                     <p>Don't have an account?</p>
                   </span>
                   <span>
-                    <Link to="/auth/register/petsitter" className="btn-ghost">Register</Link>
+                    <Link to="/auth/register/petsitter" className="btn-ghost">
+                      Register
+                    </Link>
                   </span>
                 </div>
               </main>

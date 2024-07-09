@@ -3,12 +3,16 @@ import DogFoot from "../assets/svgs/dog-foot.svg";
 import DogFootLg from "../assets/svgs/dog-foot-lg.svg";
 import StarGreen from "../assets/svgs/star-green.svg";
 import CurveBlue from "../assets/svgs/curve-blue.svg";
-import Google from "../assets/svgs/logo-google.svg";
-import Facebook from "../assets/svgs/logo-facebook.svg";
 import { Formik, Form, Field } from "formik";
 import { signinSchema } from "../schemas/SignUpAndSignIn";
 import { useAuth } from "../contexts/authentication";
 import { Link } from "react-router-dom";
+import Box from "@mui/material/Box";
+import LinearProgress from "@mui/material/LinearProgress";
+import LoginFacebook from "../components/LoginFacebook";
+import LoginGoogle from "../components/LoginGoogle";
+import FacebookLogo from "../assets/svgs/logo-facebook.svg"
+import GoogleLogo from "../assets/svgs/logo-google.svg"
 
 const initialValues = {
   email: "",
@@ -53,7 +57,11 @@ const LoginOwnerPetPage = () => {
               </header>
               <main className="flex flex-col items-center justify-center gap-[32px] w-[100%]">
                 {state.error && <p className="text-red-600">{state.error}</p>}
-                {state.loading && <p>Loading...</p>}
+                {state.loading && (
+                  <Box sx={{ width: "100%" }}>
+                    <LinearProgress />
+                  </Box>
+                )}
                 <div className="flex flex-col gap-[4px] w-[100%]">
                   <label
                     htmlFor="email"
@@ -99,25 +107,17 @@ const LoginOwnerPetPage = () => {
                   <span className="flex flex-1 h-[1px] bg-gray-200"></span>
                 </div>
                 <div className="w-[100%] flex justify-center items-center gap-[12px]">
-                  <button className="btn-social">
-                    <span>
-                      <img src={Facebook} alt="facebook" />
-                    </span>
-                    <span>Facebook</span>
-                  </button>
-                  <button className="btn-social">
-                    <span>
-                      <img src={Google} alt="Google" />
-                    </span>
-                    <span>Google</span>
-                  </button>
+                  <LoginFacebook />
+                  <LoginGoogle />
                 </div>
                 <div className="flex justify-center items-center gap-[8px]">
                   <span>
                     <p>Don't have an account?</p>
                   </span>
                   <span>
-                    <Link to="/auth/register/user" className="btn-ghost">Register</Link>
+                    <Link to="/auth/register/user" className="btn-ghost">
+                      Register
+                    </Link>
                   </span>
                 </div>
               </main>
