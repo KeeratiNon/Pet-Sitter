@@ -9,9 +9,13 @@ import iconYourPet from "../../assets/svgs/icons/icon-your-pet.svg";
 import iconBooking from "../../assets/svgs/icons/icon-booking.svg";
 import iconLogout from "../../assets/svgs/icons/icon-logout.svg";
 import ProfileInfo from "../cards/ProfileInfo";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isGuest, setIsGuest] = useState(false);
+
+  const hasToken = Boolean(window.localStorage.getItem("token"));
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -51,19 +55,23 @@ const Navbar = () => {
           </div>
         </div>
 
-        <ul className="hidden md:flex items-center gap-10">
-          <li>
-            <a href="#">Become a Pet Sitter</a>
-          </li>
-          <li>
-            <a href="#">Login</a>
-          </li>
-          <li>
-            <button className="btn-primary">Find A Pet Sitter</button>
-          </li>
-        </ul>
-
-        {/* <ProfileInfo /> */}
+        {!hasToken ? (
+          <ul className="hidden md:flex items-center gap-10">
+            <li>
+              <Link to="/register/petsitter">Become a Pet Sitter</Link>
+            </li>
+            <li>
+              <Link to="/login">Login</Link>
+            </li>
+            <li>
+              <button className="btn-primary">
+                <Link to="/">Find A Pet Sitter</Link>
+              </button>
+            </li>
+          </ul>
+        ) : (
+          <ProfileInfo toggleMenu={toggleMenu} />
+        )}
       </div>
 
       {/* Mobile Menu*/}
@@ -80,29 +88,6 @@ const Navbar = () => {
           </li>
         </ul>
       )}
-
-      <ul className="flex-col py-10 px-4 md:hidden">
-        <li className="flex gap-3 p-4">
-          <img src={iconProfile} alt="icon-profile" />
-          <a href="#">Profile</a>
-        </li>
-        <li className="flex gap-3 p-4">
-          <img src={iconYourPet} alt="icon-your-pet" />
-          <a href="#">Your Pet</a>
-        </li>
-        <li className="flex gap-3 p-4">
-          <img src={iconBooking} alt="icon-booking" />
-          <a href="#">Booking History</a>
-        </li>
-        <hr />
-        <li className="flex gap-3 p-4">
-          <img src={iconLogout} alt="icon-logout" />
-          <a href="#">Log out</a>
-        </li>
-        <li className="p-4">
-          <button className="btn-primary w-full">Find A Pet Sitter</button>
-        </li>
-      </ul>
     </nav>
   );
 };

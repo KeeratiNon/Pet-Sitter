@@ -29,4 +29,16 @@
   .btn-social {
     @apply bg-gray-100 text-gray-600 px-[24px] py-[12px] rounded-full flex justify-center items-center gap-[8px] hover:text-gray-400 active:text-gray-600 w-[100%] font-bold;
   }
+
+  .input-label {
+    @apply text-black font-medium text-[16px] leading-[24px];
+  }
+
+  .input-box {
+    @apply w-full bg-white border rounded-lg py-3 px-4 outline-none;
+  }
+
+  .list-detail {
+    @apply flex flex-col;
+  }
 }
