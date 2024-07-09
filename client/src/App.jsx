@@ -17,7 +17,7 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<HomePage/>} />
+        <Route path="/" element={<PetSitterBooking/>} />
         <Route path="/auth/login/user" element={<LoginOwnerPetPage/>} />
         <Route path="/auth/login/petsitter" element={<LoginPetSitterPage/>} />
         <Route path="/auth/register/user" element={<RegisterOwnerPetPage/>} />
