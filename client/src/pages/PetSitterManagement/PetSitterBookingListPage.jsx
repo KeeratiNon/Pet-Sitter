@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
-import Sidebar from "../../components/PetSitterProfileForm/PetProfileSidebar";
-import Navbar from "../../components/PetSitterProfileForm/PetSitterNavbar";
+import Sidebar from "../../components/petSitterManagement/petSitterProfileForm/PetProfileSidebar";
+import Navbar from "../../components/petSitterManagement/petSitterProfileForm/PetSitterNavbar";
 
 const PetsitterBookingListPage = () => {
   return (

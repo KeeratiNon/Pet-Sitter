@@ -1,5 +1,5 @@
-import petSitterProfilePic from "../../assets/svgs/pet-sitter-management/pet-sitter-profilePic.png";
-import petSitterChatLogo from "../../assets/svgs/pet-sitter-management/pet-sitter-chatLogo.svg";
+import petSitterProfilePic from "../../../assets/svgs/pet-sitter-management/pet-sitter-profilePic.png";
+import petSitterChatLogo from "../../../assets/svgs/pet-sitter-management/pet-sitter-chatLogo.svg";
 
 
 const Navbar = () => {
