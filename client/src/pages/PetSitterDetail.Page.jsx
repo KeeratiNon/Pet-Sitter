@@ -7,7 +7,7 @@ const PetSitterDetailPage = () => {
   return (
     <>
       <Navbar />
-      <ImageGallerry />
+      {/* <ImageGallerry /> */}
       <ContentPetSitterTopLeft />
       <Footer />
     </>

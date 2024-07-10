@@ -1,38 +1,120 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // ต้องนำเข้ามาเพื่อให้มีสไตล์
-import { Box } from "@mui/material";
 
 import dog1 from "../assets/images/dog1.png";
 import dog2 from "../assets/images/dog2.png";
 import dog3 from "../assets/images/dog3.png";
+import arrowRight from "../assets/svgs/icons/icon-carousel-arrowr.svg";
+import arrowLeft from "../assets/svgs/icons/icon-carousel-arrowl.svg"
 
 const ImageGallery = () => {
+  const [width, setWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
-    <div className="bg-red-500 sm:py-[40px] flex justify-center overflow-hidden">
-      <Box sx={{ width: "100%", maxWidth: 800, margin: "auto" }}>
+    <div className="md:py-[40px] bg-gray-50  ">
+      {width > 550 ? (
         <Carousel
-          className="custom-carousel" // เพิ่ม className เพื่อใช้ CSS ที่กำหนดเอง
+          className=" custom-carousel bg-gray-50 " 
           showThumbs={false}
           infiniteLoop={true}
           autoPlay={false}
           interval={3000}
           showStatus={false}
           showArrows={true}
+          renderArrowNext={(clickHandler) => {
+            return (
+              <div
+                className="w-[50px] h-[50px] right-0 top-[40%] flex justify-center items-center
+               p-3  hover:opacity-100 cursor-pointer z-20 absolute"
+               onClick={clickHandler}
+              >
+                <img width="25" height="25" src={arrowRight} className="" />
+                
+              </div>
+            );
+          }}
+          renderArrowPrev={(clickHandler) => {
+            return (
+              <div
+                className="w-[50px] h-[50px] left-0 top-[40%] flex justify-center items-center
+               p-3  hover:opacity-100 cursor-pointer z-20 absolute"
+               onClick={clickHandler}
+              >
+                <img width="25" height="25" src={arrowLeft} className="" />
+              </div>
+            );
+          }}
           centerMode={true}
-          centerSlidePercentage={60} // ปรับเปอร์เซ็นต์ของสไลด์ตรงกลาง
+          centerSlidePercentage={33.3} // ปรับเปอร์เซ็นต์ของสไลด์ตรงกลาง
         >
-          <div className="flex justify-center">
-            <img src={dog1} alt="Dog 1" className="h-full w-auto" />
+          <div className="flex justify-center items-center px-[8px] min-h-[281px] min-w-[375] ">
+            <img src={dog1} alt="Dog 1" className="" />
           </div>
-          <div className="flex justify-center">
-            <img src={dog2} alt="Dog 2" className="h-full w-auto" />
+          <div className="flex justify-center items-center  px-[8px] min-h-[281px] min-w-[375] ">
+            <img src={dog2} alt="Dog 2" className="" />
           </div>
-          <div className="flex justify-center">
-            <img src={dog3} alt="Dog 3" className="h-full w-auto" />
+          <div className="flex justify-center items-center  px-[8px] min-h-[281px] min-w-[375]">
+            <img src={dog3} alt="Dog 3" className="" />
           </div>
         </Carousel>
-      </Box>
+      ) : (
+        <Carousel
+          className=" custom-carousel flex  bg-black relative " 
+          infiniteLoop={true}
+          autoPlay={false}
+          interval={3000}
+          showStatus={false}
+          showArrows={true}
+          renderArrowNext={(clickHandler) => {
+            return (
+              <div
+                className="w-[50px] h-[50px] right-0 top-[45%] flex justify-center items-center
+               p-3  hover:opacity-100 cursor-pointer z-20 absolute"
+               onClick={clickHandler}
+              >
+              
+                <img width="25" height="25" src={arrowRight} className="  " />
+              </div>
+            );
+          }}
+          renderArrowPrev={(clickHandler) => {
+            return (
+              <div
+                className="w-[50px] h-[50px] left-0 top-[45%] flex justify-center items-center
+               p-3  hover:opacity-100 cursor-pointer z-20 absolute"
+               onClick={clickHandler}
+              >
+                <img width="25" height="25" src={arrowLeft} className="  " />
+              </div>
+            );
+          }}
+          centerMode={true}
+          centerSlidePercentage={100} // ปรับเปอร์เซ็นต์ของสไลด์ตรงกลาง
+        >
+          <div className="flex justify-center items-center px-[8px] min-h-[281px] min-w-[375] ">
+            <img src={dog1} alt="Dog 1" className="max-w-[550px] max-h-[413px]" />
+          </div>
+          <div className="flex justify-center items-center  px-[8px]  min-h-[281px] min-w-[375] ">
+            <img src={dog2} alt="Dog 2" className="max-w-[550px] max-h-[413px]" />
+          </div>
+          <div className="flex justify-center items-center  px-[8px] min-h-[281px] min-w-[375] ">
+            <img src={dog3} alt="Dog 3" className="max-w-[550px] max-h-[413px]" />
+          </div>
+        </Carousel>
+      )}
     </div>
   );
 };
@@ -58,4 +140,3 @@ export default ImageGallery;
 // };
 
 // export default ImageGallerry;
-
