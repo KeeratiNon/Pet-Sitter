@@ -9,10 +9,9 @@ import { useAuth } from "../contexts/authentication";
 import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 import LinearProgress from "@mui/material/LinearProgress";
-import LoginFacebook from "../components/LoginFacebook";
-import LoginGoogle from "../components/LoginGoogle";
-import FacebookLogo from "../assets/svgs/logo-facebook.svg"
-import GoogleLogo from "../assets/svgs/logo-google.svg"
+import LoginFacebook from "../components/login-facebook";
+import LoginGoogle from "../components/login-google";
+
 
 const initialValues = {
   email: "",
