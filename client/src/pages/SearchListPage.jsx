@@ -77,15 +77,15 @@ const SearchListPage = () => {
             </div>
           </div>
           {/* mobile mode */}
-          <div className="md:flex md:flex-col md:gap-4  " >
+          <div className="md:flex md:flex-col md:gap-4 " >
 
 
-          <div className="flex flex-col w-full rounded-4 gap-[24px] pt-4 pl-4 pr-4 pb-10  md:flex-row md:rounded-[16px]  md:py-[22px]  md:bg-white ">
+          <div className="flex flex-col w-full rounded-4 gap-[24px] pt-4 pl-4 pr-4 pb-10  md:flex-row md:rounded-[16px]  md:py-[22px] md:bg-white  ">
             <div className="">
               <img
                 src={imgpetsitter}
                 alt="profild-web"
-                className="hidden md:block md:min-w-[245px]   "
+                className="hidden object-cover md:min-w-[245px] md:min-h-[184px] md:block    "
               />
               <img
                 src={imgpetsitter2}
@@ -105,15 +105,15 @@ const SearchListPage = () => {
                 </div>
                 <div className=" w-full flex justify-between md:items-center ">
                   <div className=" ">
-                    <p className="text-[18px] leading-[24px] ">
+                    <p className="text-[18px] leading-[24px] text-nowrap ">
                       Happy House! <br /> By Jame Maison
                     </p>
                   </div>
 
-                  <div className="gap-[8px]   ">
+                  <div className="gap-[8px]  ">
                     {[5].map((rating, index) => (
                       <button
-                        className="  gap-[2px] p-2  h-[66px]  flex flex-wrap  border-gray-200   "
+                        className="  gap-[2px] p-2  h-[66px]  flex flex-nowrap  border-gray-200     "
                         key={index}
                         onClick={() => handleRatingChange(rating)}
                       >
@@ -175,7 +175,7 @@ const SearchListPage = () => {
                 </div>
                 <div className=" w-full flex justify-between md:items-center ">
                   <div className=" ">
-                    <p className="text-[18px] leading-[24px] ">
+                    <p className="text-[18px] leading-[24px] text-nowrap ">
                       Happy House! <br /> By Jame Maison
                     </p>
                   </div>
@@ -183,7 +183,7 @@ const SearchListPage = () => {
                   <div className="gap-[8px]   ">
                     {[5].map((rating, index) => (
                       <button
-                        className="  gap-[2px] p-2  h-[66px]  flex flex-wrap  border-gray-200   "
+                        className="  gap-[2px] p-2  h-[66px]  flex flex-nowrap  border-gray-200   "
                         key={index}
                         onClick={() => handleRatingChange(rating)}
                       >
@@ -245,7 +245,7 @@ const SearchListPage = () => {
                 </div>
                 <div className=" w-full flex justify-between md:items-center ">
                   <div className=" ">
-                    <p className="text-[18px] leading-[24px] ">
+                    <p className="text-[18px] leading-[24px] text-nowrap ">
                       Happy House! <br /> By Jame Maison
                     </p>
                   </div>
@@ -253,7 +253,7 @@ const SearchListPage = () => {
                   <div className="gap-[8px]   ">
                     {[5].map((rating, index) => (
                       <button
-                        className="  gap-[2px] p-2  h-[66px]  flex flex-wrap  border-gray-200   "
+                        className="  gap-[2px] p-2  h-[66px]  flex flex-nowrap  border-gray-200   "
                         key={index}
                         onClick={() => handleRatingChange(rating)}
                       >
@@ -315,7 +315,7 @@ const SearchListPage = () => {
                 </div>
                 <div className=" w-full flex justify-between md:items-center ">
                   <div className=" ">
-                    <p className="text-[18px] leading-[24px] ">
+                    <p className="text-[18px] leading-[24px] text-nowrap ">
                       Happy House! <br /> By Jame Maison
                     </p>
                   </div>
@@ -323,7 +323,7 @@ const SearchListPage = () => {
                   <div className="gap-[8px]   ">
                     {[5].map((rating, index) => (
                       <button
-                        className="  gap-[2px] p-2  h-[66px]  flex flex-wrap  border-gray-200   "
+                        className="  gap-[2px] p-2  h-[66px]  flex flex-nowrap  border-gray-200   "
                         key={index}
                         onClick={() => handleRatingChange(rating)}
                       >
@@ -385,7 +385,7 @@ const SearchListPage = () => {
                 </div>
                 <div className=" w-full flex justify-between md:items-center ">
                   <div className=" ">
-                    <p className="text-[18px] leading-[24px] ">
+                    <p className="text-[18px] leading-[24px] text-nowrap ">
                       Happy House! <br /> By Jame Maison
                     </p>
                   </div>
@@ -393,7 +393,7 @@ const SearchListPage = () => {
                   <div className="gap-[8px]   ">
                     {[5].map((rating, index) => (
                       <button
-                        className="  gap-[2px] p-2  h-[66px]  flex flex-wrap  border-gray-200   "
+                        className="  gap-[2px] p-2  h-[66px]  flex flex-nowrap  border-gray-200   "
                         key={index}
                         onClick={() => handleRatingChange(rating)}
                       >
