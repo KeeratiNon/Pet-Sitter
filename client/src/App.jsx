@@ -5,12 +5,13 @@ import LoginPetSitterPage from "./pages/LoginPetSitterPage";
 import RegisterOwnerPetPage from "./pages/RegisterOwnerPetPage";
 import { Routes, Route } from "react-router-dom";
 import RegisterPetSitterPage from "./pages/RegisterPetSitterPage";
+import PetSitterBooking from "./components/PetSitterBooking";
 
 function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Homepage/>} />
+        <Route path="/" element={<PetSitterBooking/>} />
         <Route path="/auth/login/user" element={<LoginOwnerPetPage/>} />
         <Route path="/auth/login/petsitter" element={<LoginPetSitterPage/>} />
         <Route path="/auth/register/user" element={<RegisterOwnerPetPage/>} />
