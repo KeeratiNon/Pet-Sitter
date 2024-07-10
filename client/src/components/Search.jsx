@@ -119,7 +119,7 @@ const Search = () => {
               </div>
             </div>
 
-            <div className=" flex flex-col gap-2 p-4 md:flex-row md:items-center  bg-black ">
+            <div className=" flex flex-col gap-2 p-4 md:flex-row md:items-center  ">
               <p className="font-bold ">Experience:</p>
 
               <FormControl size="small">

@@ -44,7 +44,7 @@ const Searchtolistpage = () => {
   return (
     <aside className=" md:bg-white">
       <div
-        className="    =  md:sticky  md:top-1   "
+        className="  md:sticky  md:top-1   "
         style={{ boxShadow: "4px 4px 24px 0px rgba(0, 0, 0, 0.04)" }}
       >
         <div className="hidden md:block md:pr-[24px] md:pl-[24px] md:pt-[24px] md:pb-[40px] ">
