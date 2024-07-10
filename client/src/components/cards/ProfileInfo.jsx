@@ -1,8 +1,8 @@
-import PrimaryButton from "../buttons/PrimaryButton";
 import iconBell from "../../assets/svgs/icons/icon-bell.svg";
 import iconMessage from "../../assets/svgs/icons/icon-message.svg";
 import iconGuest from "../../assets/svgs/icons/icon-image-guest.svg";
 import iconNotify from "../../assets/svgs/icons/icon-notify.svg";
+import iconHamburg from "../../assets/svgs/icons/icon-hamburger.svg"
 
 const ProfileInfo = (props) => {
   return (
@@ -66,7 +66,7 @@ const ProfileInfo = (props) => {
         </li>
       </ul>
 
-      {!isMenuOpen && (
+      {/* {!isMenuOpen && (
         <ul className="flex-col py-10 px-4 md:hidden">
           <li className="flex gap-3 p-4">
             <img src={iconProfile} alt="icon-profile" />
@@ -89,7 +89,7 @@ const ProfileInfo = (props) => {
             <button className="btn-primary w-full">Find A Pet Sitter</button>
           </li>
         </ul>
-      )}
+      )} */}
     </section>
   );
 };

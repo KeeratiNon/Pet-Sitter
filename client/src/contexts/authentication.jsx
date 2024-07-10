@@ -35,7 +35,7 @@ const AuthProvider = ({ children }) => {
           }
         } catch (error) {
           // Invalid token format
-          // removeAllTokens()
+          removeAllTokens()
           setState({ ...state, user: null });
           navigate("/auth/login/user");
         }
@@ -52,9 +52,9 @@ const AuthProvider = ({ children }) => {
     return () => clearInterval(interval); // Clean up interval on unmount
   }, []); // Empty dependency array ensures this effect runs only once
 
-  // useEffect(()=>{
-  //   console.log(state.user)
-  // },[state])
+  useEffect(()=>{
+    console.log(state.user)
+  },[state])
 
   const loginUser = async (data) => {
     setState({ ...state, loading: true });
@@ -137,7 +137,7 @@ const AuthProvider = ({ children }) => {
   const logout = () => {
     removeAllTokens()
     setState({ ...state, user: null });
-    navigate("/auth/login/user");
+    navigate("/");
   };
 
   return (
