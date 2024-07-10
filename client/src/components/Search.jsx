@@ -9,6 +9,7 @@ import Select from "@mui/material/Select";
 import { orange } from "@mui/material/colors";
 import star2 from "../assets/svgs/star2.svg";
 
+
 const Search = () => {
   const [years, setYears] = useState("");
   const [selectedPet, setSelectedPet] = useState([]);
@@ -48,11 +49,11 @@ const Search = () => {
   return (
     <section className=" flex justify-center items-center   ">
       <div
-        className="  flex flex-col max-w-[1064px] w-full    border-solid rounded-[16px]   m
+        className="  flex flex-col max-w-[1064px] w-full    border-solid rounded-[16px] 
   "
         style={{ boxShadow: "4px 4px 24px 0px rgba(0, 0, 0, 0.04)" }}
       >
-        <div className="bg-gray-100 border-solid rounded-t-2xl  ">
+        <div className="bg-gray-100 border-solid rounded-t-2xl   ">
           <div className="flex flex-wrap items-center p-4 ">
             <div className="">
               <label className=" font-bold text-[16px] leading-[24px] ml-3 md:ml-6   ">
@@ -143,6 +144,7 @@ const Search = () => {
             </div>
           </div>
         </div>
+        
       </div>
     </section>
   );

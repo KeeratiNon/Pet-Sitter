@@ -42,9 +42,11 @@ const Searchtolistpage = () => {
     setYears(event.target.value);
   };
   return (
-    <aside className=" md:bg-white">
-      <div
-        className="  md:sticky  md:top-1   "
+    <aside className=" md:bg-white ">
+      <div className=" md:min-w-[430px]  "  >
+
+<div
+        className="  md:sticky  md:top-1    "
         style={{ boxShadow: "4px 4px 24px 0px rgba(0, 0, 0, 0.04)" }}
       >
         <div className="hidden md:block md:pr-[24px] md:pl-[24px] md:pt-[24px] md:pb-[40px] ">
@@ -55,7 +57,7 @@ const Searchtolistpage = () => {
           </div>
         </div>
 
-        <div className="bg-gray-100 border-solid  md:bg-white ">
+        <div className="bg-gray-100 border-solid md:bg-white ">
           <div className="flex flex-wrap items-center p-4 ">
             <div>
               <label className=" font-bold text-[16px] leading-[24px] ml-3  ">
@@ -153,6 +155,10 @@ const Searchtolistpage = () => {
           </div>
         </div>
       </div>
+
+
+      </div>
+      
     </aside>
   );
 };
