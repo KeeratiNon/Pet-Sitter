@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // ต้องนำเข้ามาเพื่อให้มีสไตล์
@@ -7,7 +8,6 @@ import dog2 from "../assets/images/dog2.png";
 import dog3 from "../assets/images/dog3.png";
 import arrowRight from "../assets/svgs/icons/icon-carousel-arrowr.svg";
 import arrowLeft from "../assets/svgs/icons/icon-carousel-arrowl.svg"
-
 const ImageGallery = () => {
   const [width, setWidth] = useState(window.innerWidth);
 
@@ -24,55 +24,11 @@ const ImageGallery = () => {
   }, []);
 
   return (
-    <div className="md:py-[40px] bg-gray-50  ">
+    <div className="md:py-[40px] bg-red-500 ">
       {width > 550 ? (
         <Carousel
-          className=" custom-carousel bg-gray-50 " 
+          className=" custom-carousel bg-black relative " // เพิ่ม className เพื่อใช้ CSS ที่กำหนดเอง
           showThumbs={false}
-          infiniteLoop={true}
-          autoPlay={false}
-          interval={3000}
-          showStatus={false}
-          showArrows={true}
-          renderArrowNext={(clickHandler) => {
-            return (
-              <div
-                className="w-[50px] h-[50px] right-0 top-[40%] flex justify-center items-center
-               p-3  hover:opacity-100 cursor-pointer z-20 absolute"
-               onClick={clickHandler}
-              >
-                <img width="25" height="25" src={arrowRight} className="" />
-                
-              </div>
-            );
-          }}
-          renderArrowPrev={(clickHandler) => {
-            return (
-              <div
-                className="w-[50px] h-[50px] left-0 top-[40%] flex justify-center items-center
-               p-3  hover:opacity-100 cursor-pointer z-20 absolute"
-               onClick={clickHandler}
-              >
-                <img width="25" height="25" src={arrowLeft} className="" />
-              </div>
-            );
-          }}
-          centerMode={true}
-          centerSlidePercentage={33.3} // ปรับเปอร์เซ็นต์ของสไลด์ตรงกลาง
-        >
-          <div className="flex justify-center items-center px-[8px] min-h-[281px] min-w-[375] ">
-            <img src={dog1} alt="Dog 1" className="" />
-          </div>
-          <div className="flex justify-center items-center  px-[8px] min-h-[281px] min-w-[375] ">
-            <img src={dog2} alt="Dog 2" className="" />
-          </div>
-          <div className="flex justify-center items-center  px-[8px] min-h-[281px] min-w-[375]">
-            <img src={dog3} alt="Dog 3" className="" />
-          </div>
-        </Carousel>
-      ) : (
-        <Carousel
-          className=" custom-carousel flex  bg-black relative " 
           infiniteLoop={true}
           autoPlay={false}
           interval={3000}
@@ -85,7 +41,55 @@ const ImageGallery = () => {
                p-3  hover:opacity-100 cursor-pointer z-20 absolute"
                onClick={clickHandler}
               >
-              
+                <img width="25" height="25" src={arrowRight} className="" />
+
+              </div>
+            );
+          }}
+          renderArrowPrev={(clickHandler) => {
+            return (
+              <div
+                className="w-[50px] h-[50px] left-0 top-[45%] flex justify-center items-center
+               p-3  hover:opacity-100 cursor-pointer z-20 absolute"
+               onClick={clickHandler}
+              >
+                <img width="25" height="25" src={arrowLeft} className="" />
+              </div>
+            );
+          }}
+          centerMode={true}
+          centerSlidePercentage={50} // ปรับเปอร์เซ็นต์ของสไลด์ตรงกลาง
+        >
+          <div className="flex justify-between px-[8px] min-h-[281px] min-w-[375] ">
+            <img src={dog1} alt="Dog 1" className="" />
+          </div>
+          <div className="flex justify-between px-[8px] min-h-[281px] min-w-[375] ">
+            <img src={dog2} alt="Dog 2" className="" />
+          </div>
+          <div className="flex justify-between px-[8px] min-h-[281px] min-w-[375]">
+            <img src={dog3} alt="Dog 3" className="" />
+          </div>
+          <div className="flex justify-between px-[8px] min-h-[281px] min-w-[375] ">
+            <img src={dog3} alt="Dog 3" className="" />
+          </div>
+        </Carousel>
+      ) : (
+        <Carousel
+          className=" custom-carousel flex  bg-black relative " // เพิ่ม className เพื่อใช้ CSS ที่กำหนดเอง
+          showThumbs={false}
+          infiniteLoop={true}
+          autoPlay={false}
+          interval={3000}
+          showStatus={false}
+          showArrows={true}
+          renderArrowNext={(clickHandler) => {
+            return (
+              <div
+                className="w-[50px] h-[50px] right-0 top-[45%] flex justify-center items-center
+               p-3  hover:opacity-100 cursor-pointer z-20 absolute"
+               onClick={clickHandler}
+              >
+
                 <img width="25" height="25" src={arrowRight} className="  " />
               </div>
             );
@@ -104,14 +108,17 @@ const ImageGallery = () => {
           centerMode={true}
           centerSlidePercentage={100} // ปรับเปอร์เซ็นต์ของสไลด์ตรงกลาง
         >
-          <div className="flex justify-center items-center px-[8px] min-h-[281px] min-w-[375] ">
-            <img src={dog1} alt="Dog 1" className="max-w-[550px] max-h-[413px]" />
+          <div className="flex justify-between px-[8px] min-h-[281px] min-w-[375] ">
+            <img src={dog1} alt="Dog 1" className="" />
           </div>
-          <div className="flex justify-center items-center  px-[8px]  min-h-[281px] min-w-[375] ">
-            <img src={dog2} alt="Dog 2" className="max-w-[550px] max-h-[413px]" />
+          <div className="flex justify-between px-[8px]  min-h-[281px] min-w-[375] ">
+            <img src={dog2} alt="Dog 2" className="" />
           </div>
-          <div className="flex justify-center items-center  px-[8px] min-h-[281px] min-w-[375] ">
-            <img src={dog3} alt="Dog 3" className="max-w-[550px] max-h-[413px]" />
+          <div className="flex justify-between px-[8px] min-h-[281px] min-w-[375] ">
+            <img src={dog3} alt="Dog 3" className="" />
+          </div>
+          <div className="flex justify-between px-[8px] min-h-[281px] min-w-[375] ">
+            <img src={dog3} alt="Dog 3" className="" />
           </div>
         </Carousel>
       )}
