@@ -1,7 +1,7 @@
 import Navbar from "../components/navbar/Navbar";
 import Footer from "../components/Footer";
 import ImageGallerry from "../components/petsitter-detail/ImageGallerry"
-import ContentPetSitterTopLeft from "../components/ContentPetSitterTopLeft";
+import ContentPetSitterTopLeft from "../components/petsitter-detail/ContentPetSitterTopLeft";
 
 const PetSitterDetailPage = () => {
   return (

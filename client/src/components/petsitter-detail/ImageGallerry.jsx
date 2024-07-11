@@ -1,13 +1,16 @@
-
 import React, { useState, useEffect } from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // ต้องนำเข้ามาเพื่อให้มีสไตล์
 
-import dog1 from "../assets/images/dog1.png";
-import dog2 from "../assets/images/dog2.png";
-import dog3 from "../assets/images/dog3.png";
-import arrowRight from "../assets/svgs/icons/icon-carousel-arrowr.svg";
-import arrowLeft from "../assets/svgs/icons/icon-carousel-arrowl.svg"
+import dog1 from "../../assets/images/dog1.png";
+import dog2 from "../../assets/images/dog2.png";
+import dog3 from "../../assets/images/dog3.png";
+import arrowRight from "../../assets/svgs/icons/icon-carousel-arrowr.svg";
+import arrowLeft from "../../assets/svgs/icons/icon-carousel-arrowl.svg";
+
+// import catRight from "../../assets/images/catright.png" ภาพขนาดไม่เท่ากันรูปก็ไม่เท่ากัน
+// import dogLeft from "../../assets/images/dogleft.png"
+
 const ImageGallery = () => {
   const [width, setWidth] = useState(window.innerWidth);
 
@@ -24,10 +27,10 @@ const ImageGallery = () => {
   }, []);
 
   return (
-    <div className="md:py-[40px] bg-red-500 ">
+    <div className="md:py-[40px] bg-primarygray-100  ">
       {width > 550 ? (
         <Carousel
-          className=" custom-carousel bg-black relative " // เพิ่ม className เพื่อใช้ CSS ที่กำหนดเอง
+          className=" custom-carousel bg-primarygray-100 " // เพิ่ม className เพื่อใช้ CSS ที่กำหนดเอง
           showThumbs={false}
           infiniteLoop={true}
           autoPlay={false}
@@ -39,10 +42,9 @@ const ImageGallery = () => {
               <div
                 className="w-[50px] h-[50px] right-0 top-[45%] flex justify-center items-center
                p-3  hover:opacity-100 cursor-pointer z-20 absolute"
-               onClick={clickHandler}
+                onClick={clickHandler}
               >
                 <img width="25" height="25" src={arrowRight} className="" />
-
               </div>
             );
           }}
@@ -51,7 +53,7 @@ const ImageGallery = () => {
               <div
                 className="w-[50px] h-[50px] left-0 top-[45%] flex justify-center items-center
                p-3  hover:opacity-100 cursor-pointer z-20 absolute"
-               onClick={clickHandler}
+                onClick={clickHandler}
               >
                 <img width="25" height="25" src={arrowLeft} className="" />
               </div>
@@ -69,13 +71,10 @@ const ImageGallery = () => {
           <div className="flex justify-between px-[8px] min-h-[281px] min-w-[375]">
             <img src={dog3} alt="Dog 3" className="" />
           </div>
-          <div className="flex justify-between px-[8px] min-h-[281px] min-w-[375] ">
-            <img src={dog3} alt="Dog 3" className="" />
-          </div>
         </Carousel>
       ) : (
         <Carousel
-          className=" custom-carousel flex  bg-black relative " // เพิ่ม className เพื่อใช้ CSS ที่กำหนดเอง
+          className=" custom-carousel flex  bg-primarygray-100 " // เพิ่ม className เพื่อใช้ CSS ที่กำหนดเอง
           showThumbs={false}
           infiniteLoop={true}
           autoPlay={false}
@@ -87,9 +86,8 @@ const ImageGallery = () => {
               <div
                 className="w-[50px] h-[50px] right-0 top-[45%] flex justify-center items-center
                p-3  hover:opacity-100 cursor-pointer z-20 absolute"
-               onClick={clickHandler}
+                onClick={clickHandler}
               >
-
                 <img width="25" height="25" src={arrowRight} className="  " />
               </div>
             );
@@ -99,7 +97,7 @@ const ImageGallery = () => {
               <div
                 className="w-[50px] h-[50px] left-0 top-[45%] flex justify-center items-center
                p-3  hover:opacity-100 cursor-pointer z-20 absolute"
-               onClick={clickHandler}
+                onClick={clickHandler}
               >
                 <img width="25" height="25" src={arrowLeft} className="  " />
               </div>
@@ -113,9 +111,6 @@ const ImageGallery = () => {
           </div>
           <div className="flex justify-between px-[8px]  min-h-[281px] min-w-[375] ">
             <img src={dog2} alt="Dog 2" className="" />
-          </div>
-          <div className="flex justify-between px-[8px] min-h-[281px] min-w-[375] ">
-            <img src={dog3} alt="Dog 3" className="" />
           </div>
           <div className="flex justify-between px-[8px] min-h-[281px] min-w-[375] ">
             <img src={dog3} alt="Dog 3" className="" />
