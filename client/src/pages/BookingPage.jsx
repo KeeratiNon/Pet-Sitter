@@ -9,24 +9,10 @@ import BookingDetail from "../components/cards/BookingDetail";
 
 const BookingPage = () => {
   const formList = ["Your Pet", "Infomation", "Payment"];
-  const [page, setPage] = useState(0);
   const formLength = formList.length;
 
   const [width, setWidth] = useState(window.innerWidth);
-
-  useEffect(() => {
-    const handleResize = () => setWidth(window.innerWidth);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  // const initialValues = {
-  //   firstname: "",
-  //   lastname: "",
-  //   email: "",
-  //   phone: "",
-  //   message: "",
-  // };
+  const [page, setPage] = useState(0);
 
   const handlePrev = () => {
     setPage(page === 0 ? formLength - 1 : page - 1);
@@ -53,6 +39,12 @@ const BookingPage = () => {
   };
 
   const handleSubmit = async () => {};
+
+  useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <>

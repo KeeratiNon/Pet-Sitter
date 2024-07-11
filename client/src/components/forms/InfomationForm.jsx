@@ -22,8 +22,7 @@ const InfomationForm = () => {
       onSubmit={onSubmit}
     >
       {({ errors, touched }) => (
-        <Form>
-          <section className="flex flex-col gap-4 py-10 px-4 rounded-t-2xl md:bg-white md:p-10">
+        <Form className="flex flex-col gap-4 py-10 px-4 rounded-t-2xl md:bg-white md:p-10">
             <div className="flex flex-wrap gap-4 md:gap-10">
               <div className="w-full flex flex-col gap-1 md:flex-1">
                 <label htmlFor="firstname" className="input-label">
@@ -91,7 +90,6 @@ const InfomationForm = () => {
                 className="input-box"
               />
             </div>
-          </section>
         </Form>
       )}
     </Formik>
