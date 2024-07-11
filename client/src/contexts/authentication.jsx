@@ -27,7 +27,7 @@ const AuthProvider = ({ children }) => {
             // Token expired
             removeAllTokens()
             setState({ ...state, user: null });
-            navigate("/auth/login/user");
+            navigate("/");
           } else {
             // Token valid
             const userDataFromToken = jwtDecode(token);
@@ -37,7 +37,7 @@ const AuthProvider = ({ children }) => {
           // Invalid token format
           removeAllTokens()
           setState({ ...state, user: null });
-          navigate("/auth/login/user");
+          navigate("/");
         }
       } else {
         // No token found
@@ -50,11 +50,7 @@ const AuthProvider = ({ children }) => {
     const interval = setInterval(checkToken, 60000); // Check token validity every 1 min
 
     return () => clearInterval(interval); // Clean up interval on unmount
-  }, []); // Empty dependency array ensures this effect runs only once
-
-  useEffect(()=>{
-    console.log(state.user)
-  },[state])
+  }, [state]); // Empty dependency array ensures this effect runs only once
 
   const loginUser = async (data) => {
     setState({ ...state, loading: true });
