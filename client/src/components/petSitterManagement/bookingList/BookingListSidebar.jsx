@@ -1,6 +1,7 @@
+import { Link } from "react-router-dom";
 import sitterLogo from "../../../assets/svgs/logo-navbar.svg";
-import petSitterBookingList from "../../../assets/svgs/pet-sitter-management/pet-sitter-booking-list.svg";
-import petSitterOrangeProfile from "../../../assets/svgs/pet-sitter-management/pet-sitter-orangeProfile.svg";
+import petSitterOrangeBookingList from "../../../assets/svgs/pet-sitter-management/pet-sitter-orangeBooking-list.svg";
+import petSitterGrayProfile from "../../../assets/svgs/pet-sitter-management/pet-sitter-grayProfile.svg";
 import petSitterPayment from "../../../assets/svgs/pet-sitter-management/pet-sitter-payment.svg";
 import petSitterLogout from "../../../assets/svgs/pet-sitter-management/pet-sitter-logout.svg";
 import petSitterOrangeCircle from "../../../assets/svgs/pet-sitter-management/pet-sitter-orangeCircle.svg";
@@ -16,24 +17,24 @@ const Sidebar = () => {
         />
       </div>
 
-      <div className="flex gap-[16px] px-[24px] py-[16px] bg-primaryorange-100 text-primaryorange-500 font-medium">
-        <img src={petSitterOrangeProfile} className="w-[24px] h-[24px]" />
+      <Link to="/petsitter/profile" className="flex gap-[16px] px-[24px] py-[16px]">
+        <img src={petSitterGrayProfile} className="w-[24px] h-[24px]" />
         <span>Pet Sitter Profile</span>
-      </div>
+      </Link>
 
-      <div className="flex items-center px-[24px] py-[16px]">
+      <div className="flex items-center px-[24px] py-[16px]  bg-primaryorange-100 text-primaryorange-500 font-medium">
         <img
-          src={petSitterBookingList}
+          src={petSitterOrangeBookingList}
           className="w-[24px] h-[24px] mr-[16px]"
         />
         <span className="mr-[6px]">Booking List</span>
         <img src={petSitterOrangeCircle} className="w-[6px] h-[6px]" />
       </div>
 
-      <div className="flex gap-[16px] px-[24px] py-[16px]">
+      <Link to="/petsitter/payment-option" className="flex gap-[16px] px-[24px] py-[16px]">
         <img src={petSitterPayment} className="w-[24px] h-[24px]" />
         <span>Payment Option</span>
-      </div>
+      </Link>
       <div className="flex gap-[16px] mt-[664px] pl-[24px] pt-[16px] border-t-[1px] border-primarygray-200">
         <img src={petSitterLogout} className="w-[24px] h-[24px]" />
         <span>Logout</span>

@@ -21,12 +21,9 @@ function App() {
         <Route path="/auth/login/petsitter" element={<LoginPetSitterPage/>} />
         <Route path="/auth/register/user" element={<RegisterOwnerPetPage/>} />
         <Route path="/auth/register/petsitter" element={<RegisterPetSitterPage/>} />
-<<<<<<< HEAD
-=======
         <Route path="/petsitter/profile" element={<PetSitterProfilePage />} />
         <Route path="/petsitter/booking-list" element={<PetSitterBookingListPage />} />
         <Route path="/petsitter/payment-option" element={<PetSitterPaymentOptionPage />} />
->>>>>>> 84e3812 (feat: add usestate to form in /petsitter/profile page)
       </Routes>
     </>
   );

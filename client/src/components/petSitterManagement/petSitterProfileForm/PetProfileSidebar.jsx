@@ -1,5 +1,5 @@
 import sitterLogo from "../../../assets/svgs/logo-navbar.svg";
-import petSitterBookingList from "../../../assets/svgs/pet-sitter-management/pet-sitter-booking-list.svg";
+import petSitterBookingList from "../../../assets/svgs/pet-sitter-management/pet-sitter-grayBooking-list.svg";
 import petSitterOrangeProfile from "../../../assets/svgs/pet-sitter-management/pet-sitter-orangeProfile.svg";
 import petSitterPayment from "../../../assets/svgs/pet-sitter-management/pet-sitter-payment.svg";
 import petSitterLogout from "../../../assets/svgs/pet-sitter-management/pet-sitter-logout.svg";
