@@ -52,10 +52,6 @@ const AuthProvider = ({ children }) => {
     return () => clearInterval(interval); // Clean up interval on unmount
   }, []); // Empty dependency array ensures this effect runs only once
 
-  useEffect(()=>{
-    console.log(state.user)
-  },[state])
-
   const loginUser = async (data) => {
     setState({ ...state, loading: true });
     try {
