@@ -3,14 +3,15 @@ import DogFoot from "../assets/svgs/dog-foot.svg";
 import DogFootLg from "../assets/svgs/dog-foot-lg.svg";
 import StarGreen from "../assets/svgs/star-green.svg";
 import CurveBlue from "../assets/svgs/curve-blue.svg";
-import Google from "../assets/svgs/logo-google.svg";
-import Facebook from "../assets/svgs/logo-facebook.svg";
 import { Formik, Form, Field } from "formik";
 import { signinSchema } from "../schemas/SignUpAndSignIn";
 import { useAuth } from "../contexts/authentication";
 import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 import LinearProgress from "@mui/material/LinearProgress";
+import LoginFacebook from "../components/login-facebook";
+import LoginGoogle from "../components/login-google";
+
 
 const initialValues = {
   email: "",
@@ -18,10 +19,10 @@ const initialValues = {
 };
 
 const LoginPetSitterPage = () => {
-  const { loginPetSitter, state } = useAuth();
+  const { loginUser, state } = useAuth();
 
   const onSubmit = (values, actions) => {
-    loginPetSitter(values);
+    loginUser(values);
     actions.resetForm();
   };
 
@@ -105,25 +106,15 @@ const LoginPetSitterPage = () => {
                   <span className="flex flex-1 h-[1px] bg-gray-200"></span>
                 </div>
                 <div className="w-[100%] flex justify-center items-center gap-[12px]">
-                  <button className="btn-social">
-                    <span>
-                      <img src={Facebook} alt="facebook" />
-                    </span>
-                    <span>Facebook</span>
-                  </button>
-                  <button className="btn-social">
-                    <span>
-                      <img src={Google} alt="Google" />
-                    </span>
-                    <span>Google</span>
-                  </button>
+                  <LoginFacebook />
+                  <LoginGoogle />
                 </div>
                 <div className="flex justify-center items-center gap-[8px]">
                   <span>
                     <p>Don't have an account?</p>
                   </span>
                   <span>
-                    <Link to="/auth/register/petsitter" className="btn-ghost">
+                    <Link to="/auth/register/user" className="btn-ghost">
                       Register
                     </Link>
                   </span>

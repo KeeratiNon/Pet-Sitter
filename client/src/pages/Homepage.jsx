@@ -10,7 +10,6 @@ import Search from "../components/Search";
 const HomePage = () => {
   return (
     <>
-      
       <Navbar />
       <Header />
       <Search />
