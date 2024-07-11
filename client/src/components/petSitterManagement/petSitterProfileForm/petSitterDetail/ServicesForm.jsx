@@ -1,5 +1,3 @@
-import React, { useState } from 'react';
-
 const ServicesForm = ({handleServices, services}) => {
 
   return (

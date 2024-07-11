@@ -1,5 +1,3 @@
-import React, { useState } from 'react';
-
 function PhoneNumberForm({handlePhoneNumber, phoneNumber}) {
   return (
     <div>
