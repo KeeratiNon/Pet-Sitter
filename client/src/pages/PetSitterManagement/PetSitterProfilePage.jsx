@@ -122,7 +122,7 @@ const PetSitterProfilePage = () => {
     }));
   };
 
-  const petOptions = ["Dog", "Cat", "Bird", "Fish", "Other"];
+  const petOptions = ["Dog", "Cat", "Bird", "Rabbit"];
 
   const handlePetTypeSelect = (event) => {
     const selectedPet = event.target.value;

@@ -1,5 +1,3 @@
-import React, { useState } from 'react';
-
 const MyPlaceForm = ({handleMyPlace, myPlace}) => {
 
     return (

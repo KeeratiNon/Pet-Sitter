@@ -1,4 +1,4 @@
-function PostCodeForm({handlePostCode, postCode}) {
+const PostCodeForm = ({handlePostCode, postCode}) => {
 
   return (
     <div>

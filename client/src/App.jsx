@@ -9,6 +9,9 @@ import PetSitterProfilePage from "./pages/PetSitterManagement/PetSitterProfilePa
 import PetSitterBookingListPage from "./pages/PetSitterManagement/PetSitterBookingListPage";
 import PetSitterPaymentOptionPage from "./pages/PetSitterManagement/PetSitterPaymentOptionPage";
 import HomePage from "./pages/Homepage";
+import BookingPage from "./pages/BookingPage"
+
+
 
 function App() {
   return (
@@ -23,6 +26,7 @@ function App() {
         <Route path="/petsitter/profile" element={<PetSitterProfilePage />} />
         <Route path="/petsitter/booking-list" element={<PetSitterBookingListPage />} />
         <Route path="/petsitter/payment-option" element={<PetSitterPaymentOptionPage />} />
+        <Route path="/booking" element={<BookingPage/>}/>
       </Routes>
     </>
   );

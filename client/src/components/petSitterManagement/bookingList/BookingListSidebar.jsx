@@ -5,8 +5,10 @@ import petSitterGrayProfile from "../../../assets/svgs/pet-sitter-management/pet
 import petSitterPayment from "../../../assets/svgs/pet-sitter-management/pet-sitter-payment.svg";
 import petSitterLogout from "../../../assets/svgs/pet-sitter-management/pet-sitter-logout.svg";
 import petSitterOrangeCircle from "../../../assets/svgs/pet-sitter-management/pet-sitter-orangeCircle.svg";
+import { useAuth } from "../../../contexts/authentication"
 
 const Sidebar = () => {
+  const {logout} = useAuth()
   return (
     <section className="w-[240px] h-[1024px] bg-[#FAFAFB] flex flex-col text-primarygray-500 text-[16px] leading-[24px] flex-none">
       <div className="mt-[16px]">
@@ -35,7 +37,7 @@ const Sidebar = () => {
         <img src={petSitterPayment} className="w-[24px] h-[24px]" />
         <span>Payment Option</span>
       </Link>
-      <div className="flex gap-[16px] mt-[664px] pl-[24px] pt-[16px] border-t-[1px] border-primarygray-200">
+      <div onClick={logout} className="flex gap-[16px] mt-[664px] pl-[24px] pt-[16px] border-t-[1px] border-primarygray-200 cursor-pointer">
         <img src={petSitterLogout} className="w-[24px] h-[24px]" />
         <span>Logout</span>
       </div>

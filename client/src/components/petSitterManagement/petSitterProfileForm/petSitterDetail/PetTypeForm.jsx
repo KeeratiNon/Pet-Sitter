@@ -1,5 +1,3 @@
-import React from 'react';
-
 const PetTypeForm = ({
   pet_type =[],
   currentSelection="",

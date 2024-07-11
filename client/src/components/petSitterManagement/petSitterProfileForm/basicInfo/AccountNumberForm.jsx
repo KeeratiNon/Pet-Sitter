@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-
 function AccountNumberForm({handleAccountNumber, accountNumber}) {
   
   return (

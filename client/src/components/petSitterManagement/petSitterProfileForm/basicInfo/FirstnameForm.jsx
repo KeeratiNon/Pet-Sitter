@@ -1,5 +1,3 @@
-import React from 'react';
-
 const FirstnameForm = ({ handleFirstName, firstName }) => {
   return (
     <div>

@@ -1,5 +1,3 @@
-import React, { useState } from 'react';
-
 function EmailForm({handleEmail, email}) {
   
   return (
