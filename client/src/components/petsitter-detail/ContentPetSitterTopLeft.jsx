@@ -118,7 +118,7 @@ const ContentPetSitterTopLeft = () => {
           </div>
         </div>
       </div>
-      <div className="bg-gray-50 flex flex-col gap-[24px] p-[16px] lg:p-[24px] md:gap-[40px] ">
+      <div className="bg-gray-50 flex flex-col gap-[24px] p-[16px] lg:p-[24px] md:gap-[40px] w-4/6">
         <div className="flex flex-col p-[24px]  gap-[16px] md:gap-[24px] ">
           <div className="flex items-center justify-center bg-black text-white rounded-full  w-[146px] h-[146px]">
             <div className="flex flex-col items-center  ">

@@ -62,6 +62,7 @@ const ImageGallery = () => {
           centerMode={true}
           centerSlidePercentage={50} // ปรับเปอร์เซ็นต์ของสไลด์ตรงกลาง
         >
+        {/* 1440 */}
           <div className="flex justify-between px-[8px] min-h-[281px] min-w-[375] ">
             <img src={dog1} alt="Dog 1" className="" />
           </div>
@@ -106,13 +107,14 @@ const ImageGallery = () => {
           centerMode={true}
           centerSlidePercentage={100} // ปรับเปอร์เซ็นต์ของสไลด์ตรงกลาง
         >
-          <div className="flex justify-between px-[8px] min-h-[281px] min-w-[375] ">
+        {/* Mobile */}
+          <div className="flex justify-between  min-h-[281px] min-w-[375] ">
             <img src={dog1} alt="Dog 1" className="" />
           </div>
-          <div className="flex justify-between px-[8px]  min-h-[281px] min-w-[375] ">
+          <div className="flex justify-between   min-h-[281px] min-w-[375] ">
             <img src={dog2} alt="Dog 2" className="" />
           </div>
-          <div className="flex justify-between px-[8px] min-h-[281px] min-w-[375] ">
+          <div className="flex justify-between  min-h-[281px] min-w-[375] ">
             <img src={dog3} alt="Dog 3" className="" />
           </div>
         </Carousel>
