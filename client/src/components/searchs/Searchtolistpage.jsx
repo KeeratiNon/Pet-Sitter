@@ -34,7 +34,7 @@ const Searchtolistpage = () => {
   //ดึงรูปเข้าไปใน array
   const renderStars = (count) => {
     return Array.from({ length: count }, (_, index) => (
-      <img key={index} src={star2} alt={`${count} star`}  />
+      <img key={index} src={star2} alt={`${count} star`} />
     ));
   };
 
