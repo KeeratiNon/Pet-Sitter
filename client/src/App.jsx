@@ -10,6 +10,7 @@ import PetSitterBookingListPage from "./pages/PetSitterManagement/PetSitterBooki
 import PetSitterPaymentOptionPage from "./pages/PetSitterManagement/PetSitterPaymentOptionPage";
 import HomePage from "./pages/Homepage";
 import BookingPage from "./pages/BookingPage"
+import PetSitterDetailPage from "./pages/PetSitterDetailPage"
 
 
 
@@ -23,6 +24,7 @@ function App() {
         <Route path="/auth/register/user" element={<RegisterOwnerPetPage/>} />
         <Route path="/auth/register/petsitter" element={<RegisterPetSitterPage/>} />
         <Route path="/search" element={<SearchListPage />} />
+        <Route path="/search/1" element={<PetSitterDetailPage />} />
         <Route path="/petsitter/profile" element={<PetSitterProfilePage />} />
         <Route path="/petsitter/booking-list" element={<PetSitterBookingListPage />} />
         <Route path="/petsitter/payment-option" element={<PetSitterPaymentOptionPage />} />

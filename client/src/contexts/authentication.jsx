@@ -50,7 +50,7 @@ const AuthProvider = ({ children }) => {
     const interval = setInterval(checkToken, 60000); // Check token validity every 1 min
 
     return () => clearInterval(interval); // Clean up interval on unmount
-  }, [state]); // Empty dependency array ensures this effect runs only once
+  }, []); // Empty dependency array ensures this effect runs only once
 
   const loginUser = async (data) => {
     setState({ ...state, loading: true });
