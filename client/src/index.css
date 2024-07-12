@@ -41,6 +41,8 @@
   .list-detail {
     @apply flex flex-col;
   }
+
+  .icon-btn {
+    @apply bg-[#F6F6F9] size-12 flex items-center justify-center rounded-full;
+  }
 }
-
-

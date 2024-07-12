@@ -1,4 +1,4 @@
-import iconGuest from "../../assets/svgs/icons/icon-image-guest.svg";
+import iconUser from "../../assets/svgs/icons/icon-image-user.svg";
 import iconPlus from "../../assets/svgs/icons/icon-plus-circle.svg";
 
 const PetForm = () => {
@@ -14,7 +14,7 @@ const PetForm = () => {
           />
 
           <figure>
-            <img src={iconGuest} alt="image-guest" className="size-[104px]" />
+            <img src={iconUser} alt="image-user" className="size-[104px]" />
           </figure>
 
           <figcaption className="flex flex-col justify-center items-center gap-2">
