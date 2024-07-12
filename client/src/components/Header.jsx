@@ -28,18 +28,17 @@ const Header = () => {
           Find your perfect pet sitter with us.
         </p>
       </div>
-      
-        <img
-          src={headerLeftSmall}
-          alt="cats"
-          className="absolute left-[0] top-[310px] xl:hidden"
-        ></img>
-        <img
-          src={headerRightSmall}
-          alt="Dog"
-          className="absolute right-[0] top-[310px] xl:hidden"
-        ></img>
-      
+
+      <img
+        src={headerLeftSmall}
+        alt="cats"
+        className="absolute left-[0] top-[310px] xl:hidden"
+      ></img>
+      <img
+        src={headerRightSmall}
+        alt="Dog"
+        className="absolute right-[0] top-[310px] xl:hidden"
+      ></img>
 
       <img
         src={headerLeftLarge}

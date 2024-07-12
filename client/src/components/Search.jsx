@@ -9,6 +9,7 @@ import Select from "@mui/material/Select";
 import { orange } from "@mui/material/colors";
 import star2 from "../assets/svgs/star2.svg";
 
+
 const Search = () => {
   const [years, setYears] = useState("");
   const [selectedPet, setSelectedPet] = useState([]);
@@ -32,7 +33,12 @@ const Search = () => {
   //ดึงรูปเข้าไปใน array
   const renderStars = (count) => {
     return Array.from({ length: count }, (_, index) => (
-      <img key={index} src={star2} alt={`${count} star`} className="size-[20px]  "  />
+      <img
+        key={index}
+        src={star2}
+        alt={`${count} star`}
+        className="size-[20px]  "
+      />
     ));
   };
 
@@ -42,12 +48,15 @@ const Search = () => {
 
   return (
     <section className=" flex justify-center items-center   ">
-           <div className="  flex flex-col max-w-[1064px] w-full    border-solid rounded-[16px] 
-  " style={{ boxShadow: '4px 4px 24px 0px rgba(0, 0, 0, 0.04)' }}>
-        <div className="bg-gray-100 border-solid rounded-t-2xl ">
+      <div
+        className="  flex flex-col max-w-[1064px] w-full    border-solid rounded-[16px] 
+  "
+        style={{ boxShadow: "4px 4px 24px 0px rgba(0, 0, 0, 0.04)" }}
+      >
+        <div className="bg-gray-100 border-solid rounded-t-2xl   ">
           <div className="flex flex-wrap items-center p-4 ">
-            <div>
-              <label className=" font-bold text-[16px] leading-[24px] ml-3 md:ml-6  ">
+            <div className="">
+              <label className=" font-bold text-[16px] leading-[24px] ml-3 md:ml-6   ">
                 Pet Type:
               </label>
             </div>
@@ -92,24 +101,24 @@ const Search = () => {
 
         <div className="  ">
           <div className=" p-1  md:flex md:items-baseline md:w-full md:justify-start   ">
-            
-              <div className="flex flex-col  gap-[12px] p-4 md:flex-row  ">
-              <label className="  text-[16px]  leading-6 font-bold md:ml-5 ">Rating:</label>
+            <div className="flex flex-col  gap-[12px] p-4 md:flex-row  ">
+              <label className="  text-[16px]  leading-6 font-bold md:ml-5 ">
+                Rating:
+              </label>
               {/* วนรูปตามจำนวนเลข */}
-               <div className="flex flex-wrap gap-[8px]  "> 
+              <div className="flex flex-wrap gap-[8px]  ">
                 {[5, 4, 3, 2, 1].map((rating, index) => (
                   <button
                     className="  gap-[3px] pt-[4] pr-[8px] pb-[4px] pl-[8px]   text-[16px] leading-7 flex flex-wrap items-center border-gray-200 rounded-[8px] border  md:ml-1 "
                     key={index}
-                    onClick={() => handleRatingChange(rating)}                  
+                    onClick={() => handleRatingChange(rating)}
                   >
                     {rating}
                     {renderStars(rating)}
                   </button>
                 ))}
-      
               </div>
-              </div>
+            </div>
 
             <div className=" flex flex-col gap-2 p-4 md:flex-row md:items-center  ">
               <p className="font-bold ">Experience:</p>
@@ -117,7 +126,7 @@ const Search = () => {
               <FormControl size="small">
                 <InputLabel id="demo-simple-select-label">Year</InputLabel>
                 <Select
-                  className="border border-gray-200 h-[48px] rounded-[8px] min-w-[144px]  "
+                  className="border border-gray-200 h-[48px] rounded-[8px] min-w-[144px]   "
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   value={years}
@@ -130,12 +139,12 @@ const Search = () => {
                 </Select>
               </FormControl>
               <Button className="btn-primary w-full md:w-fit md:ml-5 ">
-              Search
-            </Button>
+                Search
+              </Button>
             </div>
-            
           </div>
         </div>
+        
       </div>
     </section>
   );

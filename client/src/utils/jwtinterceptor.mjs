@@ -10,7 +10,7 @@ const jwtInterceptor = () => {
       const expirationTime = exp * 1000;
       if (Date.now() >= expirationTime) {
         removeAllTokens()
-        window.location.replace("/auth/login/user");
+        window.location.replace("/");
       } else {
         req.headers = {
           ...req.headers,
@@ -32,7 +32,7 @@ const jwtInterceptor = () => {
         error.response.statusText === "Unauthorized"
       ) {
         removeAllTokens()
-        window.location.replace("/auth/login/user");
+        window.location.replace("/");
       }
       return Promise.reject(error);
     }

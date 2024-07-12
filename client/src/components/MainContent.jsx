@@ -1,13 +1,13 @@
 import React from "react";
-import catLogo from "./main-content-imgs/cat-logo.png";
-import blueStar from "./main-content-imgs/Star-blue.png";
-import pinkStar from "./main-content-imgs/Star-pink.png";
-import greenStar from "./main-content-imgs/Star-green.png";
-import yellowStar from "./main-content-imgs/Star-yellow.png";
+import catLogo from "../assets/images/cat-logo.png";
+import blueStar from "../assets/images/Star-blue.png";
+import pinkStar from "../assets/images/Star-pink.png"
+import greenStar from "../assets/images/Star-green.png";
+import yellowStar from "../assets/images/Star-yellow.png";
 
-import imgMainBtLeft from "./main-bottom/img-main-bt-left.png";
-import imgMainBtMid from "./main-bottom/img-main-bt-mid.png";
-import imgMainBtRight from "./main-bottom/img-main-bt-right.png";
+import imgMainBtLeft from "../assets/images/img-main-bt-left.png";
+import imgMainBtMid from "../assets/images/img-main-bt-mid.png";
+import imgMainBtRight from "../assets/images/img-main-bt-right.png";
 
 const MainContent = () => {
   return (
