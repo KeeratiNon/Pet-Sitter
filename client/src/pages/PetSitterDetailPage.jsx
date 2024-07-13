@@ -10,7 +10,7 @@ const PetSitterDetailPage = () => {
     <>
       <Navbar />
       <ImageGallerry />
-      <div className="bg-#FAFAFB  flex flex-col lg:flex-row lg:gap-4 lg:p-[80px] justify-center  ">
+      <div className="bg-#FAFAFB  flex flex-col lg:flex-row md:gap-4 lg:px-[80px] lg:pt-0 lg:pb-[80px] justify-center  2xl:justify-evenly ">
         <div className="flex flex-col max-w-[848px]">
           <ContentTop />
           <div className="hidden lg:flex">

@@ -6,23 +6,23 @@ import girl from "../../assets/images/girl.png";
 const PetSitterInfoCard = () => {
   return (
     <div className="relative">
-      <div className="bg-white  md:shadow-sm rounded-xl flex flex-col items-center w-full md:w-auto sticky top-0">
-        <div className="flex flex-col items-center py-[40px] px-[24px] gap-[24px]">
-          <img src={girl} className=""></img>
+      <div className="bg-white  lg:shadow-[4px_4px_24px_0px_rgba(0,0,0,0.04)] rounded-2xl flex flex-col items-center w-full h-auto lg:m lg:w-auto sticky top-0">
+        <div className="flex flex-col items-center py-[40px] px-[24px] gap-[24px] border-primarygray-200 border-b w-full">
+          <img src={girl} className="w-[120px] lg:w-[160px]"></img>
           <div className="flex flex-col gap-[16px] items-center">
-            <h1 className="text-black text-[24px] leading-[32px] font-bold ]">
+            <h1 className="text-black text-[24px] leading-[32px] lg:text-[36px] lg:leading-[44px]  font-bold ]">
               Happy House!
             </h1>
             <div className="flex gap-[8px]">
-              <p className="text-black text-[18px] leading-[26px] font-medium">
+              <p className="text-black text-[18px] leading-[26px] lg:text-[20px] lg:leading-[28px] font-medium">
                 Jane Maison
               </p>
-              <p className="text-secondarygreen-200  text-[18px] leading-[26px] font-medium">
+              <p className="text-secondarygreen-200  text-[16px] leading-[28px] font-medium">
                 1.5 Years Exp.
               </p>
             </div>
-            <div className="flex  ">
-              <p className="">⭐</p>
+            <div className="flex text-[16px] lg:text-[20px]">
+              <p>⭐</p>
               <p>⭐</p>
               <p>⭐</p>
               <p>⭐</p>
@@ -30,7 +30,7 @@ const PetSitterInfoCard = () => {
             </div>
             <div className="flex gap-[6px] ">
               <img src={locationIcon}></img>
-              <p className="text-primarygray-400 text-[14px] leading-[24px] font-medium ">
+              <p className="text-primarygray-400 text-[14px] leading-[24px] lg:text-[16px] lg:leading-[28px] font-medium ">
                 Senanikom, Bangkok
               </p>
             </div>
@@ -50,8 +50,8 @@ const PetSitterInfoCard = () => {
             </div>
           </div>
         </div>
-        <div className="border-primarygray-200 border-t   p-[24px] gap-[16px] w-[328px] md:w-[368px]   ">
-          <button type="submit" className="btn-primary">
+        <div className=" p-[24px] gap-[16px] min-w-[375px] lg:min-w-[416px] w-full">
+          <button type="submit" className="btn-primary ">
             Book Now
           </button>
         </div>
