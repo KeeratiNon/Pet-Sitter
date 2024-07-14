@@ -42,123 +42,118 @@ const Searchtolistpage = () => {
     setYears(event.target.value);
   };
   return (
-    <aside className=" md:bg-white ">
-      <div className=" md:min-w-[430px]  "  >
-
-<div
-        className="  md:sticky  md:top-1    "
-        style={{ boxShadow: "4px 4px 24px 0px rgba(0, 0, 0, 0.04)" }}
-      >
-        <div className="hidden md:block md:pr-[24px] md:pl-[24px] md:pt-[24px] md:pb-[40px] ">
-          <label className=" text-[16px] leading-[24px] ">Search</label>
-          <div className="pt-[12px] pr-[16x] pb-[12px] pl-[16px]  flex  rounded-[8px] border border-gray-200   ">
-            <input type="text" className="w-full h-[24px] " />
-            <SearchIcon />
-          </div>
-        </div>
-
-        <div className="bg-gray-100 border-solid md:bg-white ">
-          <div className="flex flex-wrap items-center p-4 ">
-            <div>
-              <label className=" font-bold text-[16px] leading-[24px] ml-3  ">
-                Pet Type:
-              </label>
-            </div>
-
-            <div className="flex items-center  ">
-              <Checkbox
-                sx={{ "&.Mui-checked": { color: orange[500] } }}
-                checked={selectedPet.includes("Dog")}
-                value="Dog"
-                onChange={handlePetChange1}
-                inputProps={{ "aria-label": "Checkbox demo" }}
-              />
-              Dog
-              <Checkbox
-                sx={{ "&.Mui-checked": { color: orange[500] } }}
-                checked={selectedPet.includes("Cat")}
-                value="Cat"
-                onChange={handlePetChange1}
-                inputProps={{ "aria-label": "Checkbox demo" }}
-              />
-              Cat
-              <Checkbox
-                sx={{ "&.Mui-checked": { color: orange[500] } }}
-                checked={selectedPet.includes("Brid")}
-                value="Brid"
-                onChange={handlePetChange1}
-                inputProps={{ "aria-label": "Checkbox demo" }}
-              />
-              Bird
-              <Checkbox
-                sx={{ "&.Mui-checked": { color: orange[500] } }}
-                checked={selectedPet.includes("Rabbit")}
-                value="Rabbit"
-                onChange={handlePetChange1}
-                inputProps={{ "aria-label": "Checkbox demo" }}
-              />
-              Rabbit
+    <aside>
+      <div className="  md:pr-[40px] ">
+        <div
+          className="  md:bg-white     "
+          style={{ boxShadow: "4px 4px 24px 0px rgba(0, 0, 0, 0.04)" }}
+        >
+          <div className="hidden md:block md:pr-[24px] md:pl-[24px] md:pt-[24px] md:pb-[40px] ">
+            <label className=" text-[16px] leading-[24px] ">Search</label>
+            <div className="pt-[12px] pr-[16x] pb-[12px] pl-[16px]  flex  rounded-[8px] border border-gray-200   ">
+              <input type="text" className="w-full h-[24px] " />
+              <SearchIcon />
             </div>
           </div>
-          <div></div>
-        </div>
 
-        <div>
+          <div className=" border-solid  bg-gray-100 md:bg-white ">
+            <div className="flex flex-wrap items-center p-4 ">
+              <div>
+                <label className="  font-bold text-[16px] leading-[24px] ml-3  ">
+                  Pet Type:
+                </label>
+              </div>
+
+              <div className="flex items-center  ">
+                <Checkbox
+                  sx={{ "&.Mui-checked": { color: orange[500] } }}
+                  checked={selectedPet.includes("Dog")}
+                  value="Dog"
+                  onChange={handlePetChange1}
+                  inputProps={{ "aria-label": "Checkbox demo" }}
+                />
+                Dog
+                <Checkbox
+                  sx={{ "&.Mui-checked": { color: orange[500] } }}
+                  checked={selectedPet.includes("Cat")}
+                  value="Cat"
+                  onChange={handlePetChange1}
+                  inputProps={{ "aria-label": "Checkbox demo" }}
+                />
+                Cat
+                <Checkbox
+                  sx={{ "&.Mui-checked": { color: orange[500] } }}
+                  checked={selectedPet.includes("Brid")}
+                  value="Brid"
+                  onChange={handlePetChange1}
+                  inputProps={{ "aria-label": "Checkbox demo" }}
+                />
+                Bird
+                <Checkbox
+                  sx={{ "&.Mui-checked": { color: orange[500] } }}
+                  checked={selectedPet.includes("Rabbit")}
+                  value="Rabbit"
+                  onChange={handlePetChange1}
+                  inputProps={{ "aria-label": "Checkbox demo" }}
+                />
+                Rabbit
+              </div>
+            </div>
+          </div>
+
           <div>
-            <div className="flex flex-col  gap-[12px] p-4 ml-3   ">
-              <label className="  text-[16px]  leading-6 font-bold md:ml-[6px]  ">
-                Rating:
-              </label>
-              {/* วนรูปตามจำนวนเลข */}
-              <div className="flex flex-wrap gap-[8px]  ">
-                {[5, 4, 3, 2, 1].map((rating, index) => (
-                  <button
-                    className="  gap-[3px] pt-[4] pr-[8px] pb-[4px] pl-[8px]   text-[16px] leading-7 flex flex-wrap items-center border-gray-200 rounded-[8px] border  "
-                    key={index}
-                    onClick={() => handleRatingChange(rating)}
-                  >
-                    {rating}
-                    {renderStars(rating)}
-                  </button>
-                ))}
+            <div>
+              <div className="flex flex-col  gap-[12px] p-4 ml-3   ">
+                <label className="  text-[16px]  leading-6 font-bold md:ml-[6px]  ">
+                  Rating:
+                </label>
+                {/* วนรูปตามจำนวนเลข */}
+                <div className="flex flex-wrap gap-[8px]  ">
+                  {[5, 4, 3, 2, 1].map((rating, index) => (
+                    <button
+                      className="  gap-[3px] pt-[4] pr-[8px] pb-[4px] pl-[8px]   text-[16px] leading-7 flex flex-wrap items-center border-gray-200 rounded-[8px] border  "
+                      key={index}
+                      onClick={() => handleRatingChange(rating)}
+                    >
+                      {rating}
+                      {renderStars(rating)}
+                    </button>
+                  ))}
+                    {selectedPet}
+                  {selectedRatings}
+                </div>
               </div>
-            </div>
 
-            <div className=" flex flex-col gap-2 p-4 ml-3  ">
-              <p className="font-bold ">Experience:</p>
+              <div className=" flex flex-col gap-2 p-4 ml-3  ">
+                <p className="font-bold ">Experience:</p>
 
-              <FormControl size="small">
-                <InputLabel id="demo-simple-select-label">Year</InputLabel>
-                <Select
-                  className="border border-gray-200 h-[48px] rounded-[8px] min-w-[144px]  "
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={years}
-                  label="Year"
-                  onChange={handleChange}
-                >
-                  <MenuItem value={1}>0-2 Years</MenuItem>
-                  <MenuItem value={2}>3-5 Years</MenuItem>
-                  <MenuItem value={3}>5+ Years</MenuItem>
-                </Select>
-              </FormControl>
-              <div className=" md:flex md:flex-row-reverse gap-4 ">
-                <Button className="btn-primary w-full    ">
-                  Search
-                </Button>
+                <FormControl size="small">
+                  <InputLabel id="demo-simple-select-label">Year</InputLabel>
+                  <Select
+                    className="border border-gray-200 h-[48px] rounded-[8px] min-w-[144px]  "
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={years}
+                    label="Year"
+                    onChange={handleChange}
+                  >
+                    <MenuItem value={1}>0-2 Years</MenuItem>
+                    <MenuItem value={2}>3-5 Years</MenuItem>
+                    <MenuItem value={3}>5+ Years</MenuItem>
+                  </Select>
+                </FormControl>
+                <div className=" md:flex md:flex-row-reverse gap-4 ">
+                  <Button className="btn-primary w-full    ">Search</Button>
 
-                <Button className=" hidden btn-secondary w-full md:block  ">
-                  Clear
-                </Button>
+                  <Button className=" hidden btn-secondary w-full md:block  ">
+                    Clear
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-
-      </div>
-      
     </aside>
   );
 };

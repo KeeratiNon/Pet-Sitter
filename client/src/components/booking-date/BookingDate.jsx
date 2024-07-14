@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import DatePicker from 'react-datepicker';
-// import 'react-datepicker/dist/react-datepicker.css';
+import 'react-datepicker/dist/react-datepicker.css';
 import moment from 'moment';
 
-const Booking = () => {
+const Bookingdate = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [time, setTime] = useState('');
 
@@ -48,4 +48,4 @@ const Booking = () => {
   );
 };
 
-export default Booking;
+export default Bookingdate;
