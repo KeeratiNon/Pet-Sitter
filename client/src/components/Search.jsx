@@ -82,7 +82,7 @@ const Search = () => {
               Cat
               <Checkbox
                 sx={{ "&.Mui-checked": { color: orange[500] } }}
-                checked={selectedPet.includes("Brid")}
+                checked={selectedPet.includes("Bird")}
                 value="Bird"
                 onChange={handlePetChange1}
                 inputProps={{ "aria-label": "Checkbox demo" }}

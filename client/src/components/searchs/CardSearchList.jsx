@@ -8,7 +8,7 @@ import TypeList from "./TypeList";
 
 
 const CardSearchList = () => {
-  const [selectedRatings, setSelectedRatings] = useState([]);
+  // const [selectedRatings, setSelectedRatings] = useState([]);
 
   const [proflies, setProfile] = useState([]); //เก็บรูปภาพ ใน setProfile
 
