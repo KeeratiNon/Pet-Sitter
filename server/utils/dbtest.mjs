@@ -1,7 +1,7 @@
 const profiles = [
   {
     title: "Happy House! ",
-    name: "Jame Masion",
+    name: "Nuttawut",
     eid: "1",
     picture: "https://zljerlfbpexcqsayzrqs.supabase.co/storage/v1/object/sign/img/images.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJpbWcvaW1hZ2VzLmpwZyIsImlhdCI6MTcyMDQyNDc4NiwiZXhwIjoxNzUxOTYwNzg2fQ.PLuGd4c78m0cW7LEvKPE9t7gSCKyUPBXE84U62ROs8U&t=2024-07-08T07%3A46%3A25.556Z",
     url: "https://www.wongnai.com/trips/travel-koh-chang",
@@ -9,9 +9,9 @@ const profiles = [
     addess: "Senanikrom, Korat",
     type: ["Dog", "Cat"],
     rating: 5,
-    year: ["0-2 year", "3-5 year", "5+ year"],
+    year:"0-2 year",
   },{
-    title: "Happy House! ",
+    title: "Majin House ",
     name: "Jame Masion",
     eid: "2",
     picture: "https://zljerlfbpexcqsayzrqs.supabase.co/storage/v1/object/sign/img/images.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJpbWcvaW1hZ2VzLmpwZyIsImlhdCI6MTcyMDQyNDc4NiwiZXhwIjoxNzUxOTYwNzg2fQ.PLuGd4c78m0cW7LEvKPE9t7gSCKyUPBXE84U62ROs8U&t=2024-07-08T07%3A46%3A25.556Z",
@@ -21,9 +21,9 @@ const profiles = [
     addess: "Senanikrom, Nan",
     type: ["Dog", "Cat", "Bird", "Rabbit"],
     rating: 2,
-    year: ["0-2 year", "3-5 year", "5+ year"],
+    year: "3-5 year",
   },{
-    title: "Happy House! ",
+    title: "Cat OnlyOne ",
     name: "Jame Masion",
     eid: "3",
     picture: "https://zljerlfbpexcqsayzrqs.supabase.co/storage/v1/object/sign/img/images.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJpbWcvaW1hZ2VzLmpwZyIsImlhdCI6MTcyMDQyNDc4NiwiZXhwIjoxNzUxOTYwNzg2fQ.PLuGd4c78m0cW7LEvKPE9t7gSCKyUPBXE84U62ROs8U&t=2024-07-08T07%3A46%3A25.556Z",
@@ -32,7 +32,7 @@ const profiles = [
     addess: "Senanikrom, Ubon",
     type: ["Dog", "Cat", "Rabbit"],
     rating:  3,
-    year: ["0-2 year", "3-5 year", "5+ year"],
+    year:  "5+ year",
   },{
     title: "Happy House! ",
     name: "Jame Masion",
@@ -43,7 +43,7 @@ const profiles = [
     addess: "Senanikrom, Khonkeng",
     type: [ "Bird", "Rabbit"],
     rating: 5,
-    year: ["0-2 year", "3-5 year", "5+ year"],
+    year: "0-2 year",
   },{
     title: "Happy House! ",
     name: "Jame Masion",
@@ -54,7 +54,7 @@ const profiles = [
     addess: "Senanikrom, Chengmai",
     type: [ "Cat", "Rabbit"],
     rating:  3 ,
-    year: ["0-2 year", "3-5 year", "5+ year"],
+    year:  "3-5 year",
   },{
     title: "Happy House! ",
     name: "Jame Masion",
@@ -65,7 +65,7 @@ const profiles = [
     addess: "Senanikrom, Bangkok",
     type: ["Dog", "Cat", "Bird"],
     rating: 4,
-    year: ["0-2 year", "3-5 year", "5+ year"],
+    year: "0-2 year",
   },{
     title: "Happy House! ",
     name: "Jame Masion",
@@ -75,8 +75,8 @@ const profiles = [
     description: "lorm",
     addess: "Senanikrom, Bangkok",
     type: ["Dog", "Cat", "Bird", "Rabbit"],
-    rating: 3,
-    year: ["0-2 year", "3-5 year", "5+ year"],
+    rating: 1,
+    year:  "5+ year",
   }
 ];
 
