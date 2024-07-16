@@ -60,6 +60,7 @@ const ContentTop = () => {
         <img src={map} className="rounded-[8px]"></img>
       </div>
     </div>
+    
   );
 };
 export default ContentTop;

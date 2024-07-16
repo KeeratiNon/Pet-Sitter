@@ -1,4 +1,3 @@
-import Navbar from "../components/navbar/Navbar";
 import Footer from "../components/Footer";
 import ImageGallerry from "../components/petsitter-detail/ImageGallerry";
 import ContentBottom from "../components/petsitter-detail/ContentBottom";
@@ -8,7 +7,6 @@ import PetSitterInfoCard from "../components/petsitter-detail/PetSitterInfoCard"
 const PetSitterDetailPage = () => {
   return (
     <>
-      <Navbar />
       <ImageGallerry />
       <div className="bg-#FAFAFB  flex flex-col lg:flex-row md:gap-4 lg:px-[80px] lg:pt-0 lg:pb-[80px] justify-center  2xl:justify-evenly ">
         <div className="flex flex-col max-w-[848px]">
@@ -25,7 +23,6 @@ const PetSitterDetailPage = () => {
         <PetSitterInfoCard />
         <ContentBottom />
       </div>
-
       <Footer />
     </>
   );
