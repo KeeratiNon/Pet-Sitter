@@ -1,4 +1,4 @@
-const SubDistrictForm = ({handleSubDistrict, subDistrict}) => {
+const SubDistrictForm = ({handleSubDistrict, subDistrict, errors}) => {
 
 
   return (
@@ -13,6 +13,7 @@ const SubDistrictForm = ({handleSubDistrict, subDistrict}) => {
           className="border border-gray-200 rounded-[8px] h-[48px] p-[12px] text-[16px] leading-[24px] font-normal"
         />
       </label>
+      {errors.sub_district && <div className="error text-[16px] leading-[24px] text-red-500">{errors.sub_district}</div>}
     </div>
   );
 };

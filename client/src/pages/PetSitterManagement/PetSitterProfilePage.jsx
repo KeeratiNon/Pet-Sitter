@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { PetSitterProfileSchema } from "../../schemas/PetSitterProfile";
 import petSitterGreenCircle from "../../assets/svgs/pet-sitter-management/pet-sitter-greenCircle.svg";
 
 import Sidebar from "../../components/petSitterManagement/petSitterProfileForm/PetProfileSidebar";
@@ -52,6 +53,13 @@ const PetSitterProfilePage = () => {
     post_code: "",
   });
 
+  const handleChange = (field) => (event) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: event.target.value,
+    }));
+  };
+
   const handleProfileImage = (imageData) => {
     setFormData((prev) => ({
       ...prev,
@@ -59,78 +67,12 @@ const PetSitterProfilePage = () => {
     }));
   };
 
-  const handleFirstName = (event) => {
-    setFormData((prev) => ({
-      ...prev,
-      first_name: event.target.value,
-    }));
-  };
-
-  const handleLastName = (event) => {
-    setFormData((prev) => ({
-      ...prev,
-      last_name: event.target.value,
-    }));
-  };
-
-  const handleExp = (event) => {
-    setFormData((prev) => ({
-      ...prev,
-      experience: event.target.value,
-    }));
-  };
-
-  const handlePhoneNumber = (event) => {
-    setFormData((prev) => ({
-      ...prev,
-      phone_number: event.target.value,
-    }));
-  };
-
-  const handleEmail = (event) => {
-    setFormData((prev) => ({
-      ...prev,
-      email: event.target.value,
-    }));
-  };
-
-  const handleIntroduction = (event) => {
-    setFormData((prev) => ({
-      ...prev,
-      introduction: event.target.value,
-    }));
-  };
-
-  const handleBank = (event) => {
-    setFormData((prev) => ({
-      ...prev,
-      bank: event.target.value,
-    }));
-  };
-
-  const handleAccountNumber = (event) => {
-    setFormData((prev) => ({
-      ...prev,
-      account_number: event.target.value,
-    }));
-  };
-
-  const handlePetSitterName = (event) => {
-    setFormData((prev) => ({
-      ...prev,
-      petsitter_name: event.target.value,
-    }));
-  };
-
-  const petOptions = ["Dog", "Cat", "Bird", "Rabbit"];
-
   const handlePetTypeSelect = (event) => {
     const selectedPet = event.target.value;
     if (selectedPet && !formData.pet_type.includes(selectedPet)) {
       setFormData((prev) => ({
         ...prev,
         pet_type: [...prev.pet_type, selectedPet],
-        currentSelection: "",
       }));
     }
   };
@@ -139,20 +81,6 @@ const PetSitterProfilePage = () => {
     setFormData((prev) => ({
       ...prev,
       pet_type: prev.pet_type.filter((p) => p !== pet),
-    }));
-  };
-
-  const handleServices = (event) => {
-    setFormData((prev) => ({
-      ...prev,
-      services: event.target.value,
-    }));
-  };
-
-  const handleMyPlace = (event) => {
-    setFormData((prev) => ({
-      ...prev,
-      my_place: event.target.value,
     }));
   };
 
@@ -169,8 +97,6 @@ const PetSitterProfilePage = () => {
         };
         reader.readAsDataURL(file);
       }
-    } else {
-      alert('You can only upload up to 10 images.');
     }
   };
 
@@ -181,44 +107,50 @@ const PetSitterProfilePage = () => {
     }));
   };
 
-  const handleAddressDetail = (event) => {
-    setFormData((prev) => ({
-      ...prev,
-      address_detail: event.target.value,
-    }));
-  };
+  const [errors, setErrors] = useState({});
 
-  const handleDistrict = (event) => {
-    setFormData((prev) => ({
-      ...prev,
-      district: event.target.value,
-    }));
-  };
-
-  const handleSubDistrict = (event) => {
-    setFormData((prev) => ({
-      ...prev,
-      sub_district: event.target.value,
-    }));
-  };
-
-  const handleProvince = (event) => {
-    setFormData((prev) => ({
-      ...prev,
-      province: event.target.value,
-    }));
-  };
-
-  const handlePostCode = (event) => {
-    setFormData((prev) => ({
-      ...prev,
-      post_code: event.target.value,
-    }));
-  };
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(formData);
+    try {await PetSitterProfileSchema.validate(formData, {abortEarly: false});
+    console.log("Form Submitted", formData);
+     
+    // Extract the ID from the URL
+    const url = window.location.href;
+    const id = url.substring(url.lastIndexOf('/') + 1);
+
+    // Send POST request to createPetsitterProfile endpoint
+    const response = await fetch(`http://localhost:4000/petsitter/profile/${id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    });
+
+    // Handle the response
+    if (!response.ok) {
+      throw new Error(`Error: ${response.statusText}`);
+    }
+
+    const result = await response.json();
+    console.log('Petsitter Profile has been created:', result);
+
+    // Optionally, you can reset the form or handle the successful response as needed
+    // setFormData(initialFormData);
+  }
+    catch (error){
+      // Handle validation errors
+    if (error.inner) {
+      const newError = {};
+      error.inner.forEach((err) => {
+        newError[err.path] = err.message;
+      });
+      setErrors(newError);
+    } else {
+      // Handle fetch or other errors
+      console.error('Error creating petsitter profile:', error);
+    }
+  }
   };
 
   return (
@@ -253,76 +185,115 @@ const PetSitterProfilePage = () => {
           </div>
           <form
             onSubmit={handleSubmit}
-            className="flex flex-col items-center gap-[24px]"
+            className="flex flex-col items-center gap-6"
           >
-            {/*-- PROFILE FORM -- */}
-            <div className="w-[93%] border rounded-2xl bg-primarygray-100 px-[80px] py-[40px] flex flex-col gap-[24px]">
-              {/*-- PROFILE FORM 1 -- */}
-              <p className="text-[20px] leading-[28px] text-primarygray-300 font-bold">
+            <div className="w-[93%] rounded-2xl bg-primarygray-100 px-20 py-10 flex flex-col gap-6">
+              <p className="text-xl text-primarygray-300 font-bold">
                 Basic Information
               </p>
               <div className="max-w-[240px]">
                 <ProfileImageForm handleProfileImage={handleProfileImage} />
               </div>
-              <div className="grid grid-cols-3 gap-[24px]">
-                <FirstnameForm handleFirstName={handleFirstName} firstName={formData.first_name}/>
-                <LastnameForm handleLastName={handleLastName} lastName={formData.last_name}/>
-                <ExpForm handleExp={handleExp} experience={formData.experience}/>
-              </div>
-              <div className="grid grid-cols-2 gap-[24px]">
-                <PhoneNumberForm handlePhoneNumber={handlePhoneNumber} phoneNumber={formData.phone_number}/>
-                <EmailForm handleEmail={handleEmail} email={formData.email}/>
-              </div>
-              <div>
-                <IntroductionForm handleIntroduction={handleIntroduction} introduction={formData.introduction}/>
-              </div>
-              <div className="grid grid-cols-2 gap-[24px]">
-                <BankForm handleBank={handleBank} />
-                <AccountNumberForm handleAccountNumber={handleAccountNumber} accountNumber={formData.account_number}/>
-              </div>
-            </div>
-            <div className="w-[93%] border rounded-2xl bg-primarygray-100 px-[80px] py-[40px] flex flex-col gap-[24px]">
-              {/*-- PROFILE FORM 2 -- */}
-              <p className="text-[20px] leading-[28px] text-primarygray-300 font-bold">
-                Pet Sitter
-              </p>
-              <div>
-                <PetSitterNameForm handlePetSitterName={handlePetSitterName} petSitterName={formData.petsitter_name}/>
-              </div>
-              <div>
-                <PetTypeForm
-                  pet_type={formData.pet_type}
-                  currentSelection={formData.currentSelection}
-                  handlePetTypeSelect={handlePetTypeSelect}
-                  handlePetTypeRemove={handlePetTypeRemove}
-                  petOptions={petOptions}
+              <div className="grid grid-cols-3 gap-6">
+                <FirstnameForm
+                  handleFirstName={handleChange("first_name")}
+                  firstName={formData.first_name}
+                  errors={errors}
+                />
+                <LastnameForm
+                  handleLastName={handleChange("last_name")}
+                  lastName={formData.last_name}
+                  errors={errors}
+                />
+                <ExpForm
+                  handleExp={handleChange("experience")}
+                  experience={formData.experience}
+                  errors={errors}
                 />
               </div>
-              <div>
-                <ServicesForm handleServices={handleServices} services={formData.services}/>
+              <div className="grid grid-cols-2 gap-6">
+                <PhoneNumberForm
+                  handlePhoneNumber={handleChange("phone_number")}
+                  phoneNumber={formData.phone_number}
+                  errors={errors}
+                />
+                <EmailForm
+                  handleEmail={handleChange("email")}
+                  email={formData.email}
+                  errors={errors}
+                />
               </div>
-              <div><MyPlaceForm handleMyPlace={handleMyPlace} myPlace={formData.my_place}/></div>
-              <div>
-                <ImageGalleryForm image_gallery={formData.image_gallery}
-                  handleImageUpload={handleImageUpload}
-                  handleRemoveImage={handleRemoveImage}/>
+              <IntroductionForm
+                handleIntroduction={handleChange("introduction")}
+                introduction={formData.introduction}
+              />
+              <div className="grid grid-cols-2 gap-6">
+                <BankForm handleBank={handleChange("bank")} />
+                <AccountNumberForm
+                  handleAccountNumber={handleChange("account_number")}
+                  accountNumber={formData.account_number}
+                />
               </div>
             </div>
-            <div className="w-[93%] border rounded-2xl bg-primarygray-100 px-[80px] py-[40px] flex flex-col gap-[24px]">
-              {/*-- PROFILE FORM 3 -- */}
-              <p className="text-[20px] leading-[28px] text-primarygray-300 font-bold">
-                Address
+            <div className="w-[93%] rounded-2xl bg-primarygray-100 px-20 py-10 flex flex-col gap-6">
+              <p className="text-xl text-primarygray-300 font-bold">
+                Pet Sitter
               </p>
-              <div>
-                <AddressDetailForm handleAddressDetail={handleAddressDetail} addressDetail={formData.address_detail}/>
+              <PetSitterNameForm
+                handlePetSitterName={handleChange("petsitter_name")}
+                petSitterName={formData.petsitter_name}
+                errors={errors}
+              />
+              <PetTypeForm
+                pet_type={formData.pet_type}
+                handlePetTypeSelect={handlePetTypeSelect}
+                handlePetTypeRemove={handlePetTypeRemove}
+                petOptions={["Dog", "Cat", "Bird", "Rabbit"]}
+              />
+              <ServicesForm
+                handleServices={handleChange("services")}
+                services={formData.services}
+              />
+              <MyPlaceForm
+                handleMyPlace={handleChange("my_place")}
+                myPlace={formData.my_place}
+              />
+              <ImageGalleryForm
+                image_gallery={formData.image_gallery}
+                handleImageUpload={handleImageUpload}
+                handleRemoveImage={handleRemoveImage}
+              />
+            </div>
+            <div className="w-[93%] rounded-2xl bg-primarygray-100 px-20 py-10 flex flex-col gap-6">
+              <p className="text-xl text-primarygray-300 font-bold">Address</p>
+              <AddressDetailForm
+                handleAddressDetail={handleChange("address_detail")}
+                addressDetail={formData.address_detail}
+                errors={errors}
+              />
+              <div className="grid grid-cols-2 gap-6">
+                <DistrictForm
+                  handleDistrict={handleChange("district")}
+                  district={formData.district}
+                  errors={errors}
+                />
+                <SubDistrictForm
+                  handleSubDistrict={handleChange("sub_district")}
+                  subDistrict={formData.sub_district}
+                  errors={errors}
+                />
               </div>
-              <div className="grid grid-cols-2 gap-[24px]">
-                <DistrictForm handleDistrict={handleDistrict} district={formData.district}/>
-                <SubDistrictForm handleSubDistrict={handleSubDistrict} subDistrict={formData.sub_district}/>
-              </div>
-              <div className="grid grid-cols-2 gap-[24px]">
-                <ProvinceForm handleProvince={handleProvince} province={formData.province}/>
-                <PostCodeForm handlePostCode={handlePostCode} postCode={formData.post_code}/>
+              <div className="grid grid-cols-2 gap-6">
+                <ProvinceForm
+                  handleProvince={handleChange("province")}
+                  province={formData.province}
+                  errors={errors}
+                />
+                <PostCodeForm
+                  handlePostCode={handleChange("post_code")}
+                  postCode={formData.post_code}
+                  errors={errors}
+                />
               </div>
             </div>
           </form>

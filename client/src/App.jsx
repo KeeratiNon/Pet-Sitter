@@ -31,7 +31,7 @@ function App() {
         <Route path="/search" element={<SearchListPage />} />
         <Route path="/search/1" element={<PetSitterDetailPage />} />
         <Route path="/popup" element={<BookingPopup />} />
-        <Route path="/petsitter/profile" element={<PetSitterProfilePage />} />
+        <Route path="/petsitter/profile/:id" element={<PetSitterProfilePage />} />
         <Route
           path="/petsitter/booking-list"
           element={<PetSitterBookingListPage />}

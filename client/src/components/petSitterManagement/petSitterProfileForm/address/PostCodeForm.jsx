@@ -1,4 +1,4 @@
-const PostCodeForm = ({handlePostCode, postCode}) => {
+const PostCodeForm = ({handlePostCode, postCode, errors}) => {
 
   return (
     <div>
@@ -12,6 +12,7 @@ const PostCodeForm = ({handlePostCode, postCode}) => {
           className="border border-gray-200 rounded-[8px] h-[48px] p-[12px] text-[16px] leading-[24px] font-normal"
         />
       </label>
+      {errors.post_code && <div className="error text-[16px] leading-[24px] text-red-500">{errors.post_code}</div>}
     </div>
   );
 }

@@ -1,4 +1,4 @@
-const ExpForm = ({ handleExp, experience }) => {
+const ExpForm = ({ handleExp, experience, errors }) => {
   return (
     <div>
       <label className="text-lg leading-6 text-black font-medium flex flex-col gap-1">
@@ -16,6 +16,7 @@ const ExpForm = ({ handleExp, experience }) => {
           <option value="5+ Years">5+ Years</option>
         </select>
       </label>
+      {errors.experience && <div className="error text-[16px] leading-[24px] text-red-500">{errors.experience}</div>}
     </div>
   );
 };
