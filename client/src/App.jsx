@@ -13,8 +13,6 @@ import HomePage from "./pages/Homepage";
 import BookingPage from "./pages/BookingPage";
 import PetSitterDetailPage from "./pages/PetSitterDetailPage";
 import Navbar from "./components/navbar/Navbar";
-import BookingPage from "./pages/BookingPage"
-import PetSitterDetailPage from "./pages/PetSitterDetailPage"
 import Chat from "./components/chat/Chat";
 import BookingPopup from "./components/BookingPopup";
 

@@ -9,7 +9,6 @@ import { chatRouter } from "./routes/chatroom.mjs";
 
 mongoose.connect("mongodb://127.0.0.1/PetSitter");
 import "./models/chatrooms.mjs";
-import cors from "cors";
 import profiles from "./utils/dbtest.mjs";
 import { petSitterProfileRouter } from "./routes/petSitterProfile.mjs";
 
