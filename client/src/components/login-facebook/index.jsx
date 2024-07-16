@@ -3,16 +3,25 @@ import { useNavigate } from "react-router-dom";
 import { setFacebookToken } from "../../utils/localStorage.mjs";
 import { FacebookAuth } from "../../utils/firebase";
 import {FacebookLoginButton} from "react-social-login-buttons"
+import { useAuth } from "../../contexts/authentication";
+import { jwtDecode } from "jwt-decode";
 
 
 const LoginFacebook = () => {
   const navigate = useNavigate();
 
+  const {state, setState} = useAuth()
+
   const onFacebookLoginSuccess = async() => {
-    const user = await FacebookAuth()
-    const token = user.user.accessToken;
-    setFacebookToken(token);
-    navigate("/");
+    try {
+      const user = await FacebookAuth()
+      const token = user.user.accessToken;
+      setFacebookToken(token);
+      setState({...state, user:jwtDecode(token)})
+      navigate("/");
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   return (

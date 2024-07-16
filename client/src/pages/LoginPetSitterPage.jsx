@@ -114,7 +114,7 @@ const LoginPetSitterPage = () => {
                     <p>Don't have an account?</p>
                   </span>
                   <span>
-                    <Link to="/auth/register/user" className="btn-ghost">
+                    <Link to="/auth/register/petsitter" className="btn-ghost">
                       Register
                     </Link>
                   </span>
