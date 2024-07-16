@@ -1,5 +1,6 @@
+/* eslint-disable react/prop-types */
 import Checkbox from "@mui/material/Checkbox";
-import { useState } from "react";
+
 import { Button } from "@mui/base";
 
 import InputLabel from "@mui/material/InputLabel";
@@ -11,25 +12,31 @@ import star2 from "../../assets/svgs/star2.svg";
 
 import SearchIcon from "@mui/icons-material/Search";
 
-const Searchtolistpage = () => {
-  const [years, setYears] = useState("");
-  const [selectedPet, setSelectedPet] = useState([]);
-  const [selectedRatings, setSelectedRatings] = useState([]);
+const Searchtolistpage = ({
+  filters,
+  setFilters,
+  selectedPet,
+  setSelectedPet,
 
-  const handlePetChange1 = (event) => {
+  setSelectedRatings,
+  years,
+  setYears,
+  handleClearFilters,
+  setSearchText,
+  searchText,
+}) => {
+  function handlePetChange(event) {
     const value = event.target.value;
     setSelectedPet((preSelectedPets) =>
       preSelectedPets.includes(value)
         ? preSelectedPets.filter((pet) => pet !== value)
         : [...preSelectedPets, value]
     );
-  };
+    setFilters({ ...filters, petType: value });
+  }
   const handleRatingChange = (rating) => {
-    setSelectedRatings((prevSelectedRatings) =>
-      prevSelectedRatings.includes(rating)
-        ? prevSelectedRatings.filter((r) => r !== rating)
-        : [...prevSelectedRatings, rating]
-    );
+    setSelectedRatings(rating);
+    setFilters({ ...filters, rating: rating });
   };
   //ดึงรูปเข้าไปใน array
   const renderStars = (count) => {
@@ -37,10 +44,25 @@ const Searchtolistpage = () => {
       <img key={index} src={star2} alt={`${count} star`} />
     ));
   };
-
-  const handleChange = (event) => {
-    setYears(event.target.value);
+  const handleSearch = () => {
+    setFilters({ ...filters, searchText: searchText });
   };
+
+  const handleExperienceChange = (event) => {
+    setYears(event.target.value);
+
+    setFilters({
+      ...filters,
+      experience:
+        event.target.value === 1
+          ? "0-2 year"
+          : event.target.value === 2
+          ? "3-5 year"
+          : "5+ year",
+    });
+    console.log(event.target.value);
+  };
+
   return (
     <aside>
       <div className="  md:pr-[40px] ">
@@ -50,8 +72,13 @@ const Searchtolistpage = () => {
         >
           <div className="hidden md:block md:pr-[24px] md:pl-[24px] md:pt-[24px] md:pb-[40px] ">
             <label className=" text-[16px] leading-[24px] ">Search</label>
-            <div className="pt-[12px] pr-[16x] pb-[12px] pl-[16px]  flex  rounded-[8px] border border-gray-200   ">
-              <input type="text" className="w-full h-[24px] " />
+            <div className="pt-[12px] pr-[16x] pb-[12px] pl-[16px]  flex  rounded-[8px] border border-gray-200    ">
+              <input
+                type="text"
+                className="w-full h-[24px] outline-none "
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+              />
               <SearchIcon />
             </div>
           </div>
@@ -69,7 +96,7 @@ const Searchtolistpage = () => {
                   sx={{ "&.Mui-checked": { color: orange[500] } }}
                   checked={selectedPet.includes("Dog")}
                   value="Dog"
-                  onChange={handlePetChange1}
+                  onChange={handlePetChange}
                   inputProps={{ "aria-label": "Checkbox demo" }}
                 />
                 Dog
@@ -77,15 +104,15 @@ const Searchtolistpage = () => {
                   sx={{ "&.Mui-checked": { color: orange[500] } }}
                   checked={selectedPet.includes("Cat")}
                   value="Cat"
-                  onChange={handlePetChange1}
+                  onChange={handlePetChange}
                   inputProps={{ "aria-label": "Checkbox demo" }}
                 />
                 Cat
                 <Checkbox
                   sx={{ "&.Mui-checked": { color: orange[500] } }}
-                  checked={selectedPet.includes("Brid")}
-                  value="Brid"
-                  onChange={handlePetChange1}
+                  checked={selectedPet.includes("Bird")}
+                  value="Bird"
+                  onChange={handlePetChange}
                   inputProps={{ "aria-label": "Checkbox demo" }}
                 />
                 Bird
@@ -93,7 +120,7 @@ const Searchtolistpage = () => {
                   sx={{ "&.Mui-checked": { color: orange[500] } }}
                   checked={selectedPet.includes("Rabbit")}
                   value="Rabbit"
-                  onChange={handlePetChange1}
+                  onChange={handlePetChange}
                   inputProps={{ "aria-label": "Checkbox demo" }}
                 />
                 Rabbit
@@ -119,8 +146,6 @@ const Searchtolistpage = () => {
                       {renderStars(rating)}
                     </button>
                   ))}
-                    {selectedPet}
-                  {selectedRatings}
                 </div>
               </div>
 
@@ -135,17 +160,25 @@ const Searchtolistpage = () => {
                     id="demo-simple-select"
                     value={years}
                     label="Year"
-                    onChange={handleChange}
+                    onChange={handleExperienceChange}
                   >
-                    <MenuItem value={1}>0-2 Years</MenuItem>
-                    <MenuItem value={2}>3-5 Years</MenuItem>
-                    <MenuItem value={3}>5+ Years</MenuItem>
+                    <MenuItem value={1}>0-2 Year</MenuItem>
+                    <MenuItem value={2}>3-5 Year</MenuItem>
+                    <MenuItem value={3}>5+ Year</MenuItem>
                   </Select>
                 </FormControl>
                 <div className=" md:flex md:flex-row-reverse gap-4 ">
-                  <Button className="btn-primary w-full    ">Search</Button>
+                  <Button
+                    className="btn-primary w-full   "
+                    onClick={handleSearch}
+                  >
+                    Search
+                  </Button>
 
-                  <Button className=" hidden btn-secondary w-full md:block  ">
+                  <Button
+                    className=" hidden btn-secondary w-full md:block  "
+                    onClick={handleClearFilters}
+                  >
                     Clear
                   </Button>
                 </div>

@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -5,30 +6,79 @@ import { Button } from "@mui/base";
 
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import MapIcon from "@mui/icons-material/Map";
-import Navbar from "../components/navbar/Navbar";
 
 import CardSearchList from "../components/searchs/CardSearchList";
 import Searchtolistpage from "../components/searchs/Searchtolistpage";
-
 import PaginationSize from "../components/searchs/Pagination";
 
 const SearchListPage = () => {
-  const [selectedRatings, setSelectedRatings] = useState([]);
-  
+  const [profiles, setProfiles] = useState([]);
+  const [searchText, setSearchText] = useState("");
+  const [selectedPet, setSelectedPet] = useState([]);
+  const [selectedRatings, setSelectedRatings] = useState(null);
+  const [years, setYears] = useState("");
+  const [filters, setFilters] = useState({
+    petType: "",
+    rating: 0,
+    experience: "",
+    searchText: "",
+  });
 
-  const handleRatingChange = (rating) => {
-    setSelectedRatings((prevSelectedRatings) =>
-      prevSelectedRatings.includes(rating)
-        ? prevSelectedRatings.filter((r) => r !== rating)
-        : [...prevSelectedRatings, rating]
-    );
+  useEffect(() => {
+    const fetchProfiles = async () => {
+      try {
+        const response = await axios.get("http://localhost:4000/profiles");
+        setProfiles(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error axios profile");
+      }
+    };
+
+    fetchProfiles();
+  }, []);
+
+  const handleClearFilters = () => {
+    setSelectedPet([]);
+    setSelectedRatings(null);
+    setSearchText("")
+    setYears("");
+    setFilters({
+      petType: "",
+      rating: 0,
+      experience: "",
+      searchText: "",
+    });
   };
 
-  //ดึงรูปเข้าไปใน array
+  const handleSearch = () => {
+    setFilters({ ...filters, searchText: searchText });
+  };
 
+  const filteredProfiles = profiles.filter((profile) => {
+    const matchType = filters.petType
+      ? profile.type.includes(filters.petType)
+      : true;
+    const matchRating = filters.rating
+      ? profile.rating === filters.rating
+      : true;
+    const matchExperience = filters.experience
+      ? profile.year === filters.experience
+      : true;
+    const matchSearchText = filters.searchText
+      ? filters.searchText
+          .toLowerCase()
+          .split(" ")
+          .every(
+            (word) =>
+              profile.title.toLowerCase().includes(word) ||
+              profile.name.toLowerCase().includes(word)
+          )
+      : true;
+    return matchType && matchRating && matchExperience && matchSearchText;
+  });
   return (
     <>
-      <Navbar />
       <section className=" md:bg-gray-100  md:pr-[70px] md:pl-[92px] ">
         {/* web mode*/}
         <div className=" hidden md:block md:pb-6 md:pt-9  ">
@@ -71,12 +121,27 @@ const SearchListPage = () => {
               </div>
             </div>
             {/* mobile mode */}
-            <div className=" md:sticky md:top-0">
-              <Searchtolistpage />
+            <div className=" md:sticky md:top-0 ">
+              <Searchtolistpage
+                filters={filters}
+                setFilters={setFilters}
+                selectedPet={selectedPet}
+                setSelectedPet={setSelectedPet}
+                selectedRatings={selectedRatings}
+                setSelectedRatings={setSelectedRatings}
+                years={years}
+                setYears={setYears}
+                handleClearFilters={handleClearFilters}
+                handleSearch={handleSearch}
+                setSearchText={setSearchText}
+                searchText={searchText}
+              />
             </div>
           </article>
-          <div className="w-full ">
-            <CardSearchList />
+          <div className="w-full flex flex-col md:gap-10 md:p-4">
+            {filteredProfiles.map((profile, index) => (
+              <CardSearchList key={index} profiles={profile} />
+            ))}
           </div>
         </main>
         <PaginationSize />
