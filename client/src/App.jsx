@@ -1,4 +1,5 @@
 import "./App.css";
+import React from "react";
 import LoginOwnerPetPage from "./pages/LoginOwnerPetPage";
 import LoginPetSitterPage from "./pages/LoginPetSitterPage";
 import RegisterOwnerPetPage from "./pages/RegisterOwnerPetPage";
@@ -12,6 +13,7 @@ import HomePage from "./pages/Homepage";
 import BookingPage from "./pages/BookingPage";
 import PetSitterDetailPage from "./pages/PetSitterDetailPage";
 import Navbar from "./components/navbar/Navbar";
+import BookingPopup from "./components/BookingPopup";
 
 function App() {
   return (
@@ -28,6 +30,7 @@ function App() {
         />
         <Route path="/search" element={<SearchListPage />} />
         <Route path="/search/1" element={<PetSitterDetailPage />} />
+        <Route path="/popup" element={<BookingPopup />} />
         <Route path="/petsitter/profile" element={<PetSitterProfilePage />} />
         <Route
           path="/petsitter/booking-list"
