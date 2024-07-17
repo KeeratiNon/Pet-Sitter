@@ -26,25 +26,7 @@ export const createPetsitterProfile = async (req, res) => {
   } = req.body;
 
   const petsitter = {
-    profile_image,
-    first_name,
-    last_name,
-    experience,
-    phone_number,
-    email,
-    introduction,
-    bank,
-    account_number,
-    petsitter_name,
-    pet_type,
-    services,
-    my_place,
-    image_gallery,
-    address_detail,
-    district,
-    sub_district,
-    province,
-    post_code,
+    ...req.body ,
     created_at: new Date(),
     updated_at: new Date()
   };
@@ -84,3 +66,4 @@ export const createPetsitterProfile = async (req, res) => {
     return res.status(500).json({ message: "Internal server error", error });
   }
 };
+

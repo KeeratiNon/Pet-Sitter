@@ -1,3 +1,4 @@
+import { Axios } from "axios";
 import { useState } from "react";
 import { PetSitterProfileSchema } from "../../schemas/PetSitterProfile";
 import petSitterGreenCircle from "../../assets/svgs/pet-sitter-management/pet-sitter-greenCircle.svg";
@@ -29,6 +30,7 @@ import DistrictForm from "../../components/petSitterManagement/petSitterProfileF
 import SubDistrictForm from "../../components/petSitterManagement/petSitterProfileForm/address/SubDistrictForm";
 import ProvinceForm from "../../components/petSitterManagement/petSitterProfileForm/address/ProvinceForm";
 import PostCodeForm from "../../components/petSitterManagement/petSitterProfileForm/address/PostCodeForm";
+import { SERVER_API_URL } from "../../core/config.mjs";
 
 const PetSitterProfilePage = () => {
   const [formData, setFormData] = useState({
@@ -111,46 +113,45 @@ const PetSitterProfilePage = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    try {await PetSitterProfileSchema.validate(formData, {abortEarly: false});
-    console.log("Form Submitted", formData);
-     
-    // Extract the ID from the URL
-    const url = window.location.href;
-    const id = url.substring(url.lastIndexOf('/') + 1);
-
-    // Send POST request to createPetsitterProfile endpoint
-    const response = await fetch(`http://localhost:4000/petsitter/profile/${id}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(formData)
-    });
-
-    // Handle the response
-    if (!response.ok) {
-      throw new Error(`Error: ${response.statusText}`);
-    }
-
-    const result = await response.json();
-    console.log('Petsitter Profile has been created:', result);
-
-    // Optionally, you can reset the form or handle the successful response as needed
-    // setFormData(initialFormData);
-  }
-    catch (error){
-      // Handle validation errors
-    if (error.inner) {
-      const newError = {};
-      error.inner.forEach((err) => {
-        newError[err.path] = err.message;
+  
+    try {
+      // Validate form data
+      await PetSitterProfileSchema.validate(formData, { abortEarly: false });
+      console.log("Form Submitted", formData);
+  
+      // Extract the ID from the URL
+      const url = window.location.href;
+      const id = url.substring(url.lastIndexOf('/') + 1);
+  
+      // Send POST request to createPetsitterProfile endpoint using axios
+      const response = await axios.post(`${SERVER_API_URL}/petsitter/profile/${id}`, formData, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
       });
-      setErrors(newError);
-    } else {
-      // Handle fetch or other errors
-      console.error('Error creating petsitter profile:', error);
+  
+      // Handle the response
+      console.log('Petsitter Profile has been created:', response.data);
+  
+      // Optionally, you can reset the form or handle the successful response as needed
+      // setFormData(initialFormData);
+  
+    } catch (error) {
+      // Handle validation errors
+      if (error.inner) {
+        const newError = {};
+        error.inner.forEach((err) => {
+          newError[err.path] = err.message;
+        });
+        setErrors(newError);
+      } else if (error.response) {
+        // Handle server errors
+        console.error('Server error creating petsitter profile:', error.response.data);
+      } else {
+        // Handle other errors (e.g., network errors)
+        console.error('Error creating petsitter profile:', error.message);
+      }
     }
-  }
   };
 
   return (
