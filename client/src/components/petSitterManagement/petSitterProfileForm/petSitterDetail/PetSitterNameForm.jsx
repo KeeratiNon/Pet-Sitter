@@ -1,4 +1,4 @@
-function PetSitterNameForm({handlePetSitterName, petSitterName}) {
+function PetSitterNameForm({handlePetSitterName, petSitterName, errors}) {
 
   return (
     <div>
@@ -11,6 +11,7 @@ function PetSitterNameForm({handlePetSitterName, petSitterName}) {
           className="border border-gray-200 rounded-[8px] h-[48px] p-[12px] text-[16px] leading-[24px] font-normal"
         />
       </label>
+      {errors.petsitter_name && <div className="error text-[16px] leading-[24px] text-red-500">{errors.petsitter_name}</div>}
     </div>
   );
 }

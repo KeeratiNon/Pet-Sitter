@@ -1,4 +1,4 @@
-function EmailForm({handleEmail, email}) {
+function EmailForm({handleEmail, email, errors}) {
   
   return (
     <div>
@@ -12,6 +12,7 @@ function EmailForm({handleEmail, email}) {
           className="border border-gray-200 rounded-[8px] h-[48px] p-[12px] text-[16px] leading-[24px] font-normal"
         />
       </label>
+      {errors.email && <div className="error text-[16px] leading-[24px] text-red-500">{errors.email}</div>}
     </div>
   );
 }
