@@ -32,6 +32,45 @@ const AuthProvider = ({ children }) => {
 
   const navigate = useNavigate();
 
+<<<<<<< HEAD
+=======
+  useEffect(() => {
+    const checkToken = async () => {
+      const token = getToken();
+      if (token) {
+        try {
+          const tokenData = jwtDecode(token);
+          const expiredIn = tokenData?.exp || tokenData?.expiredIn;
+          if (expiredIn * 1000 < Date.now()) {
+            // Token expired
+            removeAllTokens();
+            setState({ ...state, user: null });
+            navigate("/");
+          } else {
+            // Token valid
+            const userDataFromToken = jwtDecode(token);
+            setState({ ...state, user: userDataFromToken });
+          }
+        } catch (error) {
+          // Invalid token format
+          removeAllTokens();
+          setState({ ...state, user: null });
+          navigate("/");
+        }
+      } else {
+        // No token found
+        setState({ ...state, user: null });
+      }
+    };
+
+    checkToken(); // Check token validity on mount
+
+    const interval = setInterval(checkToken, 60000); // Check token validity every 1 min
+
+    return () => clearInterval(interval); // Clean up interval on unmount
+  }, [navigate]); // Empty dependency array ensures this effect runs only once
+
+>>>>>>> 5379f03 (refactor: improved the code structure of booking page)
   const loginUser = async (data) => {
     setState({ ...state, loading: true });
     try {
