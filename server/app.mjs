@@ -17,14 +17,21 @@ import { ChatRoom } from "./models/chatrooms.mjs";
 import dotenv from "dotenv";
 
 dotenv.config();
+
 import { userRouter } from "./routes/user.mjs";
 import { bookingRouter } from "./routes/booking.mjs";
 import { protect } from "./middlewares/protect.mjs";
 import bookingHistoryRouter from "./routes/bookingHistory.mjs"; // นำเข้า Route สำหรับ Booking History
+
 import { handleImageUpload } from "./utils/image.mjs";
 import sql from "./utils/db.mjs";
 import cron from "node-cron";
 import { userReview } from "./routes/review.mjs";
+
+
+
+import { bookingRouter } from "./routes/booking.mjs";
+import { protect } from "./middlewares/protect.mjs";
 
 
 const app = express();
@@ -62,8 +69,18 @@ app.use("/report", bookingHistoryRouter)
 
 app.use("/user", userRouter);
 
+
+app.use("/petsitter/profile", petSitterProfileRouter);
+
+
 app.get("/profiles", (req, res) => {
   res.json(profiles);
+});
+app.use("/auth", authRouter);
+app.use("/bookings", bookingRouter);
+
+app.get("/profile", [protect], (req, res) => {
+  res.send(profiles);
 });
 
 app.use("/bookings", bookingRouter);

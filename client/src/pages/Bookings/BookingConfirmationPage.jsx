@@ -75,7 +75,7 @@ const BookingConfirmationPage = () => {
           Booking Detail
         </button>
         <button
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/search")}
           className="bg-[#FF7037] text-white text-base py-3 px-6 rounded-full"
         >
           Back To Home
