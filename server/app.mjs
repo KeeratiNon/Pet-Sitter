@@ -16,11 +16,19 @@ import { ChatRoom } from "./models/chatrooms.mjs";
 import dotenv from "dotenv";
 
 dotenv.config();
+<<<<<<< HEAD
 import { userRouter } from "./routes/user.mjs";
 import { bookingRouter } from "./routes/booking.mjs";
 import { protect } from "./middlewares/protect.mjs";
 import bookingHistoryRouter from "./routes/bookingHistory.mjs"; // นำเข้า Route สำหรับ Booking History
+<<<<<<< HEAD
 import { handleImageUpload } from "./utils/image.mjs";
+=======
+=======
+import { bookingRouter } from "./routes/booking.mjs";
+import { protect } from "./middlewares/protect.mjs";
+>>>>>>> 01ce54b (refactor: improved the code structure of booking page)
+>>>>>>> b705b8b (refactor: improved the code structure of booking page)
 
 const app = express();
 const port = 4000;
@@ -45,8 +53,19 @@ app.use("/booking-history", bookingHistoryRouter); // ใช้ Route สำห�
 
 app.use("/user", userRouter);
 
+<<<<<<< HEAD
+=======
+app.use("/petsitter/profile", petSitterProfileRouter);
+
+>>>>>>> b705b8b (refactor: improved the code structure of booking page)
 app.get("/profiles", (req, res) => {
   res.json(profiles);
+});
+app.use("/auth", authRouter);
+app.use("/bookings", bookingRouter);
+
+app.get("/profile", [protect], (req, res) => {
+  res.send(profiles);
 });
 
 app.use("/bookings", bookingRouter);
