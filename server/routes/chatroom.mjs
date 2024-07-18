@@ -1,7 +1,8 @@
 import { Router } from "express";
-import { getChatRoomList } from "../controllers/chatrooms.mjs";
+import { getChatRoomList, getMessages } from "../controllers/chatrooms.mjs";
 import { protect } from "../middlewares/protect.mjs";
 
 export const chatRouter = Router();
 
 chatRouter.get("/list",[protect], getChatRoomList);
+chatRouter.post("/messages",[protect], getMessages);

@@ -6,11 +6,14 @@ import { Server } from "socket.io";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import { chatRouter } from "./routes/chatroom.mjs";
-
 mongoose.connect("mongodb://127.0.0.1/PetSitter");
 import "./models/chatrooms.mjs";
 import profiles from "./utils/dbtest.mjs";
 import { petSitterProfileRouter } from "./routes/petSitterProfile.mjs";
+import { ChatRoom } from "./models/chatrooms.mjs";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 const port = 4000;
@@ -29,7 +32,7 @@ app.use(express.json());
 app.use("/auth", authRouter)
 app.use("/petsitter/profile",petSitterProfileRouter)
 
-app.get('/profiles', (req, res) => {
+app.get("/profiles", (req, res) => {
   res.json(profiles);
 });
 
@@ -39,10 +42,10 @@ app.get("/test", (req, res) => {
 
 app.use("/chatrooms", chatRouter);
 
-io.use(async (socket, next) => {
+io.use((socket, next) => {
   try {
     const token = socket.handshake.query.token;
-    const payload = await jwt.verify(token, process.env.JWT_SECRET);
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
     socket.userId = payload.id;
     next();
   } catch (err) {
@@ -59,45 +62,70 @@ io.on("connection", (socket) => {
 
   socket.on("sendMessage", async ({ chatRoomId, targetId, message }) => {
     if (message) {
-      const newMessage = {
-        message,
-        senderId: socket.userId,
-        receiverId: targetId,
-      };
-      newMessage.update(
-        {
-          chatRoomId,
-        },
-        {
-          $push: { messages: newMessage },
-        }
-      );
+      try {
+        const newMessage = {
+          message,
+          senderId: socket.userId,
+          receiverId: targetId,
+        };
+        const reverseChatRoomId = chatRoomId.chatRoomId
+          .split("/")
+          .reverse()
+          .join("/");
+        // const findRoom = await ChatRoom.findOne({ $or: [{chatRoomId: chatRoomId.chatRoomId}, {chatRoomId:reverseChatRoomId}] })
+        // console.log(findRoom)
+        const chatRoom = await ChatRoom.findOneAndUpdate(
+          {
+            $or: [
+              { chatRoomId: chatRoomId.chatRoomId },
+              { chatRoomId: reverseChatRoomId },
+            ],
+          },
+          { $push: { messages: newMessage } },
+          { new: true, upsert: true }
+        );
+        console.log(chatRoom)
+        io.to(chatRoom).emit("newMessage", newMessage);
+      } catch (error) {
+        console.error("Error saving message:", error);
+      }
     }
   });
 
-  socket.on("joinRoom", async ({ chatRoomId }) => {
-    if (chatRoomId) {
-      const chatRoom = await ChatRoom.findOne({
-        chatRoomId,
-      });
-      if (chatRoom) {
+  socket.on("joinRoom", async ({ chatRoomId, targetId }) => {
+    try {
+      const reverseChatRoomId = chatRoomId.chatRoomId
+          .split("/")
+          .reverse()
+          .join("/");
+      if (chatRoomId) {
+        const chatRoom = await ChatRoom.findOne({
+          $or: [
+            { chatRoomId: chatRoomId.chatRoomId },
+            { chatRoomId: reverseChatRoomId },
+          ],
+        });
+        if (chatRoom) {
+          socket.join(chatRoomId);
+          io.to(chatRoomId).emit("chatRoomMessage", {
+            chatRoom,
+          });
+          return;
+        }
+      } else {
+        const newChatRoomId = `${socket.userId}/${targetId}`;
+        const newChatRoom = new ChatRoom({
+          chatRoomId: newChatRoomId,
+          messages: [],
+        });
+        await newChatRoom.save();
         socket.join(chatRoomId);
         io.to(chatRoomId).emit("chatRoomMessage", {
-          chatRoom,
+          chatRoom: newChatRoom,
         });
-        return;
       }
-    } else {
-      const newChatRoomId = `${socket.userId}/2`;
-      const newChatRoom = new ChatRoom({
-        chatRoomId: newChatRoomId,
-        messages: [],
-      });
-      await newChatRoom.save();
-      socket.join(chatRoomId);
-      io.to(chatRoomId).emit("chatRoomMessage", {
-        chatRoom: newChatRoom,
-      });
+    } catch (error) {
+      console.error("Error joining room:", error);
     }
   });
 });

@@ -10,13 +10,32 @@ import { SERVER_API_URL } from "../../core/config.mjs";
 
 const Chat = () => {
   const [socket, setSocket] = useState(null);
-  const [chatRoomList,setChatRoomList] = useState([])
+  const [chatRoomList, setChatRoomList] = useState([]);
+  const [selectedChatRoom, setSelectedChatRoom] = useState(null);
+  const [newMessage, setNewMessage] = useState("");
+  const [historyMessage, setHistoryMessage] = useState([]);
 
-  const getChatRoomList = async() => {
-    const results = await axios.get(`${SERVER_API_URL}/chatrooms/list`)
-    setChatRoomList(results.data)
-    console.log(results)
-  }
+  const getChatRoomList = async () => {
+    try {
+      const results = await axios.get(`${SERVER_API_URL}/chatrooms/list`);
+      setChatRoomList(results.data);
+    } catch (error) {
+      console.error("Failed to fetch chat rooms", error);
+    }
+  };
+
+  const getMessages = async (chatRoomId) => {
+    const data = { chatRoomId: chatRoomId };
+    try {
+      const results = await axios.post(
+        `${SERVER_API_URL}/chatrooms/messages`,
+        data
+      );
+      setHistoryMessage(results.data.data);
+    } catch (error) {
+      console.error("Failed to fetch messages", error);
+    }
+  };
 
   const setupSocket = () => {
     const token = getToken();
@@ -29,11 +48,16 @@ const Chat = () => {
 
       newSocket.on("disconnect", () => {
         setSocket(null);
-        console.log("Socket Disconnected!");
+        // console.log("Socket Disconnected!");
       });
 
       newSocket.on("connect", () => {
-        console.log("Socket Connected!");
+        // console.log("Socket Connected!");
+      });
+
+      newSocket.on("message", (message) => {
+        console.log("New message received:", message);
+        setNewMessage((prevMessages) => [...prevMessages, message]);
       });
 
       setSocket(newSocket);
@@ -41,7 +65,7 @@ const Chat = () => {
   };
 
   useEffect(() => {
-    getChatRoomList()
+    getChatRoomList();
     if (!socket) {
       setupSocket();
     }
@@ -50,31 +74,71 @@ const Chat = () => {
         socket.disconnect();
       }
     };
-  }, []);
+  }, [socket]);
+
+  const joinChatRoom = (chatRoomId, targetId) => {
+    setSelectedChatRoom({ chatRoomId, targetId });
+    socket.emit("joinRoom", { chatRoomId, targetId });
+  };
+
+  const sendMessage = (chatRoomId) => {
+    if (newMessage.trim()) {
+      socket.emit("sendMessage", {
+        chatRoomId: selectedChatRoom,
+        targetId: chatRoomId.targetId,
+        message: newMessage,
+      });
+      setNewMessage("");
+    }
+  };
 
   return (
-    <div className="flex">
-      <section className="bg-black py-[40px] max-w-[368px] h-screen">
+    <div className="flex h-[calc(100dvh-72px)]">
+      <section className="bg-black py-[40px] max-w-[368px]">
         <h3 className="text-white mx-[40px] mb-[24px] text-[24px] leading-[32px] font-bold">
           Messages
         </h3>
-        <div className="flex flex-col gap-[8px]">
-          <PetSitter />
-          <PetSitter />
-          <PetSitter />
-          <PetSitter />
-        </div>
+        {chatRoomList.map((chatRoom) => {
+          return (
+            <ul className="flex flex-col gap-[8px]" key={chatRoom.chatRoom}>
+              <li
+                onClick={() => {
+                  joinChatRoom(chatRoom.chatRoom, chatRoom.targetId);
+                  getMessages(chatRoom.chatRoom);
+                }}
+              >
+                <PetSitter chatRoom={chatRoom} />
+              </li>
+            </ul>
+          );
+        })}
       </section>
       <section className="flex flex-col w-[100%]">
-        <header>
-          <HeaderPetSitter />
-        </header>
-        <main className="flex flex-1 p-[40px]">
-          <MainChat socket={socket}/>
+        <main className="flex">
+          {selectedChatRoom && (
+            <div className="flex flex-col w-full">
+              <div>
+                <HeaderPetSitter />
+              </div>
+              <div className="flex flex-1 ">
+                <MainChat
+                  chatRoomId={selectedChatRoom}
+                  historyMessage={historyMessage}
+                  getMessages={getMessages}
+                />
+              </div>
+              <hr className="border-t-[1px] border-gray-200" />
+              <div className="py-[24px] px-[40px]">
+                <FooterPetSitter
+                  chatRoomId={selectedChatRoom}
+                  sendMessage={sendMessage}
+                  newMessage={newMessage}
+                  setNewMessage={setNewMessage}
+                />
+              </div>
+            </div>
+          )}
         </main>
-        <footer>
-          <FooterPetSitter socket={socket}/>
-        </footer>
       </section>
     </div>
   );

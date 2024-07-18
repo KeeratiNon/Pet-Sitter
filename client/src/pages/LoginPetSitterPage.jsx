@@ -19,10 +19,10 @@ const initialValues = {
 };
 
 const LoginPetSitterPage = () => {
-  const { loginUser, state } = useAuth();
+  const { loginPetSitter, state } = useAuth();
 
   const onSubmit = (values, actions) => {
-    loginUser(values);
+    loginPetSitter(values);
     actions.resetForm();
   };
 
