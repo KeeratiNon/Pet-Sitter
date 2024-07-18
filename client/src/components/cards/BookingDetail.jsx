@@ -1,4 +1,4 @@
-const BookingDetail = () => {
+const BookingDetail = ({ data }) => {
   return (
     <section className="w-full bg-white">
       <h1 className="text-[20px] leading-[28px] font-bold p-4 border-b md:text-2xl">
@@ -35,7 +35,7 @@ const BookingDetail = () => {
             Pet:
           </span>
           <span className="text-[#3A3B46] text-[16px] leading-[28px] font-medium">
-            -
+            {data.pet_name.map((name) => `${name}, `)}
           </span>
         </li>
       </ul>

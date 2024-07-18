@@ -17,6 +17,8 @@ import dotenv from "dotenv";
 
 dotenv.config();
 import { userRouter } from "./routes/user.mjs";
+import { bookingRouter } from "./routes/booking.mjs";
+import { protect } from "./middlewares/protect.mjs";
 
 const app = express();
 const port = 4000;
@@ -44,6 +46,16 @@ app.use("/petsitter/booking", petSitterBookingRouter);
 
 app.use("/user", userRouter);
 
+
+app.get("/profiles", (req, res) => {
+  res.json(profiles);
+});
+
+app.use("/bookings", bookingRouter);
+
+app.get("/profile", [protect], (req, res) => {
+  res.send(profiles);
+});
 
 app.get("/test", (req, res) => {
   return res.json("Server API is working");
