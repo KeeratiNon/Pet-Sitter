@@ -123,9 +123,7 @@ const Chat = () => {
               </div>
               <div className="flex flex-1 ">
                 <MainChat
-                  chatRoomId={selectedChatRoom}
                   historyMessage={historyMessage}
-                  getMessages={getMessages}
                 />
               </div>
               <hr className="border-t-[1px] border-gray-200" />

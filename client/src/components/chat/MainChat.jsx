@@ -10,7 +10,6 @@ const MainChat = ({
   const {state} = useAuth()
 
   useEffect(() => {
-    console.log("Scrolling to bottom");
     messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [historyMessage]);
 

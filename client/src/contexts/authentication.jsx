@@ -113,6 +113,8 @@ const AuthProvider = ({ children }) => {
     navigate("/");
   };
 
+  const isAuthenticated = Boolean(getAllToken());
+
   return (
     <AuthContext.Provider
       value={{

@@ -16,6 +16,7 @@ import Navbar from "./components/navbar/Navbar";
 import Chat from "./components/chat/Chat";
 import BookingPopup from "./components/BookingPopup";
 import BookingHistoryPage from "./pages/BookingHistoryPage"
+import ErrorPage from "./pages/ErrorPage";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
         <Route path="/booking" element={<BookingPage />} />
         <Route path="/chat" element={<Chat />}/>
         <Route path="/user/booking-history" element={<BookingHistoryPage />} />
+        <Route path="*" element={<ErrorPage />}/>
       </Routes>
     </>
   );
