@@ -15,7 +15,7 @@ import PetSitterDetailPage from "./pages/PetSitterDetailPage";
 import Navbar from "./components/navbar/Navbar";
 import Chat from "./components/chat/Chat";
 import BookingPopup from "./components/BookingPopup";
-import BookingHistoryPage from "./pages/BookingHistoryPage";
+import BookingHistoryPage from "./pages/BookingHistoryPage"
 
 function App() {
   return (
@@ -44,7 +44,7 @@ function App() {
         />
         <Route path="/booking" element={<BookingPage />} />
         <Route path="/chat" element={<Chat />}/>
-        <Route path="/booking/history" element={<BookingHistoryPage />} />
+        <Route path="/user/booking-history" element={<BookingHistoryPage />} />
       </Routes>
     </>
   );

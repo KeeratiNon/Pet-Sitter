@@ -4,7 +4,7 @@ import changeIcon from "../../assets/svgs/icons/icon-change.svg";
 import line from "../../assets/svgs/icons/icon-line.svg";
 import phone from "../../assets/svgs/icons/icon-phone.svg";
 
-const BookingHistorySuccess = ({list}) => {
+const BookingHistorySuccess = () => {
   return (
     <div className="flex gap-[24px] ">
       <div className="flex flex-col  border-primarygray-200 border rounded-[16px] p-[16px] lg:p-[24px] gap-[16px] lg:gap-[36px] w-full">
@@ -21,7 +21,7 @@ const BookingHistorySuccess = ({list}) => {
                   Happy House!
                 </p>
                 <p className="text-black text-18px leading-[26px] font-medium">
-                  By {list.name}
+                  By Jane Maison
                 </p>
               </div>
             </div>
