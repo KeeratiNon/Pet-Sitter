@@ -2,16 +2,17 @@ import React, { useState } from 'react';
 import petSitterWhiteProfile from "../../../../assets/svgs/pet-sitter-management/pet-sitter-whiteProfile.svg";
 import petSitterAddImage from "../../../../assets/svgs/pet-sitter-management/pet-sitter-addImage.svg";
 
-const ProfileImage = ({handleProfileImage}) => {
-  const [profileImage, setProfileImage] = useState('');
-
+const ProfileImage = ({profileImage, setFormData}) => {
+  
   const handleChange = (event) => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = (event) => {
-        setProfileImage(event.target.result);
-        handleProfileImage(event.target.result);
+      reader.onloadend = () => {
+        setFormData((prev) => ({
+          ...prev,
+          profile_image: reader.result
+        }));
       };
 
       reader.readAsDataURL(file);

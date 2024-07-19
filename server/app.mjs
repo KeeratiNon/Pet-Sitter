@@ -9,6 +9,7 @@ import { chatRouter } from "./routes/chatroom.mjs";
 mongoose.connect("mongodb://127.0.0.1/PetSitter");
 import "./models/chatrooms.mjs";
 
+import bodyParser from "body-parser";
 import { petSitterProfileRouter } from "./routes/petSitterProfile.mjs";
 import { ChatRoom } from "./models/chatrooms.mjs";
 import dotenv from "dotenv";
@@ -29,10 +30,14 @@ const io = new Server(server, {
 
 app.use(cors());
 
+app.use(bodyParser.json({ limit: '50mb' })); 
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+
 app.use(express.json());
 app.use("/auth", authRouter);
 app.use("/petsitter/profile", petSitterProfileRouter);
 app.use("/", petSitterProfileRouter);
+
 
 
 

@@ -1,8 +1,26 @@
 import sql from "../utils/db.mjs";
 
-export const createPetsitterProfile = async (req, res) => {
-  const { id: params } = req.params;
+// Helper function to format response
+const formatResponse = (res, status, message, data = null) => {
+    res.status(status).json({ message, data });
+  };
+  
+  // Helper function to get the current date
+  const getCurrentDate = () => new Date();
+  
+  // Helper function to sanitize input and convert empty strings to null
+  const sanitizeInput = (input) => {
+    return input !== '' ? input : null;
+  };
+  
+  // Enhanced logging function to debug inputs
+  const logInputs = (inputs) => {
+    console.log("Sanitized Inputs:", inputs);
+  };
 
+export const createPetsitterProfile = async (req, res) => {
+  const param = req.params.id;
+  
   const {
     profile_image,
     first_name,
@@ -26,17 +44,40 @@ export const createPetsitterProfile = async (req, res) => {
   } = req.body;
 
   const petsitter = {
-    ...req.body,
-    created_at: new Date(),
-    updated_at: new Date(),
+    profile_image: sanitizeInput(profile_image),
+    first_name: sanitizeInput(first_name),
+    last_name: sanitizeInput(last_name),
+    experience: sanitizeInput(experience),
+    phone_number: sanitizeInput(phone_number),
+    email: sanitizeInput(email),
+    introduction: sanitizeInput(introduction),
+    bank: sanitizeInput(bank),
+    account_number: sanitizeInput(account_number),
+    petsitter_name: sanitizeInput(petsitter_name),
+    pet_type: sanitizeInput(pet_type),
+    services: sanitizeInput(services),
+    my_place: sanitizeInput(my_place),
+    image_gallery: sanitizeInput(image_gallery),
+    address_detail: sanitizeInput(address_detail),
+    district: sanitizeInput(district),
+    sub_district: sanitizeInput(sub_district),
+    province: sanitizeInput(province),
+    post_code: sanitizeInput(post_code),
+    created_at: getCurrentDate(),
+    updated_at: getCurrentDate(),
   };
 
+  // Log the inputs for debugging
+  logInputs(petsitter);
+
+  let results;
+
   try {
-    const results = await sql`
+    results = await sql`
       WITH updated_pet_sitter AS (
         UPDATE pet_sitters
         SET phone_number = ${petsitter.phone_number}, email = ${petsitter.email}, updated_at = ${petsitter.updated_at}
-        WHERE id = ${params}
+        WHERE id = ${param}
         RETURNING id
       ),
       inserted_profile AS (
@@ -56,15 +97,13 @@ export const createPetsitterProfile = async (req, res) => {
       )
       RETURNING *;
     `;
-
-    return res.status(201).json({
-      message: "Petsitter Profile has been created.",
-      data: results,
-    });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({ message: "Internal server error", error });
   }
+  return res.status(201).json({
+    message: "Petsitter Profile has been created.",
+    data: results,
+  });
 };
 
 export const searchPetsitterProfile = async (req, res) => {
@@ -102,3 +141,110 @@ export const searchPetsitterProfile = async (req, res) => {
 
   
 };
+
+export const viewPetsitterProfile = async (req, res) => {
+    const param = req.params.id;
+
+    let results;
+    try {
+      results = await sql` 
+          SELECT *
+          FROM pet_sitters
+          INNER JOIN pet_sitter_profiles on pet_sitter_profiles.pet_sitter_id = pet_sitters.id
+          INNER JOIN pet_sitter_address on pet_sitter_address.pet_sitter_profile_id = pet_sitter_profiles.id
+          WHERE pet_sitters.id = ${param}
+          `;
+    } catch (error) {
+      return res.status(500).json({
+        message: "Internal server error",
+        error: error.message,
+      });
+    }
+    if (results.length > 0) {
+      return res.status(200).json({
+        message: "Petsitter Profile found",
+        data: results[0],
+      });
+    } else {
+      return res.status(404).json({
+        message: "Petsitter Profile not found",
+      });
+    }
+  };
+
+  export const updatePetsitterProfile = async (req, res) => {
+    const param = req.params.id;
+  
+    const {
+      profile_image,
+      first_name,
+      last_name,
+      experience,
+      phone_number,
+      email,
+      introduction,
+      bank,
+      account_number,
+      petsitter_name,
+      pet_type,
+      services,
+      my_place,
+      image_gallery,
+      address_detail,
+      district,
+      sub_district,
+      province,
+      post_code,
+    } = req.body;
+  
+    const petsitter = {
+      ...req.body,
+      updated_at: new Date(),
+    };
+  
+    let results;
+  
+    try {
+      results = await sql`
+        WITH updated_pet_sitter AS (
+          UPDATE pet_sitters
+          SET phone_number = ${petsitter.phone_number}, email = ${petsitter.email}, updated_at = ${petsitter.updated_at}
+          WHERE id = ${param}
+          RETURNING id
+        ),
+        updated_profile AS (
+          UPDATE pet_sitter_profiles
+          SET profile_image = ${petsitter.profile_image}, firstname = ${petsitter.first_name}, lastname = ${petsitter.last_name}, experience = ${petsitter.experience}, introduction = ${petsitter.introduction}, bank = ${petsitter.bank}, account_number = ${petsitter.account_number}, pet_sitter_name = ${petsitter.petsitter_name}, pet_type = ${petsitter.pet_type}, services = ${petsitter.services}, my_place = ${petsitter.my_place}, image_gallery = ${petsitter.image_gallery}, updated_at = ${petsitter.updated_at}
+          WHERE pet_sitter_id = ${param}
+          RETURNING id
+        )
+        UPDATE pet_sitter_address
+        SET address_detail = ${petsitter.address_detail}, district = ${petsitter.district}, sub_district = ${petsitter.sub_district}, province = ${petsitter.province}, post_code = ${petsitter.post_code}, updated_at = ${petsitter.updated_at}
+        WHERE pet_sitter_profile_id = (SELECT id FROM updated_profile)
+        RETURNING *;
+      `;
+    } catch (error) {
+      return res.status(500).json({ message: "Internal server error", error });
+    }
+    return res.status(200).json({
+      message: "Petsitter Profile has been updated.",
+      data: results,
+    });
+  };
+
+  export const checkPetsitterProfile = async (req, res) => {
+    const param = req.params.id;
+  
+    try {
+      const results = await sql`
+        SELECT 1
+        FROM pet_sitter_profiles
+        WHERE pet_sitter_id = ${param}
+        LIMIT 1;
+      `;
+      const profileExists = results.length > 0;
+      res.status(200).json({ exists: profileExists });
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error", error: error.message });
+    }
+  };
