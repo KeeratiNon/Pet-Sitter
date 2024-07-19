@@ -26,9 +26,9 @@ export const createPetsitterProfile = async (req, res) => {
   } = req.body;
 
   const petsitter = {
-    ...req.body ,
+    ...req.body,
     created_at: new Date(),
-    updated_at: new Date()
+    updated_at: new Date(),
   };
 
   try {
@@ -62,8 +62,43 @@ export const createPetsitterProfile = async (req, res) => {
       data: results,
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.status(500).json({ message: "Internal server error", error });
   }
 };
 
+export const searchPetsitterProfile = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1; // ถ้าไม่ได้ส่ง page มา ให้ใช้หน้า 1
+    const pageSize = parseInt(req.query.pageSize) || 5; // ถ้าไม่ได้ส่ง pageSize มา ให้ใช้ 5
+    const offset = (page - 1) * pageSize;
+    const results = await sql`
+              SELECT
+        pet_sitter_profiles.pet_sitter_name,
+        pet_sitter_profiles.firstname,
+        pet_sitter_profiles.lastname,
+        pet_sitter_profiles.profile_image,
+        pet_sitter_profiles.image_gallery,
+        pet_sitter_profiles.pet_type,
+        pet_sitter_profiles.experience,
+        pet_sitter_address.district,
+        pet_sitter_address.province
+      FROM
+        pet_sitter_profiles
+      INNER JOIN
+        pet_sitter_address ON pet_sitter_profiles.id = pet_sitter_address.pet_sitter_profile_id
+      LIMIT ${pageSize} OFFSET ${offset};
+    `;
+
+    return res.status(200).json({
+      message: "Pet sitter Profile has been show.",
+      data: results,
+      currentPage: page,
+      pageSize: pageSize,
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+
+  
+};

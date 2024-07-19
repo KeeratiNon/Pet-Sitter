@@ -32,7 +32,7 @@ const Searchtolistpage = ({
         ? preSelectedPets.filter((pet) => pet !== value)
         : [...preSelectedPets, value]
     );
-    setFilters({ ...filters, petType: value });
+    setFilters({ ...filters, pet_type: value });
   }
   const handleRatingChange = (rating) => {
     setSelectedRatings(rating);
@@ -50,17 +50,18 @@ const Searchtolistpage = ({
 
   const handleExperienceChange = (event) => {
     setYears(event.target.value);
+    
 
     setFilters({
       ...filters,
       experience:
         event.target.value === 1
-          ? "0-2 year"
+          ? "0-2 Years"
           : event.target.value === 2
-          ? "3-5 year"
-          : "5+ year",
+          ? "3-5 Years"
+          : "5+ Years",
     });
-    console.log(event.target.value);
+    
   };
 
   return (
@@ -162,9 +163,9 @@ const Searchtolistpage = ({
                     label="Year"
                     onChange={handleExperienceChange}
                   >
-                    <MenuItem value={1}>0-2 Year</MenuItem>
-                    <MenuItem value={2}>3-5 Year</MenuItem>
-                    <MenuItem value={3}>5+ Year</MenuItem>
+                    <MenuItem value={1}>0-2 Years</MenuItem>
+                    <MenuItem value={2}>3-5 Years</MenuItem>
+                    <MenuItem value={3}>5+ Years</MenuItem>
                   </Select>
                 </FormControl>
                 <div className=" md:flex md:flex-row-reverse gap-4 ">
