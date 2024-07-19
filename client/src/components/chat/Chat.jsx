@@ -89,6 +89,7 @@ const Chat = () => {
         message: newMessage,
       });
       setNewMessage("");
+      getMessages(chatRoomId.chatRoomId)
     }
   };
 

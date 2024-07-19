@@ -1,16 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useAuth } from "../../contexts/authentication";
 
 const MainChat = ({
-  chatRoomId,
   historyMessage,
-  getMessages,
 }) => {
+
+  const messageEndRef = useRef(null); 
 
   const {state} = useAuth()
 
   useEffect(() => {
-    getMessages(chatRoomId.chatRoomId);
+    console.log("Scrolling to bottom");
+    messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [historyMessage]);
 
   return (
@@ -23,6 +24,7 @@ const MainChat = ({
             </div>
           </div>
         ))}
+        <div ref={messageEndRef}/>
       </div>
     </div>
   );

@@ -72,8 +72,6 @@ io.on("connection", (socket) => {
           .split("/")
           .reverse()
           .join("/");
-        // const findRoom = await ChatRoom.findOne({ $or: [{chatRoomId: chatRoomId.chatRoomId}, {chatRoomId:reverseChatRoomId}] })
-        // console.log(findRoom)
         const chatRoom = await ChatRoom.findOneAndUpdate(
           {
             $or: [
@@ -84,7 +82,6 @@ io.on("connection", (socket) => {
           { $push: { messages: newMessage } },
           { new: true, upsert: true }
         );
-        console.log(chatRoom)
         io.to(chatRoom).emit("newMessage", newMessage);
       } catch (error) {
         console.error("Error saving message:", error);
