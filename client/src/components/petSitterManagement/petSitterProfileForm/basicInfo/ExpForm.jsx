@@ -8,7 +8,6 @@ const ExpForm = ({ handleExp, experience, errors }) => {
           value={experience}
           onChange={handleExp}
           className="border border-gray-200 rounded-lg h-12 p-3 text-lg leading-6 font-normal"
-          defaultValue=""
         >
           <option value="" hidden></option>
           <option value="0-2 Years">0-2 Years</option>

@@ -1,5 +1,6 @@
-import { Axios } from "axios";
-import { useState } from "react";
+import axios from "axios";
+import { useState, useEffect } from "react";
+import { SERVER_API_URL } from "../../core/config.mjs";
 import { PetSitterProfileSchema } from "../../schemas/PetSitterProfile";
 import petSitterGreenCircle from "../../assets/svgs/pet-sitter-management/pet-sitter-greenCircle.svg";
 
@@ -30,7 +31,6 @@ import DistrictForm from "../../components/petSitterManagement/petSitterProfileF
 import SubDistrictForm from "../../components/petSitterManagement/petSitterProfileForm/address/SubDistrictForm";
 import ProvinceForm from "../../components/petSitterManagement/petSitterProfileForm/address/ProvinceForm";
 import PostCodeForm from "../../components/petSitterManagement/petSitterProfileForm/address/PostCodeForm";
-import { SERVER_API_URL } from "../../core/config.mjs";
 
 const PetSitterProfilePage = () => {
   const [formData, setFormData] = useState({
@@ -55,17 +55,54 @@ const PetSitterProfilePage = () => {
     post_code: "",
   });
 
+  const [errors, setErrors] = useState({});
+
+  const getIdFromUrl = () => {
+    const url = window.location.href;
+    return url.substring(url.lastIndexOf("/") + 1);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const id = getIdFromUrl();
+      try {
+        const response = await axios.get(
+          `${SERVER_API_URL}/petsitter/profile/${id}`
+        );
+        const data = response.data.data;
+        setFormData({
+          profile_image: data.profile_image || "",
+          first_name: data.firstname || "",
+          last_name: data.lastname || "",
+          experience: data.experience || "",
+          phone_number: data.phone_number || "",
+          email: data.email || "",
+          introduction: data.introduction || "",
+          bank: data.bank || "",
+          account_number: data.account_number || "",
+          petsitter_name: data.pet_sitter_name || "",
+          pet_type: data.pet_type || [],
+          services: data.services || "",
+          my_place: data.my_place || "",
+          image_gallery: data.image_gallery || [],
+          address_detail: data.address_detail || "",
+          district: data.district || "",
+          sub_district: data.sub_district || "",
+          province: data.province || "",
+          post_code: data.post_code || "",
+        });
+      } catch (error) {
+        console.error("Error fetching petsitter profile data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const handleChange = (field) => (event) => {
     setFormData((prev) => ({
       ...prev,
       [field]: event.target.value,
-    }));
-  };
-
-  const handleProfileImage = (imageData) => {
-    setFormData((prev) => ({
-      ...prev,
-      profile_image: imageData,
     }));
   };
 
@@ -109,35 +146,36 @@ const PetSitterProfilePage = () => {
     }));
   };
 
-  const [errors, setErrors] = useState({});
-
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+
     try {
-      // Validate form data
       await PetSitterProfileSchema.validate(formData, { abortEarly: false });
-      console.log("Form Submitted", formData);
-  
-      // Extract the ID from the URL
-      const url = window.location.href;
-      const id = url.substring(url.lastIndexOf('/') + 1);
-  
-      // Send POST request to createPetsitterProfile endpoint using axios
-      const response = await axios.post(`${SERVER_API_URL}/petsitter/profile/${id}`, formData, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-  
-      // Handle the response
-      console.log('Petsitter Profile has been created:', response.data);
-  
-      // Optionally, you can reset the form or handle the successful response as needed
-      // setFormData(initialFormData);
-  
+      console.log("Form Submitted");
+
+      const id = getIdFromUrl();
+
+      const response = await axios.get(`${SERVER_API_URL}/petsitter/profile/check/${id}`);
+      const profileExists = response.data.exists;
+
+      if (profileExists) {
+        console.log("Updating existing profile");
+        const response = await axios.put(
+          `${SERVER_API_URL}/petsitter/profile/${id}`,
+          formData
+        );
+        console.log("Petsitter Profile has been updated:", response.data);
+      } else {
+        console.log("Creating new profile");
+        const response = await axios.post(
+          `${SERVER_API_URL}/petsitter/profile/${id}`,
+          formData
+        );
+        console.log("Petsitter Profile has been created:", response.data);
+      }
+
+      // window.location.reload();
     } catch (error) {
-      // Handle validation errors
       if (error.inner) {
         const newError = {};
         error.inner.forEach((err) => {
@@ -145,26 +183,23 @@ const PetSitterProfilePage = () => {
         });
         setErrors(newError);
       } else if (error.response) {
-        // Handle server errors
-        console.error('Server error creating petsitter profile:', error.response.data);
+        console.error(
+          "Server error creating petsitter profile:",
+          error.response.data
+        );
       } else {
-        // Handle other errors (e.g., network errors)
-        console.error('Error creating petsitter profile:', error.message);
+        console.error("Error creating petsitter profile:", error.message);
       }
     }
   };
 
   return (
     <div className="flex bg-primarygray-100">
-      {/*-- PAGE BG CONTAINER -- */}
       <Sidebar />
       <div className="flex flex-col gap-[8px] min-w-[1024px] w-full">
-        {/*-- NAV BAR AND PROFILE FORM CONTAINER -- */}
-        <Navbar />
+        <Navbar formData={formData} />
         <main className="flex flex-col gap-[24px] bg-[#F6F6F9] pb-[80px]">
-          {/*-- PROFILE FORM CONTAINER -- */}
           <div className="flex items-center justify-between pl-[60px] mr-[48px] mt-[54px] w-[96%]">
-            {/*-- PROFILE FORM HEADER -- */}
             <div className="flex gap-[24px]">
               <span className="text-[#2A2E3F] text-[24px] leading-[32px] font-bold">
                 Pet Sitter Profile
@@ -193,7 +228,10 @@ const PetSitterProfilePage = () => {
                 Basic Information
               </p>
               <div className="max-w-[240px]">
-                <ProfileImageForm handleProfileImage={handleProfileImage} />
+                <ProfileImageForm
+                  profileImage={formData.profile_image}
+                  setFormData={setFormData}
+                />
               </div>
               <div className="grid grid-cols-3 gap-6">
                 <FirstnameForm
@@ -229,7 +267,10 @@ const PetSitterProfilePage = () => {
                 introduction={formData.introduction}
               />
               <div className="grid grid-cols-2 gap-6">
-                <BankForm handleBank={handleChange("bank")} />
+                <BankForm
+                  handleBank={handleChange("bank")}
+                  bank={formData.bank}
+                />
                 <AccountNumberForm
                   handleAccountNumber={handleChange("account_number")}
                   accountNumber={formData.account_number}

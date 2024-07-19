@@ -34,7 +34,7 @@ function App() {
         <Route path="/popup" element={<BookingPopup />} />
         <Route path="/petsitter/profile/:id" element={<PetSitterProfilePage />} />
         <Route
-          path="/petsitter/booking-list"
+          path="/petsitter/booking-list/:id"
           element={<PetSitterBookingListPage />}
         />
         <Route
@@ -49,3 +49,4 @@ function App() {
 }
 
 export default App;
+

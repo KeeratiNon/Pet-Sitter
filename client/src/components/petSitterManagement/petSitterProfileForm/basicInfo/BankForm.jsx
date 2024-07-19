@@ -9,7 +9,6 @@ const BankForm = ({handleBank, bank}) => {
           value={bank}
           onChange={handleBank}
           className="border border-gray-200 rounded-lg h-12 p-3 text-lg leading-6 font-normal"
-          defaultValue=""
         >
           <option value="" hidden></option>
           <option value="Bangkok Bank">Bangkok Bank</option>
