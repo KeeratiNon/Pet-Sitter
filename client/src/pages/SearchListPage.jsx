@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 import { Button } from "@mui/base";
-
+import Footer from "../components/Footer"
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import MapIcon from "@mui/icons-material/Map";
 
@@ -13,12 +13,15 @@ import PaginationSize from "../components/searchs/Pagination";
 
 const SearchListPage = () => {
   const [profiles, setProfiles] = useState([]);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
+  const [total, setTotal] = useState(0);
   const [searchText, setSearchText] = useState("");
   const [selectedPet, setSelectedPet] = useState([]);
   const [selectedRatings, setSelectedRatings] = useState(null);
   const [years, setYears] = useState("");
   const [filters, setFilters] = useState({
-    petType: "",
+    pet_type: "",
     rating: 0,
     experience: "",
     searchText: "",
@@ -27,24 +30,31 @@ const SearchListPage = () => {
   useEffect(() => {
     const fetchProfiles = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/profiles");
-        setProfiles(response.data);
-        console.log(response.data);
+        const response = await axios.get("http://localhost:4000/search", {
+          params: { page, pageSize },
+        });
+        setProfiles(response.data.data);
+        setTotal(response.data.total || 0);
       } catch (error) {
         console.error("Error axios profile");
+        setTotal(0);
       }
     };
 
     fetchProfiles();
-  }, []);
+  }, [page, pageSize]);
+
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
 
   const handleClearFilters = () => {
     setSelectedPet([]);
     setSelectedRatings(null);
-    setSearchText("")
+    setSearchText("");
     setYears("");
     setFilters({
-      petType: "",
+      pet_type: "",
       rating: 0,
       experience: "",
       searchText: "",
@@ -56,14 +66,14 @@ const SearchListPage = () => {
   };
 
   const filteredProfiles = profiles.filter((profile) => {
-    const matchType = filters.petType
-      ? profile.type.includes(filters.petType)
+    const matchType = filters.pet_type
+      ? profile.pet_type.includes(filters.pet_type)
       : true;
     const matchRating = filters.rating
       ? profile.rating === filters.rating
       : true;
     const matchExperience = filters.experience
-      ? profile.year === filters.experience
+      ? profile.experience === filters.experience
       : true;
     const matchSearchText = filters.searchText
       ? filters.searchText
@@ -71,8 +81,10 @@ const SearchListPage = () => {
           .split(" ")
           .every(
             (word) =>
-              profile.title.toLowerCase().includes(word) ||
-              profile.name.toLowerCase().includes(word)
+              (profile.pet_sitter_name &&
+                profile.pet_sitter_name.toLowerCase().includes(word)) ||
+              (profile.firstname &&
+                profile.firstname.toLowerCase().includes(word))
           )
       : true;
     return matchType && matchRating && matchExperience && matchSearchText;
@@ -144,8 +156,14 @@ const SearchListPage = () => {
             ))}
           </div>
         </main>
-        <PaginationSize />
+        <PaginationSize
+          page={page}
+          count={Math.ceil(total / pageSize)}
+          onPageChange={handlePageChange}
+        />
+       
       </section>
+      <Footer />
     </>
   );
 };

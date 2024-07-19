@@ -8,12 +8,13 @@ import mongoose from "mongoose";
 import { chatRouter } from "./routes/chatroom.mjs";
 mongoose.connect("mongodb://127.0.0.1/PetSitter");
 import "./models/chatrooms.mjs";
-import profiles from "./utils/dbtest.mjs";
+
 import { petSitterProfileRouter } from "./routes/petSitterProfile.mjs";
 import { ChatRoom } from "./models/chatrooms.mjs";
 import dotenv from "dotenv";
 
 dotenv.config();
+
 
 const app = express();
 const port = 4000;
@@ -29,12 +30,14 @@ const io = new Server(server, {
 app.use(cors());
 
 app.use(express.json());
-app.use("/auth", authRouter)
-app.use("/petsitter/profile",petSitterProfileRouter)
+app.use("/auth", authRouter);
+app.use("/petsitter/profile", petSitterProfileRouter);
+app.use("/", petSitterProfileRouter);
 
-app.get("/profiles", (req, res) => {
-  res.json(profiles);
-});
+
+
+
+
 
 app.get("/test", (req, res) => {
   return res.json("Server API is working");
