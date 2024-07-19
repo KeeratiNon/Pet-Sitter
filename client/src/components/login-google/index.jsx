@@ -4,9 +4,13 @@ import { gapi } from "gapi-script";
 import { useNavigate } from "react-router-dom";
 import { GOOGLE_CLIENT_ID } from "../../core/config.mjs";
 import { setGoogleToken } from "../../utils/localStorage.mjs";
+import { useAuth } from "../../contexts/authentication";
+import { jwtDecode } from "jwt-decode";
 
 const LoginGoogle = () => {
   const navigate = useNavigate();
+
+  const {state,setState} = useAuth()
 
   useEffect(() => {
     const initClient = () => {
@@ -21,6 +25,7 @@ const LoginGoogle = () => {
   const onGoogleSuccess = (res) => {
     const token = res.tokenId;
     setGoogleToken(token);
+    setState({...state, user:jwtDecode(token)})
     navigate("/");
   };
 

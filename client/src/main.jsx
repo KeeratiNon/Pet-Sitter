@@ -9,11 +9,9 @@ import jwtInterceptor from "./utils/jwtinterceptor.mjs"
 jwtInterceptor()
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>
         <App />
       </AuthProvider>
     </BrowserRouter>
-  </React.StrictMode>
 );

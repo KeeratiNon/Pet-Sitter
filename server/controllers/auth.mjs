@@ -94,10 +94,10 @@ export const loginUser = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user.id, email: user.email },
+      { id: user.id, email: user.email, role:"user" },
       process.env.JWT_SECRET,
       {
-        expiresIn: "2m",
+        expiresIn: "1h",
       }
     );
 
@@ -132,10 +132,10 @@ export const loginPetSitter = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user.id, email: user.email },
+      { id: user.id, email: user.email, role:"petsitter" },
       process.env.JWT_SECRET,
       {
-        expiresIn: "2m",
+        expiresIn: "1h",
       }
     );
 

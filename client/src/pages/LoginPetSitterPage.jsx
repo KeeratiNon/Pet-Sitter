@@ -19,10 +19,10 @@ const initialValues = {
 };
 
 const LoginPetSitterPage = () => {
-  const { loginUser, state } = useAuth();
+  const { loginPetSitter, state } = useAuth();
 
   const onSubmit = (values, actions) => {
-    loginUser(values);
+    loginPetSitter(values);
     actions.resetForm();
   };
 
@@ -114,7 +114,7 @@ const LoginPetSitterPage = () => {
                     <p>Don't have an account?</p>
                   </span>
                   <span>
-                    <Link to="/auth/register/user" className="btn-ghost">
+                    <Link to="/auth/register/petsitter" className="btn-ghost">
                       Register
                     </Link>
                   </span>

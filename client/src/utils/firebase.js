@@ -20,5 +20,4 @@ export const FacebookAuth = async() => {
             console.error(error)
         }
     }
-
 }

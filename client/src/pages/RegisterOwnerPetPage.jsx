@@ -121,20 +121,6 @@ const RegisterOwnerPetPage = () => {
                   </span>
                   <span className="flex flex-1 h-[1px] bg-gray-200"></span>
                 </div>
-                <div className="w-[100%] flex justify-center items-center gap-[12px]">
-                  <button className="btn-social">
-                    <span>
-                      <img src={Facebook} alt="facebook" />
-                    </span>
-                    <span>Facebook</span>
-                  </button>
-                  <button className="btn-social">
-                    <span>
-                      <img src={Google} alt="Google" />
-                    </span>
-                    <span>Google</span>
-                  </button>
-                </div>
                 <div className="flex justify-center items-center gap-[8px]">
                   <span>
                     <p>Already have an account?</p>
