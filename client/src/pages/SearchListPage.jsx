@@ -31,10 +31,11 @@ const SearchListPage = () => {
     const fetchProfiles = async () => {
       try {
         const response = await axios.get("http://localhost:4000/search", {
-          params: { page, pageSize },
+          params: { page, pageSize, ...filters },
         });
         setProfiles(response.data.data);
         setTotal(response.data.total || 0);
+       
       } catch (error) {
         console.error("Error axios profile");
         setTotal(0);
@@ -42,7 +43,7 @@ const SearchListPage = () => {
     };
 
     fetchProfiles();
-  }, [page, pageSize]);
+  }, [page, pageSize, filters]);
 
   const handlePageChange = (event, value) => {
     setPage(value);

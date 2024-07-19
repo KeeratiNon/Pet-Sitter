@@ -12,7 +12,7 @@ const PaginationSize = ({ page, count, onPageChange }) => {
       page={page}
       onChange={onPageChange}
       className='hidden md:flex md:justify-center md:pt-[24px]'
-    />
+    > </Pagination>
   </Stack>
   );
 }
