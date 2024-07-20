@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import io from "socket.io-client";
+import React, { useEffect, useState } from "react";
 import PetSitter from "./PetSitter";
 import HeaderPetSitter from "./HeaderPetSitter";
 import FooterPetSitter from "./FooterPetSitter";
 import MainChat from "./MainChat";
-import { getToken } from "../../utils/localStorage.mjs";
-import axios from "axios";
 import { SERVER_API_URL } from "../../core/config.mjs";
+import axios from "axios";
+import { getToken } from "../../utils/localStorage.mjs";
+import {io} from "socket.io-client"
 
 const Chat = () => {
   const [socket, setSocket] = useState(null);
@@ -89,7 +89,7 @@ const Chat = () => {
         message: newMessage,
       });
       setNewMessage("");
-      getMessages(chatRoomId.chatRoomId)
+      getMessages(chatRoomId.chatRoomId);
     }
   };
 
@@ -124,6 +124,8 @@ const Chat = () => {
               <div className="flex flex-1 ">
                 <MainChat
                   historyMessage={historyMessage}
+                  getMessages={getMessages}
+                  chatRoomId={selectedChatRoom}
                 />
               </div>
               <hr className="border-t-[1px] border-gray-200" />
