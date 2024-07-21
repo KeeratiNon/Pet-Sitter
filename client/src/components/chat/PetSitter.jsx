@@ -7,6 +7,7 @@ const PetSitter = ({chatRoom}) => {
     <button className="bg-black flex items-center gap-[12px] py-[16px] pr-[24px] pl-[40px] hover:bg-gray-500 focus:bg-gray-500 cursor-pointer">
         <img src={SnowbellRabbit} alt="SnowbellRabbit" width="60px" height="60px" className='border-[1px] border-gray-600 rounded-full' />
         <p className='text-white text-[16px] leading-[28px] font-medium w-[232px] flex justify-start'>{chatRoom.name}</p>
+        <div className='bg-orange-500 text-white min-w-[24px] min-h-[24px] rounded-full'>1</div>
     </button>
   )
 }
