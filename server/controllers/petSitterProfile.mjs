@@ -123,6 +123,7 @@ export const searchPetsitterProfile = async (req, res) => {
 
     const results = await sql`
               SELECT
+        pet_sitter_profiles.pet_sitter_id,
         pet_sitter_profiles.pet_sitter_name,
         pet_sitter_profiles.firstname,
         pet_sitter_profiles.lastname,

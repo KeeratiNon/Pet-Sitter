@@ -1,8 +1,10 @@
 import StarRating from "./StarRating";
 import RoomIcon from "@mui/icons-material/Room";
 import TypeList from "./TypeList";
+import { Link } from "react-router-dom";
 
 const CardSearchList = ({ profiles }) => {
+  console.log(profiles)
   return (
     <section>
       <div className=" w-full   rounded-[16px] p-4 gap-4 flex flex-col  xl:flex-row md:gap-6  md:bg-white  ">
@@ -29,8 +31,11 @@ const CardSearchList = ({ profiles }) => {
                 />
               </div>
 
-              <div className="">
-                <p className="text-nowrap">{profiles.pet_sitter_name}</p>
+              <div >
+                <Link  to={`/search/${profiles.pet_sitter_id}` } className="text-nowrap" >
+                  <p className="text-nowrap">{profiles.pet_sitter_name}</p>
+                </Link>
+
                 <p className="text-nowrap">
                   {profiles.firstname} {profiles.lastname}{" "}
                 </p>
@@ -44,10 +49,8 @@ const CardSearchList = ({ profiles }) => {
             </div>
           </div>
           <div>
-            
-              <RoomIcon />
-              {profiles.district} {profiles.province}
-          
+            <RoomIcon />
+            {profiles.district} {profiles.province}
           </div>
           <div className="  flex  md:flex-col gap-6  ">
             <TypeList types={profiles.pet_type} />
