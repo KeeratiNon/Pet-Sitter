@@ -9,9 +9,9 @@ const slides = [
   { src: dog1, caption: "Dog 1" },
 ];
 
-const ImageGallery = () => {
+const ImageGallery = ({ profiles }) => {
   const [slideIndex, setSlideIndex] = useState(0);
-
+console.log(profiles)
   const nextSlide = () => {
     setSlideIndex((slideIndex + 1) % slides.length);
   };
@@ -23,7 +23,7 @@ const ImageGallery = () => {
   return (
     <div className="relative mx-auto max-w-[375px] lg:max-w-[1440px] lg:py-10">
       <div className="lg:flex lg:gap-4 lg:justify-center lg:items-center">
-        {slides.map((slide, index) => (
+        {profiles.map((slide, index) => (
           <div
             key={index}
             className={`mySlides fade ${
@@ -41,15 +41,15 @@ const ImageGallery = () => {
             }}
           >
             <img
-              src={slide.src}
-              className="w-full max-w-[375px] max-h-[281px] lg:max-w-[550px] lg:max-h-[413px]"
+              src={slide}
+              className="w-full max-w-[375px] h-[281px] lg:max-w-[550px] lg:h-[413px]"
               alt={slide.caption}
             />
           </div>
         ))}
       </div>
       <button
-        className="prev absolute top-1/2 left-0 transform -translate-y-1/2 p-4 text-white font-bold text-lg transition-all ease-in-out rounded-r bg-black bg-opacity-50 hover:bg-opacity-80"
+        className="prev absolute top-1/2 left-0 transform -translate-y-1/2 size-[50px] text-white font-bold text-lg transition-all ease-in-out  bg-red-500 bg-opacity-50 hover:bg-opacity-80 rounded-full"
         onClick={prevSlide}
       >
         ❮
