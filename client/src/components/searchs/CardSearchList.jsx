@@ -4,7 +4,6 @@ import TypeList from "./TypeList";
 import { Link } from "react-router-dom";
 
 const CardSearchList = ({ profiles }) => {
-  console.log(profiles)
   return (
     <section>
       <div className=" w-full   rounded-[16px] p-4 gap-4 flex flex-col  xl:flex-row md:gap-6  md:bg-white  ">
