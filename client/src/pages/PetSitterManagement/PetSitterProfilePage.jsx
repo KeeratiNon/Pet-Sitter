@@ -174,7 +174,7 @@ const PetSitterProfilePage = () => {
         console.log("Petsitter Profile has been created:", response.data);
       }
 
-      // window.location.reload();
+      window.location.reload();
     } catch (error) {
       if (error.inner) {
         const newError = {};

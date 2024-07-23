@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 
 function TypeList({ types }) {
-
     const getColorClass = (type) => {
         switch (type.toLowerCase()) {
             case "dog":
@@ -22,7 +21,7 @@ function TypeList({ types }) {
 
     return (
         <div className=" flex gap-2 md:gap-2">
-            {types.map((type, i) => {
+            {types && types.length && types.map((type, i) => {
                 return (
                     <button
                         key={i}

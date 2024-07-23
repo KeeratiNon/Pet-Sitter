@@ -11,6 +11,8 @@ petSitterProfileRouter.get("/search", searchPetsitterProfile);
 
 petSitterProfileRouter.get("/:id", viewPetsitterProfile);
 
+petSitterProfileRouter.get("/search/:id", viewPetsitterProfile);
+
 petSitterProfileRouter.get('/check/:id', checkPetsitterProfile);
 
 petSitterProfileRouter.put("/:id", updatePetsitterProfile);

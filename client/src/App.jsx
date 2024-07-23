@@ -15,6 +15,7 @@ import PetSitterDetailPage from "./pages/PetSitterDetailPage";
 import Navbar from "./components/navbar/Navbar";
 import Chat from "./components/chat/Chat";
 import BookingPopup from "./components/BookingPopup";
+import BookingHistoryPage from "./pages/BookingHistoryPage"
 
 function App() {
   return (
@@ -30,7 +31,7 @@ function App() {
           element={<RegisterPetSitterPage />}
         />
         <Route path="/search" element={<SearchListPage />} />
-        <Route path="/search/1" element={<PetSitterDetailPage />} />
+        <Route path="/search/:id" element={<PetSitterDetailPage />} />
         <Route path="/popup" element={<BookingPopup />} />
         <Route path="/petsitter/profile/:id" element={<PetSitterProfilePage />} />
         <Route
@@ -43,6 +44,7 @@ function App() {
         />
         <Route path="/booking" element={<BookingPage />} />
         <Route path="/chat" element={<Chat />}/>
+        <Route path="/user/booking-history" element={<BookingHistoryPage />} />
       </Routes>
     </>
   );
