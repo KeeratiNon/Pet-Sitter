@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 import { Button } from "@mui/base";
-import Footer from "../components/Footer"
+import Footer from "../components/Footer";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import MapIcon from "@mui/icons-material/Map";
 
@@ -31,7 +31,7 @@ const SearchListPage = () => {
     const fetchProfiles = async () => {
       try {
         const response = await axios.get("http://localhost:4000/search", {
-          params: { page, pageSize },
+          params: { page, pageSize, ...filters },
         });
         setProfiles(response.data.data);
         setTotal(response.data.total || 0);
@@ -42,7 +42,7 @@ const SearchListPage = () => {
     };
 
     fetchProfiles();
-  }, [page, pageSize]);
+  }, [page, pageSize, filters]);
 
   const handlePageChange = (event, value) => {
     setPage(value);
@@ -84,8 +84,13 @@ const SearchListPage = () => {
               (profile.pet_sitter_name &&
                 profile.pet_sitter_name.toLowerCase().includes(word)) ||
               (profile.firstname &&
-                profile.firstname.toLowerCase().includes(word))
-          )
+                profile.firstname.toLowerCase().includes(word)) ||
+              (profile.district &&
+                profile.district.toLowerCase().includes(word)) || 
+              (profile.province &&
+                profile.province.toLowerCase().includes(word))
+              )
+          
       : true;
     return matchType && matchRating && matchExperience && matchSearchText;
   });
@@ -161,7 +166,6 @@ const SearchListPage = () => {
           count={Math.ceil(total / pageSize)}
           onPageChange={handlePageChange}
         />
-       
       </section>
       <Footer />
     </>
