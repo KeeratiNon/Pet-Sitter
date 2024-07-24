@@ -15,6 +15,7 @@ import { ChatRoom } from "./models/chatrooms.mjs";
 import dotenv from "dotenv";
 
 dotenv.config();
+import { userRouter } from "./routes/user.mjs";
 
 const app = express();
 const port = 4000;
@@ -35,6 +36,12 @@ app.use(express.json());
 app.use("/auth", authRouter);
 app.use("/petsitter/profile", petSitterProfileRouter);
 app.use("/", petSitterProfileRouter);
+
+
+
+
+app.use("/user", userRouter);
+
 
 app.get("/test", (req, res) => {
   return res.json("Server API is working");

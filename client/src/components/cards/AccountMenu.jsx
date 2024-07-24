@@ -1,25 +1,75 @@
-import { Link } from "react-router-dom";
-import iconProfile from "../../assets/svgs/icons/icon-profile.svg";
-import iconYourPet from "../../assets/svgs/icons/icon-your-pet.svg";
-import iconBooking from "../../assets/svgs/icons/icon-booking.svg";
+import { useLocation, Link } from "react-router-dom";
+import { IconUser } from "../../assets/svgs/icons/IconUser";
+import { IconYourPet } from "../../assets/svgs/icons/IconYourPet";
+import { IconUserBooking } from "../../assets/svgs/icons/IconUserBooking";
 
 const AccountMenu = () => {
+  const location = useLocation();
+
   return (
-    <ul className="flex overflow-hidden">
-      <li className="hidden">
-        <span>Account</span>
+    <ul className="bg-white flex h-fit justify-between shadow-md md:flex-col md:py-6 md:rounded-2xl md:min-w-[292px]">
+      <li className="hidden md:block md:px-6 md:pb-3">
+        <span className="text-[20px] leading-[28px] font-bold">Account</span>
       </li>
-      <li className="flex gap-3 py-3 px-6">
-        <img src={iconProfile} alt="icon-profile" />
-        <Link>Profile</Link>
+      <li>
+        <Link
+          to="/user/profile"
+          className={`group w-full flex items-center gap-3 py-3 px-6 ${
+            location.pathname === "/user/profile" ? "bg-[#FFF1EC]" : ""
+          } md:py-5 md:px-6`}
+        >
+          <IconUser
+            fill={location.pathname === "/user/profile" ? "#FF7037" : "#AEB1C3"}
+          />
+          <span
+            className={`text-[18px] leading-[27px] font-bold group-hover:text-[#FF7037] ${
+              location.pathname === "/user/profile"
+                ? "text-[#FF7037]"
+                : "text-[#5B5D6F]"
+            }`}
+          >
+            Profile
+          </span>
+        </Link>
       </li>
-      <li className="flex gap-3 py-3 px-6">
-        <img src={iconYourPet} alt="icon-your-pet" />
-        <Link>Your Pet</Link>
+      <li>
+        <Link
+          to="/user/pet"
+          className={`group w-full flex items-center gap-3 py-3 px-6 ${
+            location.pathname === "/user/pet" ? "bg-[#FFF1EC]" : ""
+          } md:py-5 md:px-6`}
+        >
+          <IconYourPet
+            fill={location.pathname === "/user/pet" ? "#FF7037" : "#AEB1C3"}
+          />
+          <span
+            className={`text-[18px] leading-[27px] font-bold group-hover:text-[#FF7037] ${
+              location.pathname === "/user/pet"
+                ? "text-[#FF7037]"
+                : "text-[#5B5D6F]"
+            }`}
+          >
+            Your Pet
+          </span>
+        </Link>
       </li>
-      <li className="flex gap-3 py-3 px-6">
-        <img src={iconBooking} alt="icon-booking" />
-        <Link>Booking History</Link>
+      <li>
+        <Link
+          className={`group w-full flex items-center gap-3 py-3 px-6 ${
+            location.pathname === "/user/booking" ? "bg-[#FFF1EC]" : ""
+          } md:py-5 md:px-6`}
+        >
+          <IconUserBooking fill={"#AEB1C3"} />
+          <span
+            className={`text-[18px] leading-[27px] font-bold group-hover:text-[#FF7037] ${
+              location.pathname === "/user/booking"
+                ? "text-[#FF7037]"
+                : "text-[#5B5D6F]"
+            }`}
+          >
+            Booking History
+          </span>
+        </Link>
       </li>
     </ul>
   );
