@@ -10,6 +10,8 @@ import BookingPage from "./BookingPage";
 import BookingHistoryPage from "./BookingHistoryPage";
 import Chat from "../components/chat/Chat";
 import BookingPopup from "../components/BookingPopup";
+import SearchListPage from "./SearchListPage";
+import PetSitterDetailPage from "./PetSitterDetailPage";
 
 import Navbar from '../components/navbar/Navbar';
 
@@ -47,6 +49,8 @@ const AutenticationApp = () => {
         <Route path="/booking" element={<BookingPage />} />
         <Route path="/user/booking-history" element={<BookingHistoryPage />} />
         <Route path="/chat" element={<Chat />} />
+        <Route path="/search" element={<SearchListPage />} />
+        <Route path="/search/:id" element={<PetSitterDetailPage />} />
       </Routes>
     </>
   );
