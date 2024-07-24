@@ -12,6 +12,10 @@ const messageSchema = new mongoose.Schema({
     receiverId: {
         type: Number,
         require: true
+    },
+    isRead: {
+        type: Boolean,
+        default: false
     }
 })
 
@@ -20,7 +24,8 @@ const chatSchema = new mongoose.Schema({
         type: String,
         require: true
     },
-    messages: [messageSchema]
+    messages: [messageSchema],
+    users: [Number]
 })
 
 export const ChatRoom = mongoose.model('ChatRoom', chatSchema);

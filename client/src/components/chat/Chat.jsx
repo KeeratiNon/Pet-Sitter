@@ -7,7 +7,19 @@ import { useSocket } from "../../contexts/socket";
 
 const Chat = () => {
 
-  const {socket, chatRoomList, selectedChatRoom, historyMessage, newMessage, setNewMessage, getChatRoomList, setupSocket, joinChatRoom, getMessages, sendMessage} = useSocket()
+  const {socket, chatRoomList,setChatRoomList, selectedChatRoom, historyMessage, inputMessage, setInputMessage, getChatRoomList, setupSocket, joinChatRoom, getMessages, sendMessage} = useSocket()
+
+  const clearReadCount = (chatRoomId) => {
+    const newChatRoomList = [...chatRoomList]
+    newChatRoomList.map((chatRoom)=>{
+      if (chatRoom.chatRoomId === chatRoomId) {
+        chatRoom.isReadCount = 0
+        return chatRoom
+      }
+      return chatRoom
+    })
+    setChatRoomList(newChatRoomList)
+  }
 
   useEffect(() => {
     getChatRoomList();
@@ -32,8 +44,8 @@ const Chat = () => {
             <ul className="flex flex-col gap-[8px]" key={chatRoom.chatRoom}>
               <li
                 onClick={() => {
-                  joinChatRoom(chatRoom.chatRoom, chatRoom.targetId);
-                  getMessages(chatRoom.chatRoom);
+                  joinChatRoom(chatRoom);
+                  clearReadCount(chatRoom.chatRoomId)
                 }}
               >
                 <PetSitter chatRoom={chatRoom} />
@@ -61,8 +73,8 @@ const Chat = () => {
                 <FooterPetSitter
                   chatRoomId={selectedChatRoom}
                   sendMessage={sendMessage}
-                  newMessage={newMessage}
-                  setNewMessage={setNewMessage}
+                  inputMessage={inputMessage}
+                  setInputMessage={setInputMessage}
                 />
               </div>
             </div>

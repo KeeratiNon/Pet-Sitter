@@ -12,7 +12,7 @@ const MainChat = ({
 
   useEffect(() => {
     getMessages(chatRoomId.chatRoomId)
-  }, [getMessages, chatRoomId.chatRoomId]);
+  }, [chatRoomId.chatRoomId]);
 
   useEffect(() => {
     if (chatContainerRef.current) {

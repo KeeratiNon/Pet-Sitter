@@ -23,9 +23,9 @@ const AuthProvider = ({ children }) => {
     user: getAllToken(),
   });
 
-  useEffect(()=>{
-    console.log(state)
-  },[state])
+  // useEffect(()=>{
+  //   console.log(state)
+  // },[state])
 
   const navigate = useNavigate();
 
