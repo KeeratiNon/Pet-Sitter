@@ -1,16 +1,18 @@
 import { Router } from "express";
 import {
+  viewUserProfile,
   createUserProfile,
-  createPet,
-  updatePet,
-  deletePet,
-  selectAllPet,
+  viewPetProfile,
+  createPetProfile,
+  updatePetProfile,
+  deletePetProfile,
 } from "../controllers/user.mjs";
 
 export const userRouter = Router();
 
-userRouter.post("/", createUserProfile);
-userRouter.post("/pet", createPet);
-userRouter.put("/pet/:petId", updatePet);
-userRouter.delete("/pet/:petId", deletePet);
-userRouter.get("/pet", selectAllPet);
+userRouter.get("/profile/:userId", viewUserProfile);
+userRouter.post("/profile", createUserProfile);
+userRouter.get("/pet/:userId", viewPetProfile);
+userRouter.post("/pet", createPetProfile);
+userRouter.put("/pet/:petId", updatePetProfile);
+userRouter.delete("/pet/:petId", deletePetProfile);

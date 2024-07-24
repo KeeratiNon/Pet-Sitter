@@ -40,7 +40,7 @@ app.use("/", petSitterProfileRouter);
 
 
 
-app.use("/user/profile", userRouter);
+app.use("/user", userRouter);
 
 
 app.get("/test", (req, res) => {

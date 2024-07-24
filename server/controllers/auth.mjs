@@ -33,6 +33,7 @@ export const registerUser = async (req, res) => {
       data: results,
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ message: "Internal server error" });
   }
 };
