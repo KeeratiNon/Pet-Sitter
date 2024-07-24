@@ -4,7 +4,7 @@ export const protect = async (req,res,next) => {
     const token = req.headers.authorization
 
     if (!token || !token.startsWith('Bearer ')) {
-        return req.status(401).json({
+        return res.status(401).json({
             message: "Token has invalid format"
         })
     }

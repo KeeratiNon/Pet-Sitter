@@ -4,14 +4,17 @@ import App from "./App.jsx";
 import "./index.css";
 import { AuthProvider } from "./contexts/authentication.jsx";
 import { BrowserRouter } from "react-router-dom";
-import jwtInterceptor from "./utils/jwtinterceptor.mjs"
+import jwtInterceptor from "./utils/jwtinterceptor.mjs";
+import { SocketProvider } from "./contexts/socket.jsx";
 
-jwtInterceptor()
+jwtInterceptor();
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-    <BrowserRouter>
-      <AuthProvider>
+  <BrowserRouter>
+    <AuthProvider>
+      <SocketProvider>
         <App />
-      </AuthProvider>
-    </BrowserRouter>
+      </SocketProvider>
+    </AuthProvider>
+  </BrowserRouter>
 );
