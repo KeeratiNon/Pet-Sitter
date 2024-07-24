@@ -12,7 +12,7 @@ const PetSitterInfoCard = ({ profiles }) => {
     <div className="relative">
       <div className="bg-white  lg:shadow-[4px_4px_24px_0px_rgba(0,0,0,0.04)] rounded-2xl flex flex-col items-center w-full h-auto lg:m lg:w-auto sticky top-0">
         <div className="flex flex-col items-center py-[40px] px-[24px] gap-[24px] border-primarygray-200 border-b w-full">
-          <img src={profiles.profile_image} alt="Girl" className="w-[120px] h-[120px]  lg:w-[160px]"></img>
+          <img src={profiles.profile_image} alt="Girl" className="w-[120px] h-[120px] rounded-full  lg:w-[160px] lg:h-[160px]"></img>
           <div className="flex flex-col gap-[16px] items-center">
             <h1 className="text-black text-[24px] leading-[32px] lg:text-[36px] lg:leading-[44px]  font-bold ]">
              {profiles.pet_sitter_name}

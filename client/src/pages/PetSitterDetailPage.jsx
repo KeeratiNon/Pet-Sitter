@@ -1,11 +1,11 @@
-import Footer from "../components/Footer";
-import ImageGallerry from "../components/petsitter-detail/ImageGallerry";
-import ContentBottom from "../components/petsitter-detail/ContentBottom";
-import ContentTop from "../components/petsitter-detail/ContentTop";
-import PetSitterInfoCard from "../components/petsitter-detail/PetSitterInfoCard";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import ImageGallerry from "../components/petsitter-detail/ImageGallerry";
+import ContentTop from "../components/petsitter-detail/ContentTop";
+import ContentBottom from "../components/petsitter-detail/ContentBottom";
+import PetSitterInfoCard from "../components/petsitter-detail/PetSitterInfoCard";
+import Footer from "../components/Footer";
 
 const PetSitterDetailPage = () => {
   const [profiles, setProfiles] = useState({});
@@ -27,10 +27,12 @@ const PetSitterDetailPage = () => {
 
     fetchProfiles(id);
   }, []);
+
+
   return (
     <>
       {profiles["image_gallery"]&&<ImageGallerry profiles={profiles["image_gallery"]}/>}
-      <div className="bg-#FAFAFB  flex flex-col lg:flex-row md:gap-4 lg:px-[80px] lg:pt-0 lg:pb-[80px] justify-center  2xl:justify-evenly ">
+      <div className="bg-[#FAFAFB]  flex flex-col lg:flex-row md:gap-4 lg:px-[80px] lg:pt-0 lg:pb-[80px] justify-center  2xl:justify-evenly ">
         <div className="flex flex-col max-w-[848px]">
             <ContentTop  profiles={profiles} />
 
