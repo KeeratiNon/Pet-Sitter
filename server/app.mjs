@@ -16,7 +16,6 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-
 const app = express();
 const port = 4000;
 
@@ -38,12 +37,6 @@ app.use("/auth", authRouter);
 app.use("/petsitter/profile", petSitterProfileRouter);
 app.use("/", petSitterProfileRouter);
 
-
-
-
-
-
-
 app.get("/test", (req, res) => {
   return res.json("Server API is working");
 });
@@ -62,10 +55,10 @@ io.use((socket, next) => {
 });
 
 io.on("connection", (socket) => {
-  console.log("a user connected:", socket.userId);
+  // console.log("a user connected:", socket.userId);
 
   socket.on("disconnect", () => {
-    console.log("user disconnected:", socket.userId);
+    // console.log("user disconnected:", socket.userId);
   });
 
   socket.on("sendMessage", async ({ chatRoomId, targetId, message }) => {
@@ -99,14 +92,14 @@ io.on("connection", (socket) => {
 
   socket.on("joinRoom", async ({ chatRoomId, targetId }) => {
     try {
-      const reverseChatRoomId = chatRoomId.chatRoomId
+      const reverseChatRoomId = chatRoomId
           .split("/")
           .reverse()
           .join("/");
       if (chatRoomId) {
         const chatRoom = await ChatRoom.findOne({
           $or: [
-            { chatRoomId: chatRoomId.chatRoomId },
+            { chatRoomId: chatRoomId },
             { chatRoomId: reverseChatRoomId },
           ],
         });
