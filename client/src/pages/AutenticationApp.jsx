@@ -13,15 +13,17 @@ import BookingPopup from "../components/BookingPopup";
 import SearchListPage from "./SearchListPage";
 import PetSitterDetailPage from "./PetSitterDetailPage";
 
-import Navbar from '../components/navbar/Navbar';
+import Navbar from "../components/navbar/Navbar";
+import UserManagementPage from "./user/UserManagementPage";
+import UserPetManagementPage from "./user/UserPetManagementPage";
 
 const AutenticationApp = () => {
-    const location = useLocation();
-    const hideNavbarPaths = ["/petsitter"];
-  
-    const shouldShowNavbar = !hideNavbarPaths.some((path) => 
-      location.pathname.startsWith(path)
-    );
+  const location = useLocation();
+  const hideNavbarPaths = ["/petsitter"];
+
+  const shouldShowNavbar = !hideNavbarPaths.some((path) =>
+    location.pathname.startsWith(path)
+  );
   return (
     <>
       {shouldShowNavbar && <Navbar />}
@@ -47,6 +49,8 @@ const AutenticationApp = () => {
           element={<PetSitterPaymentOptionPage />}
         />
         <Route path="/booking" element={<BookingPage />} />
+        <Route path="/user/profile" element={<UserManagementPage />} />
+        <Route path="/user/pet" element={<UserPetManagementPage />} />
         <Route path="/user/booking-history" element={<BookingHistoryPage />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/search" element={<SearchListPage />} />

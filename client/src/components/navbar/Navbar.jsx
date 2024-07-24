@@ -130,15 +130,15 @@ const Navbar = () => {
             <>
               <li className="flex gap-3 p-4">
                 <img src={iconProfile} alt="icon-profile" />
-                <Link>Profile</Link>
+                <Link to="/user/profile">Profile</Link>
               </li>
               <li className="flex gap-3 p-4">
                 <img src={iconYourPet} alt="icon-your-pet" />
-                <Link>Your Pet</Link>
+                <Link to="/user/pet">Your Pet</Link>
               </li>
               <li className="flex gap-3 p-4">
                 <img src={iconBooking} alt="icon-booking" />
-                <Link>Booking History</Link>
+                <Link to="/user/booking-history">Booking History</Link>
               </li>
               <hr />
               <li className="flex gap-3 p-4">
