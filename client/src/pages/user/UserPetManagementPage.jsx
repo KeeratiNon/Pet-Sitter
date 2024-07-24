@@ -5,9 +5,11 @@ import PetProfileList from "../../components/forms/user/PetProfileList";
 import { useAuth } from "../../contexts/authentication";
 import axios from "axios";
 import { SERVER_API_URL } from "../../core/config.mjs";
+import { useNavigate } from "react-router-dom";
 
 const UserPetManagementPage = () => {
   const { state } = useAuth();
+  const navigate = useNavigate();
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -30,7 +32,7 @@ const UserPetManagementPage = () => {
 
   useEffect(() => {
     getPetProfileData();
-  }, [state.user.id]);
+  }, []);
 
   const handlePetOnClick = (petId) => {
     const selectedPet = petData.find((pet) => pet.id === petId);
@@ -58,8 +60,23 @@ const UserPetManagementPage = () => {
     setShowForm(true);
   };
 
-  const handlePetOnSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async (petFormData) => {
+    try {
+      if (petFormData.id) {
+        await axios.put(
+          `${SERVER_API_URL}/user/pet/${petFormData.id}`,
+          petFormData
+        );
+      } else {
+        await axios.post(`${SERVER_API_URL}/user/pet`, petFormData);
+      }
+
+      getPetProfileData();
+    } catch (error) {
+      console.error("error", error);
+    } finally {
+      setShowForm(false);
+    }
   };
 
   if (loading) {
@@ -81,7 +98,7 @@ const UserPetManagementPage = () => {
             petData={petData}
             setPetFormData={setPetFormData}
             petFormData={petFormData}
-            handlePetOnSubmit={handlePetOnSubmit}
+            handleSubmit={handleSubmit}
           />
         ) : (
           <PetProfileList

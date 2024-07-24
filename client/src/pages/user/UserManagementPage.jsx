@@ -19,17 +19,31 @@ const UserManagementPage = () => {
         `${SERVER_API_URL}/user/profile/${userId}`
       );
 
-      const userProfileData = response.data.data;
-      setUserData({
-        user_id: userId,
-        first_name: userProfileData.firstname || "",
-        last_name: userProfileData.lastname || "",
-        id_number: userProfileData.id_number || "",
-        email: userProfileData.email || "",
-        date_of_birth: userProfileData.date_of_birth || "",
-        image: userProfileData.image || "",
-        phone_number: userProfileData.phone_number || "",
-      });
+      if (response.data && response.data.data) {
+        const userProfileData = response.data.data;
+
+        setUserData({
+          user_id: userId,
+          first_name: userProfileData.firstname || "",
+          last_name: userProfileData.lastname || "",
+          id_number: userProfileData.id_number || "",
+          email: userProfileData.email || "",
+          date_of_birth: userProfileData.date_of_birth || "",
+          image: userProfileData.image || "",
+          phone_number: userProfileData.phone_number || "",
+        });
+      } else {
+        setUserData({
+          user_id: userId,
+          first_name: "",
+          last_name: "",
+          id_number: "",
+          email: "",
+          date_of_birth: "",
+          image: "",
+          phone_number: "",
+        });
+      }
     } catch (error) {
       console.error("Error fetching user profile data:", error);
       setError(error);
@@ -45,10 +59,8 @@ const UserManagementPage = () => {
   const handleSubmit = async (formData) => {
     try {
       await axios.put(`${SERVER_API_URL}/user/profile`, formData);
-      alert("Profile updated successfully");
     } catch (error) {
       console.error("Error updating profile:", error);
-      alert("Failed to update profile");
     }
 
     window.location.reload();

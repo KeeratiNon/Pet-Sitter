@@ -95,9 +95,9 @@ const Navbar = () => {
                   </button>
                 </li>
                 <li>
-                  <button className="icon-btn">
+                  <Link to="/user/profile" className="icon-btn">
                     <img src={iconUser} alt="icon-user" />
-                  </button>
+                  </Link>
                 </li>
                 <li>
                   <button className="btn-primary">

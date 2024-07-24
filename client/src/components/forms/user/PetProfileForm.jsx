@@ -1,35 +1,96 @@
 import { IoChevronBack } from "react-icons/io5";
 import defaultProfile from "../../../assets/svgs/pet-sitter-management/pet-sitter-whiteProfile.svg";
 import buttonAddImage from "../../../assets/svgs/pet-sitter-management/pet-sitter-addImage.svg";
+import supabase from "../../../utils/storage";
+import { v4 as uuidv4 } from "uuid";
+import { useState } from "react";
 
 const PetProfileForm = ({
   setShowForm,
   showForm,
-  petData,
   setPetFormData,
   petFormData,
-  handlePetOnSubmit,
+  handleSubmit,
 }) => {
-  const handleChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setPetFormData({ ...petFormData, image: event.target.result });
-      };
+  const [loading, setLoading] = useState(false);
 
-      reader.readAsDataURL(file);
+  const handleImageChange = async (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${uuidv4()}.${fileExt}`;
+      const filePath = `${petFormData.user_id}/${fileName}`;
+      setLoading(true);
+
+      try {
+        if (petFormData.image) {
+          const oldImagePath = petFormData.image.split("pet_profile_image/")[1];
+          if (oldImagePath) {
+            const { error: removeError } = await supabase.storage
+              .from("pet_profile_image")
+              .remove([oldImagePath]);
+
+            if (removeError) {
+              console.error("Error removing old image:", removeError);
+              throw removeError;
+            }
+          }
+        }
+
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from("pet_profile_image")
+          .upload(filePath, file);
+
+        if (uploadError) {
+          console.error("Error uploading image:", uploadError);
+          throw uploadError;
+        }
+
+        console.log("Upload successful:", uploadData);
+
+        const { data: publicUrlData, error: urlError } = supabase.storage
+          .from("pet_profile_image")
+          .getPublicUrl(filePath);
+
+        if (urlError) {
+          console.error("Error getting public URL:", urlError);
+          throw urlError;
+        }
+
+        console.log("Public URL fetched:", publicUrlData);
+
+        setPetFormData((prevData) => ({
+          ...prevData,
+          image: publicUrlData.publicUrl,
+        }));
+      } catch (error) {
+        console.error("Error uploading or deleting image:", error);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
-  console.log(petFormData);
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setPetFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    handleSubmit(petFormData);
+  };
 
   return (
     <form
       className={`flex flex-col gap-6 py-6 px-4 w-full ${
         showForm ? "bg-white" : null
       } md:bg-white md:rounded-2xl md:p-10 md:gap-[60px]`}
-      onSubmit={handlePetOnSubmit}
+      onSubmit={onSubmit}
     >
       <div className="flex justify-start items-center gap-[10px]">
         <IoChevronBack
@@ -40,7 +101,11 @@ const PetProfileForm = ({
       </div>
 
       <div className="size-[120px] rounded-full bg-[#DCDFED] relative flex items-center justify-center md:size-60">
-        {petFormData.image ? (
+        {loading ? (
+          <div className="w-[120px] h-[120px] rounded-full flex items-center justify-center">
+            <div className="size-9 border-4 border-t-4 border-t-gray-700 border-gray-300 rounded-full animate-spin"></div>
+          </div>
+        ) : petFormData.image ? (
           <img
             src={petFormData.image}
             alt="Profile"
@@ -58,7 +123,7 @@ const PetProfileForm = ({
             type="file"
             name="profile_image"
             className="hidden"
-            onChange={handleChange}
+            onChange={handleImageChange}
           />
           <img
             src={buttonAddImage}
@@ -79,12 +144,7 @@ const PetProfileForm = ({
             placeholder="Pet name"
             className="input-box"
             value={petFormData.pet_name || ""}
-            onChange={(event) =>
-              setPetFormData({
-                ...petFormData,
-                pet_name: event.target.value,
-              })
-            }
+            onChange={handleInputChange}
           />
         </div>
 
@@ -97,12 +157,7 @@ const PetProfileForm = ({
               name="pet_type"
               className="input-box"
               value={petFormData.pet_type || ""}
-              onChange={(event) =>
-                setPetFormData({
-                  ...petFormData,
-                  pet_type: event.target.value,
-                })
-              }
+              onChange={handleInputChange}
             >
               <option value="" disabled>
                 Select your pet type
@@ -123,12 +178,7 @@ const PetProfileForm = ({
               placeholder="Breed of your pet"
               className="input-box"
               value={petFormData.breed || ""}
-              onChange={(event) =>
-                setPetFormData({
-                  ...petFormData,
-                  breed: event.target.value,
-                })
-              }
+              onChange={handleInputChange}
             />
           </div>
         </div>
@@ -142,12 +192,7 @@ const PetProfileForm = ({
               name="sex"
               className="input-box"
               value={petFormData.sex || ""}
-              onChange={(event) =>
-                setPetFormData({
-                  ...petFormData,
-                  sex: event.target.value,
-                })
-              }
+              onChange={handleInputChange}
             >
               <option value="" disabled>
                 Select sex of your pet
@@ -167,12 +212,7 @@ const PetProfileForm = ({
               placeholder="Age of your pet"
               className="input-box"
               value={petFormData.age || ""}
-              onChange={(event) =>
-                setPetFormData({
-                  ...petFormData,
-                  age: event.target.value,
-                })
-              }
+              onChange={handleInputChange}
             />
           </div>
         </div>
@@ -188,12 +228,7 @@ const PetProfileForm = ({
               placeholder="Describe color of your pet"
               className="input-box"
               value={petFormData.color || ""}
-              onChange={(event) =>
-                setPetFormData({
-                  ...petFormData,
-                  color: event.target.value,
-                })
-              }
+              onChange={handleInputChange}
             />
           </div>
 
@@ -207,12 +242,7 @@ const PetProfileForm = ({
               placeholder="Weight of your pet"
               className="input-box"
               value={petFormData.weight || ""}
-              onChange={(event) =>
-                setPetFormData({
-                  ...petFormData,
-                  weight: event.target.value,
-                })
-              }
+              onChange={handleInputChange}
             />
           </div>
         </div>
@@ -227,14 +257,21 @@ const PetProfileForm = ({
             placeholder="Describe more about your pet..."
             className="input-box"
             value={petFormData.about || ""}
-            onChange={(event) =>
-              setPetFormData({
-                ...petFormData,
-                about: event.target.value,
-              })
-            }
+            onChange={handleInputChange}
           />
         </div>
+      </div>
+      <div className="flex justify-between gap-4 py-6 px-4 bg-white md:rounded-b-2xl">
+        <button
+          className="btn-secondary md:w-[120px]"
+          onClick={() => setShowForm(false)}
+        >
+          Cancel
+        </button>
+
+        <button type="submit" className="btn-primary md:w-[127px]">
+          Create Pet
+        </button>
       </div>
     </form>
   );
