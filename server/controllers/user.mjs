@@ -15,9 +15,9 @@ export const viewUserProfile = async (req, res) => {
           user_profiles.email,
           user_profiles.date_of_birth,
           user_profiles.image
-        FROM users
-        INNER JOIN user_profiles on users.id = user_profiles.user_id
-        WHERE user_id = ${userIdFromClient}`;
+      FROM users
+      INNER JOIN user_profiles on users.id = user_profiles.user_id
+      WHERE user_id = ${userIdFromClient}`;
   } catch (error) {
     return res.status(500).json({
       message: `Server could not bacause database connection: ${error.message}`,
@@ -36,31 +36,50 @@ export const createUserProfile = async (req, res) => {
     updated_at: new Date(),
   };
 
-  let result;
-
   try {
-    result = await sql`
-    WITH updated_user as (
+    const existingUser = await sql`
+      SELECT id FROM user_profiles WHERE user_id = ${newUserProfile.user_id}
+    `;
+
+    let result;
+    if (existingUser.length > 0) {
+      result = await sql`
+        UPDATE user_profiles
+        SET firstname = ${newUserProfile.first_name},
+            lastname = ${newUserProfile.last_name},
+            id_number = ${newUserProfile.id_number},
+            email = ${newUserProfile.email},
+            date_of_birth = ${newUserProfile.date_of_birth},
+            updated_at = ${newUserProfile.updated_at},
+            image = ${newUserProfile.image}
+        WHERE user_id = ${newUserProfile.user_id}
+        RETURNING *
+      `;
+    } else {
+      result = await sql`
+        INSERT INTO user_profiles (user_id, firstname, lastname, id_number, email, date_of_birth, created_at, updated_at, image)
+        VALUES (${newUserProfile.user_id}, ${newUserProfile.first_name}, ${newUserProfile.last_name},
+                ${newUserProfile.id_number}, ${newUserProfile.email}, ${newUserProfile.date_of_birth},
+                ${newUserProfile.created_at}, ${newUserProfile.updated_at}, ${newUserProfile.image})
+        RETURNING *
+      `;
+    }
+
+    await sql`
       UPDATE users
       SET phone_number = ${newUserProfile.phone_number}, updated_at = ${newUserProfile.updated_at}
       WHERE id = ${newUserProfile.user_id}
-      RETURNING id
-    )
-    INSERT INTO user_profiles (user_id, firstname, lastname, id_number, email, date_of_birth, created_at, updated_at, image)
-      VALUES (${newUserProfile.user_id}, ${newUserProfile.first_name}, ${newUserProfile.last_name},
-              ${newUserProfile.id_number}, ${newUserProfile.email}, ${newUserProfile.date_of_birth},
-              ${newUserProfile.created_at}, ${newUserProfile.updated_at}, ${newUserProfile.image})
-      RETURNING *`;
+    `;
+
+    return res.status(201).json({
+      message: `User profile successfully created or edited`,
+      data: result,
+    });
   } catch {
     return res.status(500).json({
       message: `Server could not bacause database connection`,
     });
   }
-
-  return res.status(201).json({
-    message: `User profile created successfully`,
-    data: result,
-  });
 };
 
 export const viewPetProfile = async (req, res) => {
