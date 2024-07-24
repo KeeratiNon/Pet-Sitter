@@ -125,6 +125,7 @@ const AuthProvider = ({ children }) => {
         registerUser,
         registerPetSitter,
         logout,
+        isAuthenticated,
       }}
     >
       {children}
