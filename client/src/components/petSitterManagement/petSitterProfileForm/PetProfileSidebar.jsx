@@ -1,14 +1,14 @@
 import sitterLogo from "../../../assets/svgs/logo-navbar.svg";
 import petSitterBookingList from "../../../assets/svgs/pet-sitter-management/pet-sitter-grayBooking-list.svg";
 import petSitterOrangeProfile from "../../../assets/svgs/pet-sitter-management/pet-sitter-orangeProfile.svg";
-import petSitterPayment from "../../../assets/svgs/pet-sitter-management/pet-sitter-payment.svg";
+import petSitterPayment from "../../../assets/svgs/pet-sitter-management/pet-sitter-grayPayment.svg";
 import petSitterLogout from "../../../assets/svgs/pet-sitter-management/pet-sitter-logout.svg";
 import petSitterOrangeCircle from "../../../assets/svgs/pet-sitter-management/pet-sitter-orangeCircle.svg";
 import { Link } from "react-router-dom";
-import { useAuth } from "../../../contexts/authentication"
+import { useAuth } from "../../../contexts/authentication";
 
 const Sidebar = () => {
-  const {logout} = useAuth()
+  const { logout } = useAuth();
   return (
     <section className="w-[240px] h-[1024px] bg-[#FAFAFB] flex flex-col text-primarygray-500 text-[16px] leading-[24px] flex-none">
       <div className="mt-[16px]">
@@ -24,7 +24,10 @@ const Sidebar = () => {
         <span>Pet Sitter Profile</span>
       </div>
 
-      <Link to="/petsitter/booking-list" className="flex items-center px-[24px] py-[16px]">
+      <Link
+        to="/petsitter/booking-list/"
+        className="flex items-center px-[24px] py-[16px]"
+      >
         <img
           src={petSitterBookingList}
           className="w-[24px] h-[24px] mr-[16px]"
@@ -33,11 +36,17 @@ const Sidebar = () => {
         <img src={petSitterOrangeCircle} className="w-[6px] h-[6px]" />
       </Link>
 
-      <Link to="/petsitter/payment-option" className="flex gap-[16px] px-[24px] py-[16px]">
+      <Link
+        to="/petsitter/payment-option/"
+        className="flex gap-[16px] px-[24px] py-[16px]"
+      >
         <img src={petSitterPayment} className="w-[24px] h-[24px]" />
         <span>Payment Option</span>
       </Link>
-      <div onClick={logout} className="flex gap-[16px] mt-[664px] pl-[24px] pt-[16px] border-t-[1px] border-primarygray-200 cursor-pointer">
+      <div
+        onClick={logout}
+        className="flex gap-[16px] mt-[664px] pl-[24px] pt-[16px] border-t-[1px] border-primarygray-200 cursor-pointer"
+      >
         <img src={petSitterLogout} className="w-[24px] h-[24px]" />
         <span>Logout</span>
       </div>

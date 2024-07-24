@@ -22,11 +22,23 @@ const rows = [
 ];
 
 const PetSitterBooking = () => {
-  const [status, setStatus] = useState(1);
+  const [status, setStatus] = useState("All status");
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const handleChange = (event) => {
+  const handleStatusChange = (event) => {
     setStatus(event.target.value);
   };
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const filteredRows = rows.filter(row => {
+    const matchesStatus = status === "All status" || row.status === status;
+    const matchesSearch = row.name.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesStatus && matchesSearch;
+  });
+
   return (
     <section className="bg-gray-100 px-[40px] pt-[40px] py-[184px] flex flex-col gap-[24px]">
       <header className="flex flex-col items-center gap-[24px] md:flex-row">
@@ -38,63 +50,62 @@ const PetSitterBooking = () => {
             type="text"
             placeholder="Search"
             className="w-[240px] p-[12px] pr-[16px] rounded-[8px] border-[1px] outline-none"
+            value={searchQuery}
+            onChange={handleSearchChange}
+            aria-label="Search bookings"
           />
           <img
             src={searchIcon}
-            alt="searchIcon"
+            alt="Search Icon"
             className="absolute top-1/2 right-[16px] transform -translate-y-1/2"
           />
         </div>
         <div className="relative">
           <img
             src={dropdownIcon}
-            alt=""
+            alt="Dropdown Icon"
             className="absolute bottom-[20px] right-[16px]"
           />
           <select
             className="w-[240px] border-[1px] rounded-[8px] h-[50px] bg-white text-gray-400 text-[16px] leading-[24px] p-[12px] pr-[16px] appearance-none outline-none"
             value={status}
-            onChange={handleChange}
+            onChange={handleStatusChange}
+            aria-label="Filter by status"
           >
-            <option value={1}>All status</option>
-            <option value={2}>Success</option>
-            <option value={3}>Waiting for confirm</option>
-            <option value={4}>Waiting for service</option>
-            <option value={5}>In service</option>
-            <option value={6}>Cancel</option>
+            <option value="All status">All status</option>
+            <option value="Success">Success</option>
+            <option value="Waiting for confirm">Waiting for confirm</option>
+            <option value="Waiting for service">Waiting for service</option>
+            <option value="In service">In service</option>
+            <option value="Cancel">Cancel</option>
           </select>
         </div>
       </header>
       <main>
-      <TableContainer component={Paper} className="!rounded-[20px]">
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow className="bg-black">
-            <TableCell className="!text-white">Pet Owner Name</TableCell>
-            <TableCell className="!text-white" align="left">Pet(s)</TableCell>
-            <TableCell className="!text-white" align="left">Duration</TableCell>
-            <TableCell className="!text-white" align="left">Booked Date</TableCell>
-            <TableCell className="!text-white" align="left">Status</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.name}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="left">{row.pet}</TableCell>
-              <TableCell align="left">{row.duration}</TableCell>
-              <TableCell align="left">{row.bookedDate}</TableCell>
-              <TableCell align="left">{row.status}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+        <TableContainer component={Paper} className="!rounded-[20px]">
+          <Table sx={{ minWidth: 650 }} aria-label="booking table">
+            <TableHead>
+              <TableRow className="bg-black">
+                <TableCell className="!text-white">Pet Owner Name</TableCell>
+                <TableCell className="!text-white" align="left">Pet(s)</TableCell>
+                <TableCell className="!text-white" align="left">Duration</TableCell>
+                <TableCell className="!text-white" align="left">Booked Date</TableCell>
+                <TableCell className="!text-white" align="left">Status</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {filteredRows.map((row) => (
+                <TableRow key={row.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableCell component="th" scope="row">{row.name}</TableCell>
+                  <TableCell align="left">{row.pet}</TableCell>
+                  <TableCell align="left">{row.duration}</TableCell>
+                  <TableCell align="left">{row.bookedDate}</TableCell>
+                  <TableCell align="left">{row.status}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </main>
     </section>
   );

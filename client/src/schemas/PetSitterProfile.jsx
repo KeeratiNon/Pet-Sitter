@@ -39,15 +39,15 @@ export const PetSitterProfileSchema = Yup.object().shape({
     .required("Please enter postal code")
     .length(5, "Post code must be exactly 5 digits long"),
   introduction: Yup.string().max(
-    500,
-    "Introduction must be at most 500 characters long"
+    1000,
+    "Introduction must be at most 1000 characters long"
   ),
   my_place: Yup.string().max(
-    500,
-    "My place must be at most 500 characters long"
+    1000,
+    "My place must be at most 1000 characters long"
   ),
   services: Yup.string().max(
-    500,
-    "Services must be at most 500 characters long"
+    1000,
+    "Services must be at most 1000 characters long"
   ),
 });

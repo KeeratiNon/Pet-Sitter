@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { protect } from "../middlewares/protect.mjs";
 import { createPetsitterProfile, viewPetsitterProfile, updatePetsitterProfile, checkPetsitterProfile,  searchPetsitterProfile} from "../controllers/petSitterProfile.mjs";
 
 
@@ -6,8 +7,6 @@ import { createPetsitterProfile, viewPetsitterProfile, updatePetsitterProfile, c
 export const petSitterProfileRouter = Router();
 
 petSitterProfileRouter.post("/:id", createPetsitterProfile);
-
-petSitterProfileRouter.get("/search", searchPetsitterProfile);
 
 petSitterProfileRouter.get("/:id", viewPetsitterProfile);
 
@@ -17,3 +16,4 @@ petSitterProfileRouter.get('/check/:id', checkPetsitterProfile);
 
 petSitterProfileRouter.put("/:id", updatePetsitterProfile);
 
+petSitterProfileRouter.get("/search", searchPetsitterProfile);
