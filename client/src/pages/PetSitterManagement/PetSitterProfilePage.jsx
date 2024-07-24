@@ -3,6 +3,9 @@ import { useState, useEffect } from "react";
 import { SERVER_API_URL } from "../../core/config.mjs";
 import { PetSitterProfileSchema } from "../../schemas/PetSitterProfile";
 import petSitterGreenCircle from "../../assets/svgs/pet-sitter-management/pet-sitter-greenCircle.svg";
+import supabase from "../../utils/storage";
+import { v4 as uuidv4 } from "uuid";
+
 
 import Sidebar from "../../components/petSitterManagement/petSitterProfileForm/PetProfileSidebar";
 import Navbar from "../../components/petSitterManagement/petSitterProfileForm/PetSitterNavbar";
@@ -57,11 +60,13 @@ const PetSitterProfilePage = () => {
 
   const [errors, setErrors] = useState({});
 
+
   const getIdFromUrl = () => {
     const url = window.location.href;
     return url.substring(url.lastIndexOf("/") + 1);
   };
-
+  
+  
   useEffect(() => {
     const fetchData = async () => {
       const id = getIdFromUrl();
@@ -91,6 +96,8 @@ const PetSitterProfilePage = () => {
           province: data.province || "",
           post_code: data.post_code || "",
         });
+
+
       } catch (error) {
         console.error("Error fetching petsitter profile data:", error);
       }
@@ -123,32 +130,67 @@ const PetSitterProfilePage = () => {
     }));
   };
 
-  const handleImageUpload = (event) => {
+  const handleImageUpload = async (event) => {
     if (formData.image_gallery.length < 10) {
       const file = event.target.files[0];
       if (file) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
+        const profileId = getIdFromUrl();
+        const fileName = `${profileId}/${uuidv4()}`;
+        try {
+          const { data, error } = await supabase
+            .storage
+            .from('petsitter_image_gallery')
+            .upload(fileName, file, { upsert: true });
+  
+          if (error) {
+            throw error;
+          }
+  
+          const { data: publicUrlData, error: urlError } = supabase
+            .storage
+            .from('petsitter_image_gallery')
+            .getPublicUrl(fileName);
+            console.log(publicUrlData);
+          if (urlError) {
+            throw urlError;
+          }
+  
           setFormData((prev) => ({
             ...prev,
-            image_gallery: [...prev.image_gallery, reader.result],
+            image_gallery: [...prev.image_gallery, publicUrlData.publicUrl],
           }));
-        };
-        reader.readAsDataURL(file);
+        } catch (error) {
+          console.error('Error uploading or fetching image URL:', error);
+        }
       }
     }
   };
 
-  const handleRemoveImage = (index) => {
-    setFormData((prev) => ({
-      ...prev,
-      image_gallery: prev.image_gallery.filter((_, i) => i !== index),
-    }));
+  const handleRemoveImage = async (index) => {
+    const imageUrl = formData.image_gallery[index];
+    const fileName = imageUrl.split('/').pop();
+  
+    try {
+      const { error } = await supabase
+        .storage
+        .from('petsitter_image_gallery')
+        .remove([fileName]);
+  
+      if (error) {
+        throw error;
+      }
+  
+      setFormData((prev) => ({
+        ...prev,
+        image_gallery: prev.image_gallery.filter((_, i) => i !== index),
+      }));
+    } catch (error) {
+      console.error('Error removing image from gallery:', error);
+    }
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     try {
       await PetSitterProfileSchema.validate(formData, { abortEarly: false });
       console.log("Form Submitted");
@@ -231,6 +273,7 @@ const PetSitterProfilePage = () => {
                 <ProfileImageForm
                   profileImage={formData.profile_image}
                   setFormData={setFormData}
+                  profileId={getIdFromUrl()}
                 />
               </div>
               <div className="grid grid-cols-3 gap-6">

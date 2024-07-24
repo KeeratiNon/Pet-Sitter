@@ -1,22 +1,5 @@
 import sql from "../utils/db.mjs";
 
-// Helper function to format response
-const formatResponse = (res, status, message, data = null) => {
-    res.status(status).json({ message, data });
-  };
-  
-  // Helper function to get the current date
-  const getCurrentDate = () => new Date();
-  
-  // Helper function to sanitize input and convert empty strings to null
-  const sanitizeInput = (input) => {
-    return input !== '' ? input : null;
-  };
-  
-  // Enhanced logging function to debug inputs
-  const logInputs = (inputs) => {
-    console.log("Sanitized Inputs:", inputs);
-  };
 
 export const createPetsitterProfile = async (req, res) => {
   const param = req.params.id;
@@ -41,34 +24,14 @@ export const createPetsitterProfile = async (req, res) => {
     sub_district,
     province,
     post_code,
-  } = req.body;
+  }= req.body; 
 
   const petsitter = {
-    profile_image: sanitizeInput(profile_image),
-    first_name: sanitizeInput(first_name),
-    last_name: sanitizeInput(last_name),
-    experience: sanitizeInput(experience),
-    phone_number: sanitizeInput(phone_number),
-    email: sanitizeInput(email),
-    introduction: sanitizeInput(introduction),
-    bank: sanitizeInput(bank),
-    account_number: sanitizeInput(account_number),
-    petsitter_name: sanitizeInput(petsitter_name),
-    pet_type: sanitizeInput(pet_type),
-    services: sanitizeInput(services),
-    my_place: sanitizeInput(my_place),
-    image_gallery: sanitizeInput(image_gallery),
-    address_detail: sanitizeInput(address_detail),
-    district: sanitizeInput(district),
-    sub_district: sanitizeInput(sub_district),
-    province: sanitizeInput(province),
-    post_code: sanitizeInput(post_code),
-    created_at: getCurrentDate(),
-    updated_at: getCurrentDate(),
+    ...req,body,
+    created_at: new Date(),
+    updated_at: new Date(),
   };
 
-  // Log the inputs for debugging
-  logInputs(petsitter);
 
   let results;
 
@@ -235,7 +198,9 @@ export const viewPetsitterProfile = async (req, res) => {
         WHERE pet_sitter_profile_id = (SELECT id FROM updated_profile)
         RETURNING *;
       `;
+      console.log(results)
     } catch (error) {
+      console.log(error)
       return res.status(500).json({ message: "Internal server error", error });
     }
     return res.status(200).json({

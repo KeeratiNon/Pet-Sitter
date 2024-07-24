@@ -1,21 +1,41 @@
-import React, { useState } from 'react';
 import petSitterWhiteProfile from "../../../../assets/svgs/pet-sitter-management/pet-sitter-whiteProfile.svg";
 import petSitterAddImage from "../../../../assets/svgs/pet-sitter-management/pet-sitter-addImage.svg";
+import supabase from "../../../../utils/storage";
+import { v4 as uuidv4 } from "uuid";
 
-const ProfileImage = ({profileImage, setFormData}) => {
-  
-  const handleChange = (event) => {
+const ProfileImage = ({ profileImage, setFormData, profileId }) => {
+  const handleChange = async (event) => {
     const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
+    
+      if (file) {
+      const fileName = `${profileId}/${uuidv4()}`;
+      try {
+        const { data, error } = await supabase
+          .storage
+          .from("petsitter_profile_image")
+          .upload(fileName, file, { upsert: false });
+        
+        if (error) {
+          throw error;
+        }
+
+        const { data: publicUrlData, error: urlError } = supabase.storage
+          .from("petsitter_profile_image")
+          .getPublicUrl(fileName);
+        console.log(publicUrlData);
+        if (urlError) {
+          throw urlError;
+        }
+
         setFormData((prev) => ({
           ...prev,
-          profile_image: reader.result
+          profile_image: publicUrlData.publicUrl,
         }));
-      };
 
-      reader.readAsDataURL(file);
+
+      } catch (error) {
+        console.error("Error uploading or fetching file URL:", error);
+      }
     }
   };
 
@@ -25,7 +45,11 @@ const ProfileImage = ({profileImage, setFormData}) => {
         Profile Image
         <div className="w-[240px] h-[240px] rounded-full bg-[#DCDFED] relative flex items-center justify-center">
           {profileImage ? (
-            <img src={profileImage} alt="Profile" className="w-[240px] h-[240px] rounded-full object-cover" />
+            <img
+              src={profileImage}
+              alt="Profile"
+              className="w-[240px] h-[240px] rounded-full object-cover"
+            />
           ) : (
             <img
               src={petSitterWhiteProfile}
