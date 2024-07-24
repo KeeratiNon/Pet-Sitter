@@ -5,6 +5,7 @@ import Sidebar from "../../components/petSitterManagement/bookingList/BookingLis
 import Navbar from "../../components/petSitterManagement/petSitterProfileForm/PetSitterNavbar";
 import BookingList from "../../components/PetSitterBooking";
 import { SERVER_API_URL } from "../../core/config.mjs";
+import PetsitterBookingDetail from "../../components/petSitterManagement/bookingList/PetSitterBookingDetail";
 
 const PetsitterBookingDetailPage = () => {
   const [formData, setFormData] = useState({
@@ -46,7 +47,7 @@ const PetsitterBookingDetailPage = () => {
         <Navbar formData={formData} />
         <main>
           <div>
-            <BookingList />
+            <PetsitterBookingDetail />
           </div>
         </main>
       </div>
