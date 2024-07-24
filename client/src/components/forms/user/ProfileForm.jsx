@@ -1,30 +1,94 @@
 import defaultProfile from "../../../assets/svgs/pet-sitter-management/pet-sitter-whiteProfile.svg";
 import buttonAddImage from "../../../assets/svgs/pet-sitter-management/pet-sitter-addImage.svg";
+import supabase from "../../../utils/storage";
+import { v4 as uuidv4 } from "uuid";
+import { useState } from "react";
 
-const ProfileForm = ({ setUserData, userData }) => {
-  const handleChange = (event) => {
+const ProfileForm = ({ userData, handleSubmit }) => {
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState(userData);
+
+  const handleImageChange = async (event) => {
     const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setUserData({ ...userData, image: event.target.result });
-      };
 
-      reader.readAsDataURL(file);
+    if (file) {
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${uuidv4()}.${fileExt}`;
+      const filePath = `${formData.user_id}/${fileName}`;
+      setLoading(true);
+
+      try {
+        if (formData.image) {
+          const oldImagePath = formData.image.split("user_profile_image/")[1];
+          if (oldImagePath) {
+            const { error: removeError } = await supabase.storage
+              .from("user_profile_image")
+              .remove([oldImagePath]);
+
+            if (removeError) {
+              throw removeError;
+            }
+          }
+        }
+
+        const { error: uploadError } = await supabase.storage
+          .from("user_profile_image")
+          .upload(filePath, file);
+
+        if (uploadError) {
+          throw uploadError;
+        }
+
+        const { data, error: urlError } = supabase.storage
+          .from("user_profile_image")
+          .getPublicUrl(filePath);
+
+        if (urlError) {
+          throw urlError;
+        }
+
+        setFormData((prevData) => ({
+          ...prevData,
+          image: data.publicUrl,
+        }));
+      } catch (error) {
+        console.error("Error uploading or deleting image:", error);
+      } finally {
+        setLoading(false);
+      }
     }
+  };
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    handleSubmit(formData);
   };
 
   return (
     <form
       className="flex flex-col gap-4 py-10 px-4 bg-white w-full md:p-10 md:rounded-2xl md:gap-[60px]"
-      onSubmit={() => {}}
+      onSubmit={onSubmit}
     >
       <h1 className="text-[20px] leading-[28px] font-bold">Profile</h1>
 
-      <div className="size-[120px] rounded-full bg-[#DCDFED] relative flex items-center justify-center md:size-60">
-        {userData?.image ? (
+      <div
+        className={`size-[120px] rounded-full bg-[#DCDFED] relative flex items-center justify-center md:size-60`}
+      >
+        {loading ? (
+          <div className="w-[120px] h-[120px] rounded-full flex items-center justify-center">
+            <div className="size-9 border-4 border-t-4 border-t-gray-700 border-gray-300 rounded-full animate-spin"></div>
+          </div>
+        ) : formData.image ? (
           <img
-            src={userData.image}
+            src={formData.image}
             alt="Profile"
             className="size-[120px] rounded-full object-cover md:size-60"
           />
@@ -40,7 +104,7 @@ const ProfileForm = ({ setUserData, userData }) => {
             type="file"
             name="profile_image"
             className="hidden"
-            onChange={handleChange}
+            onChange={handleImageChange}
           />
           <img
             src={buttonAddImage}
@@ -61,10 +125,8 @@ const ProfileForm = ({ setUserData, userData }) => {
               name="first_name"
               placeholder="First name"
               className="input-box"
-              value={userData.first_name}
-              onChange={(event) =>
-                setUserData({ ...userData, first_name: event.target.value })
-              }
+              value={formData.first_name || ""}
+              onChange={handleInputChange}
             />
           </div>
 
@@ -77,10 +139,8 @@ const ProfileForm = ({ setUserData, userData }) => {
               name="last_name"
               placeholder="Last name"
               className="input-box"
-              value={userData.last_name}
-              onChange={(event) =>
-                setUserData({ ...userData, last_name: event.target.value })
-              }
+              value={formData.last_name || ""}
+              onChange={handleInputChange}
             />
           </div>
         </div>
@@ -95,10 +155,8 @@ const ProfileForm = ({ setUserData, userData }) => {
               name="email"
               placeholder="youremail@company.com"
               className="input-box"
-              value={userData.email}
-              onChange={(event) =>
-                setUserData({ ...userData, email: event.target.value })
-              }
+              value={formData.email || ""}
+              onChange={handleInputChange}
             />
           </div>
 
@@ -111,10 +169,8 @@ const ProfileForm = ({ setUserData, userData }) => {
               name="phone_number"
               placeholder="xxx-xxx-xxxx"
               className="input-box"
-              value={userData.phone_number}
-              onChange={(event) =>
-                setUserData({ ...userData, phone_number: event.target.value })
-              }
+              value={formData.phone_number || ""}
+              onChange={handleInputChange}
             />
           </div>
         </div>
@@ -129,10 +185,8 @@ const ProfileForm = ({ setUserData, userData }) => {
               name="id_number"
               placeholder="Your ID number"
               className="input-box"
-              value={userData.id_number}
-              onChange={(event) =>
-                setUserData({ ...userData, id_number: event.target.value })
-              }
+              value={formData.id_number || ""}
+              onChange={handleInputChange}
             />
           </div>
 
@@ -145,10 +199,8 @@ const ProfileForm = ({ setUserData, userData }) => {
               name="date_of_birth"
               placeholder="Select your date of birth"
               className="input-box"
-              value={userData.date_of_birth.slice(0, 10)}
-              onChange={(event) =>
-                setUserData({ ...userData, date_of_birth: event.target.value })
-              }
+              value={formData.date_of_birth.slice(0, 10) || ""}
+              onChange={handleInputChange}
             />
           </div>
         </div>

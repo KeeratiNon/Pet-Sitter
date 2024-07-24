@@ -4,7 +4,6 @@ import { SERVER_API_URL } from "../../core/config.mjs";
 import axios from "axios";
 import AccountMenu from "../../components/cards/AccountMenu";
 import ProfileForm from "../../components/forms/user/ProfileForm";
-import PetProfileForm from "../../components/forms/user/PetProfileForm";
 
 const UserManagementPage = () => {
   const { state } = useAuth();
@@ -41,7 +40,19 @@ const UserManagementPage = () => {
 
   useEffect(() => {
     getUserProfileData();
-  }, [state.user.id]);
+  }, []);
+
+  const handleSubmit = async (formData) => {
+    try {
+      await axios.put(`${SERVER_API_URL}/user/profile`, formData);
+      alert("Profile updated successfully");
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      alert("Failed to update profile");
+    }
+
+    window.location.reload();
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -55,7 +66,7 @@ const UserManagementPage = () => {
     <section className="flex flex-col bg-[#F6F6F9] md:gap-8 md:py-10 md:px-20 md:min-h-[calc(100dvh-72px)] md:min-w-[956px] md:flex-row">
       <AccountMenu />
       {userData && (
-        <ProfileForm setUserData={setUserData} userData={userData} />
+        <ProfileForm userData={userData} handleSubmit={handleSubmit} />
       )}
     </section>
   );
