@@ -3,7 +3,7 @@ import axios from "axios";
 
 import Sidebar from "../../components/petSitterManagement/paymentOption/PaymentOptionSidebar";
 import Navbar from "../../components/petSitterManagement/petSitterProfileForm/PetSitterNavbar";
-import BookingList from "../../components/PetSitterBooking";
+import BookingList from "../../components/petSitterManagement/bookingList/PetSitterBooking";
 import { SERVER_API_URL } from "../../core/config.mjs";
 
 

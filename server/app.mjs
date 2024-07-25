@@ -11,6 +11,7 @@ import "./models/chatrooms.mjs";
 
 import bodyParser from "body-parser";
 import { petSitterProfileRouter } from "./routes/petSitterProfile.mjs";
+import { petSitterBookingRouter } from "./routes/petSitterBooking.mjs";
 import { ChatRoom } from "./models/chatrooms.mjs";
 import dotenv from "dotenv";
 
@@ -34,8 +35,9 @@ app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 app.use(express.json());
 app.use("/auth", authRouter);
-app.use("/petsitter/profile", petSitterProfileRouter);
 app.use("/", petSitterProfileRouter);
+app.use("/petsitter/booking", petSitterBookingRouter);
+
 
 
 
