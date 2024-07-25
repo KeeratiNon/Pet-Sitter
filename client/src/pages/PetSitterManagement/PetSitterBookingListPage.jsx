@@ -3,7 +3,7 @@ import axios from "axios";
 
 import Sidebar from "../../components/petSitterManagement/bookingList/BookingListSidebar";
 import Navbar from "../../components/petSitterManagement/petSitterProfileForm/PetSitterNavbar";
-import BookingList from "../../components/PetSitterBooking";
+import PetSitterBooking from "../../components/petSitterManagement/bookingList/PetSitterBooking";
 import { SERVER_API_URL } from "../../core/config.mjs";
 
 const PetsitterBookingListPage = () => {
@@ -12,6 +12,10 @@ const PetsitterBookingListPage = () => {
     first_name: "",
     last_name: "",
   });
+
+  const [bookingsData, setBookingsData] = useState([]);
+  const [status, setStatus] = useState("All status");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const getIdFromUrl = () => {
     const url = window.location.href;
@@ -22,22 +26,35 @@ const PetsitterBookingListPage = () => {
     const fetchData = async () => {
       const id = getIdFromUrl();
       try {
-        const response = await axios.get(
+        // Fetching petsitter profile data
+        const profileResponse = await axios.get(
           `${SERVER_API_URL}/petsitter/profile/${id}`
         );
-        const data = response.data.data;
+        const profileData = profileResponse.data.data;
         setFormData({
-          profile_image: data.profile_image || "",
-          first_name: data.firstname || "",
-          last_name: data.lastname || "",
+          profile_image: profileData.profile_image || "",
+          first_name: profileData.firstname || "",
+          last_name: profileData.lastname || "",
         });
+
+        // Fetching bookings data
+        const bookingsResponse = await axios.get(
+          `${SERVER_API_URL}/petsitter/booking/${id}`,
+          {
+            params: {
+              searchQuery,
+              status,
+            },
+          }
+        );
+        setBookingsData(bookingsResponse.data.data);
       } catch (error) {
-        console.error("Error fetching petsitter profile data:", error);
+        console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
-  }, []);
+  }, [searchQuery, status]);
 
   return (
     <div className="flex bg-primarygray-100">
@@ -46,7 +63,13 @@ const PetsitterBookingListPage = () => {
         <Navbar formData={formData} />
         <main>
           <div>
-            <BookingList />
+            <PetSitterBooking
+              bookingsData={bookingsData}
+              setStatus={setStatus}
+              setSearchQuery={setSearchQuery}
+              status={status}
+              searchQuery={searchQuery}
+            />
           </div>
         </main>
       </div>

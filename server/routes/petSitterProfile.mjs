@@ -6,14 +6,14 @@ import { createPetsitterProfile, viewPetsitterProfile, updatePetsitterProfile, c
 
 export const petSitterProfileRouter = Router();
 
-petSitterProfileRouter.post("/:id", createPetsitterProfile);
+petSitterProfileRouter.post("/petsitter/profile/:id",[protect], createPetsitterProfile);
 
-petSitterProfileRouter.get("/:id", viewPetsitterProfile);
+petSitterProfileRouter.get("/petsitter/profile/:id",[protect], viewPetsitterProfile);
 
 petSitterProfileRouter.get("/search/:id", viewPetsitterProfile);
 
-petSitterProfileRouter.get('/check/:id', checkPetsitterProfile);
+petSitterProfileRouter.get('/petsitter/profile/check/:id', checkPetsitterProfile);
 
-petSitterProfileRouter.put("/:id", updatePetsitterProfile);
+petSitterProfileRouter.put("/petsitter/profile/:id",[protect], updatePetsitterProfile);
 
 petSitterProfileRouter.get("/search", searchPetsitterProfile);

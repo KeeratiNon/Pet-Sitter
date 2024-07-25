@@ -37,11 +37,11 @@ const AutenticationApp = () => {
           element={<PetSitterProfilePage />}
         />
         <Route
-          path="/petsitter/booking-list/:id"
+          path="/petsitter/booking/:id"
           element={<PetSitterBookingListPage />}
         />
         <Route
-          path="/petsitter/booking/:id"
+          path="/petsitter/booking/detail/:id"
           element={<PetSitterBookingDetailPage />}
         />
         <Route

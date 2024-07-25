@@ -1,13 +1,14 @@
+import React, { useState } from 'react';
 import petSitterWhiteProfile from "../../../../assets/svgs/pet-sitter-management/pet-sitter-whiteProfile.svg";
 import petSitterAddImage from "../../../../assets/svgs/pet-sitter-management/pet-sitter-addImage.svg";
 import supabase from "../../../../utils/storage";
 import { v4 as uuidv4 } from "uuid";
-
+  
 const ProfileImage = ({ profileImage, setFormData, profileId }) => {
   const handleChange = async (event) => {
     const file = event.target.files[0];
     
-      if (file) {
+    if (file) {
       const fileName = `${profileId}/${uuidv4()}`;
       try {
         const { data, error } = await supabase
@@ -31,7 +32,6 @@ const ProfileImage = ({ profileImage, setFormData, profileId }) => {
           ...prev,
           profile_image: publicUrlData.publicUrl,
         }));
-
 
       } catch (error) {
         console.error("Error uploading or fetching file URL:", error);
