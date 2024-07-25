@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import { useState, useEffect } from "react";
 import axios from "axios";
-
+import { useLocation } from "react-router-dom";
 import { Button } from "@mui/base";
 import Footer from "../components/Footer";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
@@ -12,6 +12,7 @@ import Searchtolistpage from "../components/searchs/Searchtolistpage";
 import PaginationSize from "../components/searchs/Pagination";
 
 const SearchListPage = () => {
+  const location = useLocation();
   const [profiles, setProfiles] = useState([]);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
@@ -27,6 +28,18 @@ const SearchListPage = () => {
     searchText: "",
   });
 
+  useEffect(() => {
+    if (location.state) {
+      console.log(location.state)
+      setFilters({
+        pet_type: location.state.selectedPet || "",
+        rating: location.state.selectedRatings || 0,
+        experience: location.state.years || "",
+        searchText: location.state.searchText || "",
+      });
+    }
+  }, [location.state]);
+  console.log(filters)
   useEffect(() => {
     const fetchProfiles = async () => {
       try {
