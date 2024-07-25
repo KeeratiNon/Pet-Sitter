@@ -1,6 +1,8 @@
+import { useNavigate } from "react-router-dom";
 import iconX from "../../assets/svgs/icons/icon-x.svg";
 
 const BookingConfirm = ({ open, onClose, onSubmit }) => {
+  const navigate = useNavigate();
   return (
     <div
       className={`fixed inset-0 flex justify-center items-center transition-colors ${
@@ -29,7 +31,10 @@ const BookingConfirm = ({ open, onClose, onSubmit }) => {
             <button onClick={onClose} className="btn-secondary">
               Cancel
             </button>
-            <button onClick={onSubmit} className="btn-primary">
+            <button
+              onClick={() => navigate("/booking/confirmation")}
+              className="btn-primary"
+            >
               Yes, I'm sure
             </button>
           </div>
