@@ -155,7 +155,7 @@ const SearchListPage = () => {
               />
             </div>
           </article>
-          <div className="w-full flex flex-col md:gap-10 md:p-4">
+          <div className="w-full flex flex-col md:gap-10 md:p-4 ">
             {filteredProfiles.map((profile, index) => (
               <CardSearchList key={index} profiles={profile} />
             ))}
