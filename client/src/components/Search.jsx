@@ -19,9 +19,9 @@ const Search = () => {
   const [years, setYears] = useState("");
   const [selectedPet, setSelectedPet] = useState([]);
   const [selectedRatings, setSelectedRatings] = useState([]);
-  const [searchText, setSearchText] = useState("");
+ 
 
-  const handlePetChange1 = (event) => {
+  const handlePetChange = (event) => {
     const value = event.target.value;
     setSelectedPet((preSelectedPets) =>
       preSelectedPets.includes(value)
@@ -54,7 +54,6 @@ const Search = () => {
         selectedPet,
         selectedRatings,
         years,
-        searchText,
       },
     });
   };
@@ -84,7 +83,7 @@ const Search = () => {
                 sx={{ "&.Mui-checked": { color: orange[500] } }}
                 checked={selectedPet.includes("Dog")}
                 value="Dog"
-                onChange={handlePetChange1}
+                onChange={handlePetChange}
                 inputProps={{ "aria-label": "Checkbox demo" }}
               />
               Dog
@@ -92,7 +91,7 @@ const Search = () => {
                 sx={{ "&.Mui-checked": { color: orange[500] } }}
                 checked={selectedPet.includes("Cat")}
                 value="Cat"
-                onChange={handlePetChange1}
+                onChange={handlePetChange}
                 inputProps={{ "aria-label": "Checkbox demo" }}
               />
               Cat
@@ -100,7 +99,7 @@ const Search = () => {
                 sx={{ "&.Mui-checked": { color: orange[500] } }}
                 checked={selectedPet.includes("Bird")}
                 value="Bird"
-                onChange={handlePetChange1}
+                onChange={handlePetChange}
                 inputProps={{ "aria-label": "Checkbox demo" }}
               />
               Bird
@@ -108,7 +107,7 @@ const Search = () => {
                 sx={{ "&.Mui-checked": { color: orange[500] } }}
                 checked={selectedPet.includes("Rabbit")}
                 value="Rabbit"
-                onChange={handlePetChange1}
+                onChange={handlePetChange}
                 inputProps={{ "aria-label": "Checkbox demo" }}
               />
               Rabbit

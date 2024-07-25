@@ -86,12 +86,12 @@ const SearchListPage = () => {
               (profile.firstname &&
                 profile.firstname.toLowerCase().includes(word)) ||
               (profile.district &&
-                profile.district.toLowerCase().includes(word)) ||
+                profile.district.toLowerCase().includes(word)) || 
               (profile.province &&
                 profile.province.toLowerCase().includes(word))
-          )
+              )
+          
       : true;
-
     return matchType && matchRating && matchExperience && matchSearchText;
   });
   return (
