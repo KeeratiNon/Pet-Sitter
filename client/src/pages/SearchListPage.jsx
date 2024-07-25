@@ -66,11 +66,12 @@ const SearchListPage = () => {
   };
 
   const filteredProfiles = profiles.filter((profile) => {
+    console.log("Profile:", profile);
     const matchType = filters.pet_type
       ? profile.pet_type.includes(filters.pet_type)
       : true;
     const matchRating = filters.rating
-      ? profile.rating === filters.rating
+      ? profile.rating == filters.rating
       : true;
     const matchExperience = filters.experience
       ? profile.experience === filters.experience
@@ -92,6 +93,10 @@ const SearchListPage = () => {
               )
           
       : true;
+      console.log("Match Type:", matchType);
+    console.log("Match Rating:", matchRating);
+    console.log("Match Experience:", matchExperience);
+    console.log("Match Search Text:", matchSearchText);
     return matchType && matchRating && matchExperience && matchSearchText;
   });
   return (
