@@ -3,10 +3,11 @@ import sql from "../utils/db.mjs";
 
 export const getChatRoomList = async (req, res) => {
   const allChatRoom = await ChatRoom.find(
-    {},
+    { users: req.user.id },
     {
       _id: 0,
       chatRoomId: 1,
+      messages: 1,
     }
   );
   const mappedChatRoomWithName = await Promise.all(
@@ -18,6 +19,10 @@ export const getChatRoomList = async (req, res) => {
         const targetId = Number(
           chatRoom.chatRoomId.split("/").find((id) => id !== req.user.id)
         );
+        const isReadCount = chatRoom.messages.reduce(
+          (acc, curr) => (!curr.isRead && curr.receiverId === Number(req.user.id) ? acc + 1 : acc),
+          0
+        );
         let data;
         if (req.user.role === "petsitter") {
           data =
@@ -27,9 +32,10 @@ export const getChatRoomList = async (req, res) => {
             await sql`select firstname, lastname from pet_sitter_profiles where pet_sitter_id = ${targetId}`;
         }
         return {
-          chatRoom: chatRoom.chatRoomId,
+          chatRoomId: chatRoom.chatRoomId,
           name: `${data[0].firstname} ${data[0].lastname}`,
           targetId,
+          isReadCount
         };
       })
   );

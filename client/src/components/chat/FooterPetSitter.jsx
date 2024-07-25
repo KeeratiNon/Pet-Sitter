@@ -4,8 +4,8 @@ import UploadImg from "../../assets/svgs/uploadimg.svg";
 
 const FooterPetSitter = ({
   sendMessage,
-  newMessage,
-  setNewMessage,
+  inputMessage,
+  setInputMessage,
   chatRoomId,
 }) => {
   const [images, setImages] = useState([]);
@@ -76,8 +76,8 @@ const FooterPetSitter = ({
           type="text"
           placeholder="Message here..."
           className="placeholder-gray-600 w-[100%] outline-none"
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
+          value={inputMessage}
+          onChange={(e) => setInputMessage(e.target.value)}
           onKeyDown={handleKeyDown}
         />
       </span>

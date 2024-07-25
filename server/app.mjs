@@ -86,8 +86,9 @@ io.on("connection", (socket) => {
       try {
         const newMessage = {
           message,
-          senderId: socket.userId,
+          senderId: Number(socket.userId),
           receiverId: targetId,
+          isRead: false
         };
         const reverseChatRoomId = chatRoomId.chatRoomId
           .split("/")
@@ -103,14 +104,14 @@ io.on("connection", (socket) => {
           { $push: { messages: newMessage } },
           { new: true, upsert: true }
         );
-        io.to(chatRoom).emit("newMessage", newMessage);
+        io.to(chatRoom.chatRoomId).emit("newMessage", newMessage);
       } catch (error) {
         console.error("Error saving message:", error);
       }
     }
   });
 
-  socket.on("joinRoom", async ({ chatRoomId, targetId }) => {
+  socket.on("joinRoom", async ({ chatRoomId, targetId, isReadCount }) => {
     try {
       const reverseChatRoomId = chatRoomId
           .split("/")
@@ -124,10 +125,12 @@ io.on("connection", (socket) => {
           ],
         });
         if (chatRoom) {
+          if (isReadCount) {
+            await ChatRoom.updateMany({},{ 
+              $set: { "messages.$[].isRead": true }
+            })
+          }
           socket.join(chatRoomId);
-          io.to(chatRoomId).emit("chatRoomMessage", {
-            chatRoom,
-          });
           return;
         }
       } else {
@@ -135,12 +138,10 @@ io.on("connection", (socket) => {
         const newChatRoom = new ChatRoom({
           chatRoomId: newChatRoomId,
           messages: [],
+          users: [Number(socket.userId),Number(targetId)]
         });
         await newChatRoom.save();
         socket.join(chatRoomId);
-        io.to(chatRoomId).emit("chatRoomMessage", {
-          chatRoom: newChatRoom,
-        });
       }
     } catch (error) {
       console.error("Error joining room:", error);

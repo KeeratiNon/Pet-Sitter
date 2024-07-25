@@ -10,7 +10,7 @@ const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const [chatRoomList, setChatRoomList] = useState([]);
   const [selectedChatRoom, setSelectedChatRoom] = useState(null);
-  const [newMessage, setNewMessage] = useState("");
+  const [inputMessage, setInputMessage] = useState("");
   const [historyMessage, setHistoryMessage] = useState([]);
 
   const getChatRoomList = async () => {
@@ -53,29 +53,28 @@ const SocketProvider = ({ children }) => {
         // console.log("Socket Connected!");
       });
 
-      newSocket.on("message", (message) => {
+      newSocket.on("newMessage", (message) => {
         console.log("New message received:", message);
-        setNewMessage((prevMessages) => [...prevMessages, message]);
+        setHistoryMessage((prevMessages) => [...prevMessages, message]);
       });
 
       setSocket(newSocket);
     }
   };
 
-  const joinChatRoom = (chatRoomId, targetId) => {
+  const joinChatRoom = ({ chatRoomId, targetId, isReadCount }) => {
     setSelectedChatRoom({ chatRoomId, targetId });
-    socket.emit("joinRoom", { chatRoomId, targetId });
+    socket.emit("joinRoom", { chatRoomId, targetId, isReadCount });
   };
 
   const sendMessage = (chatRoomId) => {
-    if (newMessage.trim()) {
+    if (inputMessage.trim()) {
       socket.emit("sendMessage", {
         chatRoomId: selectedChatRoom,
         targetId: chatRoomId.targetId,
-        message: newMessage,
+        message: inputMessage,
       });
-      setNewMessage("");
-      getMessages(chatRoomId.chatRoomId);
+      setInputMessage("");
     }
   };
 
@@ -86,8 +85,9 @@ const SocketProvider = ({ children }) => {
         chatRoomList,
         selectedChatRoom,
         historyMessage,
-        newMessage,
-        setNewMessage,
+        inputMessage,
+        setChatRoomList,
+        setInputMessage,
         getChatRoomList,
         setupSocket,
         joinChatRoom,
