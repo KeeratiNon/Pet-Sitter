@@ -66,7 +66,6 @@ const SearchListPage = () => {
   };
 
   const filteredProfiles = profiles.filter((profile) => {
-    console.log("Profile:", profile);
     const matchType = filters.pet_type
       ? profile.pet_type.includes(filters.pet_type)
       : true;
@@ -87,16 +86,12 @@ const SearchListPage = () => {
               (profile.firstname &&
                 profile.firstname.toLowerCase().includes(word)) ||
               (profile.district &&
-                profile.district.toLowerCase().includes(word)) || 
+                profile.district.toLowerCase().includes(word)) ||
               (profile.province &&
                 profile.province.toLowerCase().includes(word))
-              )
-          
+          )
       : true;
-      console.log("Match Type:", matchType);
-    console.log("Match Rating:", matchRating);
-    console.log("Match Experience:", matchExperience);
-    console.log("Match Search Text:", matchSearchText);
+
     return matchType && matchRating && matchExperience && matchSearchText;
   });
   return (
