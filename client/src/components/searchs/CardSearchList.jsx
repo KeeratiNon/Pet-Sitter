@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const CardSearchList = ({ profiles }) => {
   return (
-    <section>
+    
       <div className=" w-full   rounded-[16px] p-4 gap-4 flex flex-col  xl:flex-row md:gap-6  md:bg-white  ">
         <div className="  md:w-[245px] md:h-[184px]  ">
           <img
@@ -19,8 +19,8 @@ const CardSearchList = ({ profiles }) => {
             className=" w-full  md:min-w-full md:min-h-[184px] rounded-[8px] md:hidden "
           />
         </div>
-        <div className="  flex-2 h-full flex flex-col justify-between  gap-6 ">
-          <div className=" flex justify-between  md:gap-4  ">
+        <div className="  flex-1   flex flex-col justify-between  gap-6  ">
+          <div className=" flex justify-between    md:gap-4  ">
             <div className=" flex gap-4">
               <div>
                 <img
@@ -41,7 +41,7 @@ const CardSearchList = ({ profiles }) => {
               </div>
             </div>
 
-            <div>
+            <div className="" >
               <button className="gap-[2px] p-2  h-[66px]  flex flex-nowrap  border-gray-200    ">
                 <StarRating rating={profiles.rating} />
               </button>
@@ -56,7 +56,7 @@ const CardSearchList = ({ profiles }) => {
           </div>
         </div>
       </div>
-    </section>
+   
   );
 };
 

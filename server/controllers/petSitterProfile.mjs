@@ -93,6 +93,7 @@ export const searchPetsitterProfile = async (req, res) => {
         pet_sitter_profiles.profile_image,
         pet_sitter_profiles.image_gallery,
         pet_sitter_profiles.pet_type,
+        pet_sitter_profiles.rating,
         pet_sitter_profiles.experience,
         pet_sitter_address.district,
         pet_sitter_address.province

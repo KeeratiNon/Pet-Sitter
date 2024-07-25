@@ -70,7 +70,7 @@ const SearchListPage = () => {
       ? profile.pet_type.includes(filters.pet_type)
       : true;
     const matchRating = filters.rating
-      ? profile.rating === filters.rating
+      ? profile.rating == filters.rating
       : true;
     const matchExperience = filters.experience
       ? profile.experience === filters.experience
@@ -86,12 +86,12 @@ const SearchListPage = () => {
               (profile.firstname &&
                 profile.firstname.toLowerCase().includes(word)) ||
               (profile.district &&
-                profile.district.toLowerCase().includes(word)) || 
+                profile.district.toLowerCase().includes(word)) ||
               (profile.province &&
                 profile.province.toLowerCase().includes(word))
-              )
-          
+          )
       : true;
+
     return matchType && matchRating && matchExperience && matchSearchText;
   });
   return (
@@ -155,7 +155,7 @@ const SearchListPage = () => {
               />
             </div>
           </article>
-          <div className="w-full flex flex-col md:gap-10 md:p-4">
+          <div className="w-full flex flex-col md:gap-10 md:p-4 ">
             {filteredProfiles.map((profile, index) => (
               <CardSearchList key={index} profiles={profile} />
             ))}
