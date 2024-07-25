@@ -4,14 +4,25 @@ import cross from "../assets/svgs/icons/icon-cross.svg";
 import clock from "../assets/svgs/icons/icon-clock.svg";
 import CustomDatePicker from "./cards/CustomDatePicker ";
 import CustomTimePicker from "./cards/CustomTimePicker";
+import { useNavigate } from "react-router-dom";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 const BookingPopup = ({ showModal, setShowModal }) => {
+  const { setItem } = useLocalStorage("bookingData");
+  const navigate = useNavigate();
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
+
+  const handleContinue = () => {
+    setItem({ startTime, endTime });
+
+    navigate("/booking");
+  };
 
   if (!showModal) {
     return null;
   }
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center lg:items-center items-start z-50 pt-[24px] lg:pt-0">
       <div className="bg-white rounded-t-[16px] lg:rounded-[16px] w-full max-w-[560px] mx-auto flex flex-col h-[calc(100vh-24px)] max-h-[788px] lg:h-[438px]">
@@ -53,7 +64,11 @@ const BookingPopup = ({ showModal, setShowModal }) => {
               </div>
             </div>
           </div>
-          <button type="submit" className="btn-primary mt-4 flex-shrink-0">
+          <button
+            type="submit"
+            className="btn-primary mt-4 flex-shrink-0"
+            onClick={handleContinue}
+          >
             Continue
           </button>
         </div>
@@ -63,11 +78,6 @@ const BookingPopup = ({ showModal, setShowModal }) => {
 };
 
 export default BookingPopup;
-
-
-
-
-
 
 // import React from "react";
 // import cross from "../assets/svgs/icons/icon-cross.svg";

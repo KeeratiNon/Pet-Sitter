@@ -6,7 +6,8 @@ import PetSitterProfilePage from "./PetSitterManagement/PetSitterProfilePage";
 import PetSitterBookingListPage from "./PetSitterManagement/PetSitterBookingListPage";
 import PetSitterBookingDetailPage from "./PetSitterManagement/PetSitterBookingDetailPage";
 import PetSitterPaymentOptionPage from "./PetSitterManagement/PetSitterPaymentOptionPage";
-import BookingPage from "./BookingPage";
+import BookingConfirmationPage from "../pages/Bookings/BookingConfirmationPage";
+import BookingPage from "../pages/Bookings/BookingPage";
 import BookingHistoryPage from "./BookingHistoryPage";
 import Chat from "../components/chat/Chat";
 import BookingPopup from "../components/BookingPopup";
@@ -49,6 +50,10 @@ const AutenticationApp = () => {
           element={<PetSitterPaymentOptionPage />}
         />
         <Route path="/booking" element={<BookingPage />} />
+        <Route
+          path="/booking/confirmation"
+          element={<BookingConfirmationPage />}
+        />
         <Route path="/user/profile" element={<UserManagementPage />} />
         <Route path="/user/pet" element={<UserPetManagementPage />} />
         <Route path="/user/booking-history" element={<BookingHistoryPage />} />

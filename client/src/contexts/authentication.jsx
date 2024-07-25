@@ -1,8 +1,12 @@
 import React, { useState, createContext, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import axios from "axios";
-import {  getToken, removeAllTokens, setUserToken } from "../utils/localStorage.mjs";
+import {
+  getToken,
+  removeAllTokens,
+  setUserToken,
+} from "../utils/localStorage.mjs";
 import { SERVER_API_URL } from "../core/config.mjs";
 
 const AuthContext = createContext();
@@ -37,7 +41,7 @@ const AuthProvider = ({ children }) => {
         data
       );
       const token = result.data.token;
-      setUserToken(token)
+      setUserToken(token);
       const userDataFromToken = jwtDecode(token);
 
       setState({ ...state, user: userDataFromToken, loading: false });
@@ -59,7 +63,7 @@ const AuthProvider = ({ children }) => {
         data
       );
       const token = result.data.token;
-      setUserToken(token)
+      setUserToken(token);
       const userDataFromToken = jwtDecode(token);
 
       setState({ ...state, user: userDataFromToken, loading: false });
@@ -108,7 +112,7 @@ const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    removeAllTokens()
+    removeAllTokens();
     setState({ ...state, user: null });
     navigate("/");
   };
