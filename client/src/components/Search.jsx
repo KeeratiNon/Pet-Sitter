@@ -8,13 +8,18 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { orange } from "@mui/material/colors";
 import star2 from "../assets/svgs/star2.svg";
+import { useNavigate } from "react-router-dom";
+
 
 
 
 const Search = () => {
+  
+  const navigate = useNavigate();
   const [years, setYears] = useState("");
   const [selectedPet, setSelectedPet] = useState([]);
   const [selectedRatings, setSelectedRatings] = useState([]);
+  const [searchText, setSearchText] = useState("");
 
   const handlePetChange1 = (event) => {
     const value = event.target.value;
@@ -41,6 +46,17 @@ const Search = () => {
         className="size-[20px]  "
       />
     ));
+  };
+
+  const handleSearch = () => {
+    navigate("/search", {
+      state: {
+        selectedPet,
+        selectedRatings,
+        years,
+        searchText,
+      },
+    });
   };
 
   const handleChange = (event) => {
@@ -140,7 +156,7 @@ const Search = () => {
                   <MenuItem value={3}>5+ Years</MenuItem>
                 </Select>
               </FormControl>
-              <Button className="btn-primary w-full md:w-fit md:ml-5 ">
+              <Button className="btn-primary w-full md:w-fit md:ml-5  " onClick={handleSearch}>
                 Search
               </Button>
             </div>

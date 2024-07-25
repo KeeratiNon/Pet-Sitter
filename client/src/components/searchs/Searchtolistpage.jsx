@@ -50,7 +50,6 @@ const Searchtolistpage = ({
 
   const handleExperienceChange = (event) => {
     setYears(event.target.value);
-    
 
     setFilters({
       ...filters,
@@ -61,7 +60,6 @@ const Searchtolistpage = ({
           ? "3-5 Years"
           : "5+ Years",
     });
-    
   };
 
   return (
