@@ -1,8 +1,7 @@
-// CustomTimePicker.jsx
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Select from "react-select";
 
-const timeOptions = [
+const allTimeOptions = [
   { value: "08:00", label: "8:00 AM" },
   { value: "08:30", label: "8:30 AM" },
   { value: "09:00", label: "9:00 AM" },
@@ -59,16 +58,45 @@ const customStyles = {
   }),
   placeholder: (base) => ({
     ...base,
-    color: "#9CA3AF", // สี placeholder ที่ต้องการ
+    color: "#9CA3AF",
   }),
 };
 
-const CustomTimePicker = ({ selectedTime, setSelectedTime }) => {
+const CustomTimePicker = ({ selectedDate, selectedTime, setSelectedTime, minTime }) => {
+  const [filteredTimeOptions, setFilteredTimeOptions] = useState(allTimeOptions);
+
+  useEffect(() => {
+    if (selectedDate) {
+      const now = new Date();
+      const selectedDateTime = new Date(selectedDate);
+      if (selectedDateTime.toDateString() === now.toDateString()) {
+        now.setHours(now.getHours() + 2);
+        now.setMinutes(now.getMinutes() + 30); // เพิ่ม 2 ชั่วโมง 30 นาที
+        const currentTimeString = now.toTimeString().substring(0, 5);
+        let filteredOptions = allTimeOptions.filter(option => option.value >= currentTimeString);
+
+        if (minTime) {
+          filteredOptions = filteredOptions.filter(option => option.value > minTime);
+        }
+
+        setFilteredTimeOptions(filteredOptions); // กรองเวลาที่น้อยกว่า 2 ชั่วโมง 30 นาทีจากเวลาปัจจุบัน
+      } else {
+        let filteredOptions = allTimeOptions;
+
+        if (minTime) {
+          filteredOptions = filteredOptions.filter(option => option.value > minTime);
+        }
+
+        setFilteredTimeOptions(filteredOptions); // ใช้ทุกเวลาในกรณีที่ไม่ใช่วันนี้
+      }
+    }
+  }, [selectedDate, minTime]); // รีเฟรชตัวเลือกเวลาทุกครั้งที่เลือกวันที่ใหม่และเมื่อ minTime เปลี่ยน
+
   return (
     <Select
-      options={timeOptions}
-      value={selectedTime}
-      onChange={setSelectedTime}
+      options={filteredTimeOptions} // ใช้ options ที่กรองแล้ว
+      value={selectedTime} // ใช้ selectedTime จาก props
+      onChange={setSelectedTime} // ใช้ setSelectedTime จาก props
       styles={customStyles}
       className="w-full"
       placeholder="Select Time"
@@ -77,3 +105,5 @@ const CustomTimePicker = ({ selectedTime, setSelectedTime }) => {
 };
 
 export default CustomTimePicker;
+
+
