@@ -6,20 +6,32 @@ import MainChat from "./MainChat";
 import { useSocket } from "../../contexts/socket";
 
 const Chat = () => {
-
-  const {socket, chatRoomList,setChatRoomList, selectedChatRoom, historyMessage, inputMessage, setInputMessage, getChatRoomList, setupSocket, joinChatRoom, getMessages, sendMessage} = useSocket()
+  const {
+    socket,
+    chatRoomList,
+    setChatRoomList,
+    selectedChatRoom,
+    historyMessage,
+    inputMessage,
+    setInputMessage,
+    getChatRoomList,
+    setupSocket,
+    joinChatRoom,
+    getMessages,
+    sendMessage,
+  } = useSocket();
 
   const clearReadCount = (chatRoomId) => {
-    const newChatRoomList = [...chatRoomList]
-    newChatRoomList.map((chatRoom)=>{
+    const newChatRoomList = [...chatRoomList];
+    newChatRoomList.map((chatRoom) => {
       if (chatRoom.chatRoomId === chatRoomId) {
-        chatRoom.isReadCount = 0
-        return chatRoom
+        chatRoom.isReadCount = 0;
+        return chatRoom;
       }
-      return chatRoom
-    })
-    setChatRoomList(newChatRoomList)
-  }
+      return chatRoom;
+    });
+    setChatRoomList(newChatRoomList);
+  };
 
   useEffect(() => {
     getChatRoomList();
@@ -45,7 +57,7 @@ const Chat = () => {
               <li
                 onClick={() => {
                   joinChatRoom(chatRoom);
-                  clearReadCount(chatRoom.chatRoomId)
+                  clearReadCount(chatRoom.chatRoomId);
                 }}
               >
                 <PetSitter chatRoom={chatRoom} />
@@ -58,9 +70,13 @@ const Chat = () => {
         <main className="flex">
           {selectedChatRoom && (
             <div className="flex flex-col w-full">
-              <div>
-                <HeaderPetSitter />
-              </div>
+              {chatRoomList.filter((list)=>list.targetId === selectedChatRoom.targetId).map((chatRoom) => {
+                return (
+                  <div key={chatRoom.chatRoom}>
+                    <HeaderPetSitter chatRoom={chatRoom} />
+                  </div>
+                );
+              })}
               <div className="flex flex-1 ">
                 <MainChat
                   historyMessage={historyMessage}

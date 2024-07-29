@@ -26,16 +26,17 @@ export const getChatRoomList = async (req, res) => {
         let data;
         if (req.user.role === "petsitter") {
           data =
-            await sql`select firstname, lastname from user_profiles where user_id = ${targetId}`;
+            await sql`select firstname, lastname, image from user_profiles where user_id = ${targetId}`;
         } else {
           data =
-            await sql`select firstname, lastname from pet_sitter_profiles where pet_sitter_id = ${targetId}`;
+            await sql`select firstname, lastname, profile_image from pet_sitter_profiles where pet_sitter_id = ${targetId}`;
         }
         return {
           chatRoomId: chatRoom.chatRoomId,
           name: `${data[0].firstname} ${data[0].lastname}`,
           targetId,
-          isReadCount
+          isReadCount,
+          image: `${data[0].image || data[0].profile_image}`
         };
       })
   );
