@@ -1,17 +1,18 @@
 /* eslint-disable no-undef */
 import { useState, useEffect } from "react";
 import axios from "axios";
-
+import { useLocation } from "react-router-dom";
 import { Button } from "@mui/base";
 import Footer from "../components/Footer";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import MapIcon from "@mui/icons-material/Map";
-
+import Search from "@mui/icons-material/Search";
 import CardSearchList from "../components/searchs/CardSearchList";
 import Searchtolistpage from "../components/searchs/Searchtolistpage";
 import PaginationSize from "../components/searchs/Pagination";
 
 const SearchListPage = () => {
+  const location = useLocation();
   const [profiles, setProfiles] = useState([]);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
@@ -21,11 +22,29 @@ const SearchListPage = () => {
   const [selectedRatings, setSelectedRatings] = useState(null);
   const [years, setYears] = useState("");
   const [filters, setFilters] = useState({
-    pet_type: "",
-    rating: 0,
+    pet_type: [],
+    rating: [],
     experience: "",
     searchText: "",
   });
+
+  useEffect(() => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      pet_type: selectedPet,
+    }));
+  }, [selectedPet]);
+
+  useEffect(() => {
+    if (location.state) {
+      
+      setFilters({
+        pet_type: location.state.selectedPet || [],
+        rating: location.state.selectedRatings || [],
+        experience: location.state.years || "",      
+      });
+    }
+  }, [location.state]);
 
   useEffect(() => {
     const fetchProfiles = async () => {
@@ -47,6 +66,9 @@ const SearchListPage = () => {
   const handlePageChange = (event, value) => {
     setPage(value);
   };
+  
+
+  
 
   const handleClearFilters = () => {
     setSelectedPet([]);
@@ -55,7 +77,7 @@ const SearchListPage = () => {
     setYears("");
     setFilters({
       pet_type: "",
-      rating: 0,
+      rating: [],
       experience: "",
       searchText: "",
     });
@@ -65,35 +87,32 @@ const SearchListPage = () => {
     setFilters({ ...filters, searchText: searchText });
   };
 
-  const filteredProfiles = profiles.filter((profile) => {
-    const matchType = filters.pet_type
-      ? profile.pet_type.includes(filters.pet_type)
-      : true;
-    const matchRating = filters.rating
-      ? profile.rating == filters.rating
-      : true;
-    const matchExperience = filters.experience
-      ? profile.experience === filters.experience
-      : true;
-    const matchSearchText = filters.searchText
-      ? filters.searchText
-          .toLowerCase()
-          .split(" ")
-          .every(
-            (word) =>
-              (profile.pet_sitter_name &&
-                profile.pet_sitter_name.toLowerCase().includes(word)) ||
-              (profile.firstname &&
-                profile.firstname.toLowerCase().includes(word)) ||
-              (profile.district &&
-                profile.district.toLowerCase().includes(word)) ||
-              (profile.province &&
-                profile.province.toLowerCase().includes(word))
-          )
-      : true;
-
-    return matchType && matchRating && matchExperience && matchSearchText;
-  });
+ const filteredProfiles = profiles.filter((profile) => {
+  const matchType = filters.pet_type.length > 0
+    ? filters.pet_type.every(type => profile.pet_type.includes(type))
+    : true;
+  const matchRating = filters.rating.length > 0
+    ? filters.rating.includes(profile.rating)
+    : true;
+  const matchExperience = filters.experience
+    ? profile.experience === filters.experience
+    : true;
+  const matchSearchText = filters.searchText
+    ? filters.searchText.toLowerCase().split(" ").every(
+        (word) =>
+          (profile.pet_sitter_name &&
+            profile.pet_sitter_name.toLowerCase().includes(word)) ||
+          (profile.firstname &&
+            profile.firstname.toLowerCase().includes(word)) ||
+          (profile.district &&
+            profile.district.toLowerCase().includes(word)) ||
+          (profile.province &&
+            profile.province.toLowerCase().includes(word))
+      )
+    : true;
+      
+  return matchType && matchRating && matchExperience && matchSearchText;
+});
   return (
     <>
       <section className=" md:bg-gray-100  md:pr-[70px] md:pl-[92px] ">

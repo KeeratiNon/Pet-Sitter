@@ -17,7 +17,6 @@ const Searchtolistpage = ({
   setFilters,
   selectedPet,
   setSelectedPet,
-
   setSelectedRatings,
   years,
   setYears,
@@ -25,14 +24,14 @@ const Searchtolistpage = ({
   setSearchText,
   searchText,
 }) => {
+  
   function handlePetChange(event) {
     const value = event.target.value;
-    setSelectedPet((preSelectedPets) =>
-      preSelectedPets.includes(value)
-        ? preSelectedPets.filter((pet) => pet !== value)
-        : [...preSelectedPets, value]
+    setSelectedPet((prevSelectedPets) =>
+      prevSelectedPets.includes(value)
+        ? prevSelectedPets.filter((pet) => pet !== value)
+        : [...prevSelectedPets, value]
     );
-    setFilters({ ...filters, pet_type: value });
   }
   const handleRatingChange = (rating) => {
     setSelectedRatings(rating);
@@ -135,7 +134,7 @@ const Searchtolistpage = ({
                 </label>
                 {/* วนรูปตามจำนวนเลข */}
                 <div className="flex flex-wrap gap-[8px]  ">
-                  {[5, 4, 3, 2, 1].map((rating, index) => (
+                  {["5", "4", "3", "2", "1"].map((rating, index) => (
                     <button
                       className="  gap-[3px] pt-[4] pr-[8px] pb-[4px] pl-[8px]   text-[16px] leading-7 flex flex-wrap items-center border-gray-200 rounded-[8px] border  "
                       key={index}
