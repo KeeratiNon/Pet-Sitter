@@ -1,5 +1,5 @@
 import Checkbox from "@mui/material/Checkbox";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@mui/base";
 
 import InputLabel from "@mui/material/InputLabel";
@@ -12,23 +12,32 @@ import { useNavigate } from "react-router-dom";
 
 
 
-
 const Search = () => {
   
   const navigate = useNavigate();
   const [years, setYears] = useState("");
   const [selectedPet, setSelectedPet] = useState([]);
-  const [selectedRatings, setSelectedRatings] = useState([]);
+  const [selectedRatings, setSelectedRatings] = useState("");
+  const [filters, setFilters] = useState({
+    pet_type: [],
+    rating: [],
+    experience: "",
+    searchText: "",
+  });
  
+  useEffect(() => {
+    setSelectedPet(filters.pet_type || []);
+  }, [filters.pet_type]);
 
   const handlePetChange = (event) => {
     const value = event.target.value;
-    setSelectedPet((preSelectedPets) =>
-      preSelectedPets.includes(value)
-        ? preSelectedPets.filter((pet) => pet !== value)
-        : [...preSelectedPets, value]
+    setSelectedPet((prevSelectedPets) =>
+      prevSelectedPets.includes(value)
+        ? prevSelectedPets.filter((pet) => pet !== value)
+        : [...prevSelectedPets, value]
     );
   };
+  
   const handleRatingChange = (rating) => {
     setSelectedRatings((prevSelectedRatings) =>
       prevSelectedRatings.includes(rating)
@@ -47,6 +56,8 @@ const Search = () => {
       />
     ));
   };
+  
+ 
 
   const handleSearch = () => {
     navigate("/search", {
@@ -124,7 +135,7 @@ const Search = () => {
               </label>
               {/* วนรูปตามจำนวนเลข */}
               <div className="flex flex-wrap gap-[8px]  ">
-                {[5, 4, 3, 2, 1].map((rating, index) => (
+                {["5", "4", "3", "2", "1"].map((rating, index) => (
                   <button
                     className="  gap-[3px] pt-[4] pr-[8px] pb-[4px] pl-[8px]   text-[16px] leading-7 flex flex-wrap items-center border-gray-200 rounded-[8px] border  md:ml-1 "
                     key={index}
@@ -150,9 +161,9 @@ const Search = () => {
                   label="Year"
                   onChange={handleChange}
                 >
-                  <MenuItem value={1}>0-2 Years</MenuItem>
-                  <MenuItem value={2}>3-5 Years</MenuItem>
-                  <MenuItem value={3}>5+ Years</MenuItem>
+                  <MenuItem value={"0-2 Years"}>0-2 Years</MenuItem>
+                  <MenuItem value={"3-5 Years"}>3-5 Years</MenuItem>
+                  <MenuItem value={"5+ Years"}>5+ Years</MenuItem>
                 </Select>
               </FormControl>
               <Button className="btn-primary w-full md:w-fit md:ml-5  " onClick={handleSearch}>
