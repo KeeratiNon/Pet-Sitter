@@ -6,7 +6,7 @@ import { Button } from "@mui/base";
 import Footer from "../components/Footer";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import MapIcon from "@mui/icons-material/Map";
-import Search from "@mui/icons-material/Search";
+
 import CardSearchList from "../components/searchs/CardSearchList";
 import Searchtolistpage from "../components/searchs/Searchtolistpage";
 import PaginationSize from "../components/searchs/Pagination";
@@ -19,7 +19,7 @@ const SearchListPage = () => {
   const [total, setTotal] = useState(0);
   const [searchText, setSearchText] = useState("");
   const [selectedPet, setSelectedPet] = useState([]);
-  const [selectedRatings, setSelectedRatings] = useState(null);
+  const [selectedRatings, setSelectedRatings] = useState([]);
   const [years, setYears] = useState("");
   const [filters, setFilters] = useState({
     pet_type: [],
@@ -37,11 +37,10 @@ const SearchListPage = () => {
 
   useEffect(() => {
     if (location.state) {
-      
       setFilters({
         pet_type: location.state.selectedPet || [],
         rating: location.state.selectedRatings || [],
-        experience: location.state.years || "",      
+        experience: location.state.years || "",
       });
     }
   }, [location.state]);
@@ -49,26 +48,39 @@ const SearchListPage = () => {
   useEffect(() => {
     const fetchProfiles = async () => {
       try {
+        const petTypeParam = Array.isArray(filters.pet_type)
+          ? filters.pet_type.join(",")
+          : "";
+       
+
         const response = await axios.get("http://localhost:4000/search", {
-          params: { page, pageSize, ...filters },
+          params: {
+            page,
+            pageSize,
+            q: searchText,
+            rating: filters.rating,
+            experience: filters.experience,
+            pet_type: petTypeParam,
+          },
         });
+
         setProfiles(response.data.data);
         setTotal(response.data.total || 0);
       } catch (error) {
-        console.error("Error axios profile");
+        console.error(
+          "Error fetching profiles:",
+          error.response ? error.response.data : error.message
+        );
         setTotal(0);
       }
     };
 
     fetchProfiles();
-  }, [page, pageSize, filters]);
+  }, [page, pageSize, searchText, filters]);
 
   const handlePageChange = (event, value) => {
     setPage(value);
   };
-  
-
-  
 
   const handleClearFilters = () => {
     setSelectedPet([]);
@@ -76,7 +88,7 @@ const SearchListPage = () => {
     setSearchText("");
     setYears("");
     setFilters({
-      pet_type: "",
+      pet_type: [],
       rating: [],
       experience: "",
       searchText: "",
@@ -84,35 +96,40 @@ const SearchListPage = () => {
   };
 
   const handleSearch = () => {
-    setFilters({ ...filters, searchText: searchText });
+    setFilters({ ...filters, searchText: searchText, rating: selectedRatings });
+    setPage(1);
   };
 
- const filteredProfiles = profiles.filter((profile) => {
-  const matchType = filters.pet_type.length > 0
-    ? filters.pet_type.every(type => profile.pet_type.includes(type))
-    : true;
-  const matchRating = filters.rating.length > 0
-    ? filters.rating.includes(profile.rating)
-    : true;
-  const matchExperience = filters.experience
-    ? profile.experience === filters.experience
-    : true;
-  const matchSearchText = filters.searchText
-    ? filters.searchText.toLowerCase().split(" ").every(
-        (word) =>
-          (profile.pet_sitter_name &&
-            profile.pet_sitter_name.toLowerCase().includes(word)) ||
-          (profile.firstname &&
-            profile.firstname.toLowerCase().includes(word)) ||
-          (profile.district &&
-            profile.district.toLowerCase().includes(word)) ||
-          (profile.province &&
-            profile.province.toLowerCase().includes(word))
-      )
-    : true;
-      
-  return matchType && matchRating && matchExperience && matchSearchText;
-});
+  const filteredProfiles = profiles.filter((profile) => {
+    const matchType =
+    filters.pet_type && Array.isArray(filters.pet_type) && filters.pet_type.length > 0
+        ? filters.pet_type.some((type) => profile.pet_type.includes(type))
+        : true;
+    const matchRating = filters.rating && Array.isArray(filters.rating) && filters.rating.length
+      ? filters.rating.includes(profile.rating)
+      : true;
+    const matchExperience = filters.experience
+      ? profile.experience === filters.experience
+      : true;
+    const matchSearchText = filters.searchText
+      ? filters.searchText
+          .toLowerCase()
+          .split(" ")
+          .every(
+            (word) =>
+              (profile.pet_sitter_name &&
+                profile.pet_sitter_name.toLowerCase().includes(word)) ||
+              (profile.firstname &&
+                profile.firstname.toLowerCase().includes(word)) ||
+              (profile.district &&
+                profile.district.toLowerCase().includes(word)) ||
+              (profile.province &&
+                profile.province.toLowerCase().includes(word))
+          )
+      : true;
+
+    return matchType && matchRating && matchExperience && matchSearchText;
+  });
   return (
     <>
       <section className=" md:bg-gray-100  md:pr-[70px] md:pl-[92px] ">
