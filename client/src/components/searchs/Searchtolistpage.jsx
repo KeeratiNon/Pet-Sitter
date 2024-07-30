@@ -89,7 +89,7 @@ const Searchtolistpage = ({
     <aside>
       <div className="  md:pr-[40px] ">
         <div
-          className="  md:bg-white     "
+          className="  md:bg-white  md:rounded-2xl   "
           style={{ boxShadow: "4px 4px 24px 0px rgba(0, 0, 0, 0.04)" }}
         >
           <div className="hidden md:block md:pr-[24px] md:pl-[24px] md:pt-[24px] md:pb-[40px] ">
