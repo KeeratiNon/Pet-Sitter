@@ -1,9 +1,8 @@
 import sql from "../utils/db.mjs";
 
-
 export const createPetsitterProfile = async (req, res) => {
   const param = req.params.id;
-  
+
   const {
     profile_image,
     first_name,
@@ -24,14 +23,14 @@ export const createPetsitterProfile = async (req, res) => {
     sub_district,
     province,
     post_code,
-  }= req.body; 
+  } = req.body;
 
   const petsitter = {
-    ...req,body,
+    ...req,
+    body,
     created_at: new Date(),
     updated_at: new Date(),
   };
-
 
   let results;
 
@@ -71,21 +70,47 @@ export const createPetsitterProfile = async (req, res) => {
 
 export const searchPetsitterProfile = async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1; // ถ้าไม่ได้ส่ง page มา ให้ใช้หน้า 1
-    const pageSize = parseInt(req.query.pageSize) || 5; // ถ้าไม่ได้ส่ง pageSize มา ให้ใช้ 5
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = parseInt(req.query.pageSize) || 5;
     const offset = (page - 1) * pageSize;
+    const searchText = req.query.q || "";
+    const selectedRatings = req.query.rating || [];
+    const years = req.query.experience || "";
+    const selectedPet = req.query.pet_type ? req.query.pet_type.split(",") : [];
 
-    const totalResults = await sql`
-      SELECT COUNT(*) AS count
+    const totalResultsQuery =  sql`
+    SELECT COUNT(*) AS count
       FROM pet_sitter_profiles
-      INNER JOIN pet_sitter_address ON pet_sitter_profiles.id = pet_sitter_address.pet_sitter_profile_id
+      INNER JOIN pet_sitter_address 
+      ON pet_sitter_profiles.id = pet_sitter_address.pet_sitter_profile_id
+      WHERE (
+        pet_sitter_profiles.pet_sitter_name ILIKE ${`%${searchText}%`}
+        OR pet_sitter_profiles.firstname ILIKE ${`%${searchText}%`}
+        OR pet_sitter_profiles.lastname ILIKE ${`%${searchText}%`}
+        OR pet_sitter_address.district ILIKE ${`%${searchText}%`}
+        OR pet_sitter_address.province ILIKE ${`%${searchText}%`}
+      )
+      ${
+        selectedRatings.length > 0
+      ? sql`AND pet_sitter_profiles.rating = ANY(${sql.array(selectedRatings)})`
+      : sql``
+      }
+      ${
+        years
+          ? sql`AND pet_sitter_profiles.experience ILIKE ${`%${years}%`}`
+          : sql``
+      }
+      ${       
+        selectedPet.length > 0
+          ? sql`AND EXISTS (SELECT 1 FROM UNNEST(pet_sitter_profiles.pet_type) AS pet WHERE pet = ANY(${sql.array(selectedPet)}))`
+          : sql``
+      }
     `;
+    const totalResults = await totalResultsQuery;
     const totalCount = totalResults[0].count;
 
-
-
-    const results = await sql`
-              SELECT
+    const resultsQuery = sql`
+  SELECT
         pet_sitter_profiles.pet_sitter_id,
         pet_sitter_profiles.pet_sitter_name,
         pet_sitter_profiles.firstname,
@@ -101,85 +126,111 @@ export const searchPetsitterProfile = async (req, res) => {
         pet_sitter_profiles
       INNER JOIN
         pet_sitter_address ON pet_sitter_profiles.id = pet_sitter_address.pet_sitter_profile_id
-      LIMIT ${pageSize} OFFSET ${offset};
+      WHERE (
+        pet_sitter_profiles.pet_sitter_name ILIKE ${`%${searchText}%`}
+        OR pet_sitter_profiles.firstname ILIKE ${`%${searchText}%`}
+        OR pet_sitter_profiles.lastname ILIKE ${`%${searchText}%`}
+        OR pet_sitter_address.district ILIKE ${`%${searchText}%`}
+        OR pet_sitter_address.province ILIKE ${`%${searchText}%`}
+      )
+      ${
+        selectedRatings.length > 0
+      ? sql`AND pet_sitter_profiles.rating = ANY(${sql.array(selectedRatings)})`
+      : sql``
+      }
+      ${
+        years
+          ? sql`AND pet_sitter_profiles.experience ILIKE ${`%${years}%`}`
+          : sql``
+      }
+      ${
+
+        selectedPet.length > 0
+          ? sql`AND EXISTS (SELECT 1 FROM UNNEST(pet_sitter_profiles.pet_type) AS pet WHERE pet = ANY(${sql.array(selectedPet)}))`
+          : sql``
+      }
+      LIMIT ${pageSize} OFFSET ${offset}
     `;
-      
+const results = await resultsQuery;
+
     return res.status(200).json({
       message: "Pet sitter Profile has been show.",
       data: results,
       currentPage: page,
       pageSize: pageSize,
-      total : totalCount,
+      total: totalCount,
     });
   } catch (error) {
+    console.error("Error fetching profiles:", error);
     res.status(500).json({ error: "Internal Server Error" });
+    
   }
 };
 
 export const viewPetsitterProfile = async (req, res) => {
-    const param = req.params.id;
+  const param = req.params.id;
 
-    let results;
-    try {
-      results = await sql` 
+  let results;
+  try {
+    results = await sql` 
           SELECT *
           FROM pet_sitters
           INNER JOIN pet_sitter_profiles on pet_sitter_profiles.pet_sitter_id = pet_sitters.id
           INNER JOIN pet_sitter_address on pet_sitter_address.pet_sitter_profile_id = pet_sitter_profiles.id
           WHERE pet_sitters.id = ${param}
           `;
-    } catch (error) {
-      return res.status(500).json({
-        message: "Internal server error",
-        error: error.message,
-      });
-    }
-    if (results.length > 0) {
-      return res.status(200).json({
-        message: "Petsitter Profile found",
-        data: results[0],
-      });
-    } else {
-      return res.status(404).json({
-        message: "Petsitter Profile not found",
-      });
-    }
+  } catch (error) {
+    return res.status(500).json({
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+  if (results.length > 0) {
+    return res.status(200).json({
+      message: "Petsitter Profile found",
+      data: results[0],
+    });
+  } else {
+    return res.status(404).json({
+      message: "Petsitter Profile not found",
+    });
+  }
+};
+
+export const updatePetsitterProfile = async (req, res) => {
+  const param = req.params.id;
+
+  const {
+    profile_image,
+    first_name,
+    last_name,
+    experience,
+    phone_number,
+    email,
+    introduction,
+    bank,
+    account_number,
+    petsitter_name,
+    pet_type,
+    services,
+    my_place,
+    image_gallery,
+    address_detail,
+    district,
+    sub_district,
+    province,
+    post_code,
+  } = req.body;
+
+  const petsitter = {
+    ...req.body,
+    updated_at: new Date(),
   };
 
-  export const updatePetsitterProfile = async (req, res) => {
-    const param = req.params.id;
-  
-    const {
-      profile_image,
-      first_name,
-      last_name,
-      experience,
-      phone_number,
-      email,
-      introduction,
-      bank,
-      account_number,
-      petsitter_name,
-      pet_type,
-      services,
-      my_place,
-      image_gallery,
-      address_detail,
-      district,
-      sub_district,
-      province,
-      post_code,
-    } = req.body;
-  
-    const petsitter = {
-      ...req.body,
-      updated_at: new Date(),
-    };
-  
-    let results;
-  
-    try {
-      results = await sql`
+  let results;
+
+  try {
+    results = await sql`
         WITH updated_pet_sitter AS (
           UPDATE pet_sitters
           SET phone_number = ${petsitter.phone_number}, email = ${petsitter.email}, updated_at = ${petsitter.updated_at}
@@ -197,30 +248,32 @@ export const viewPetsitterProfile = async (req, res) => {
         WHERE pet_sitter_profile_id = (SELECT id FROM updated_profile)
         RETURNING *;
       `;
-      console.log(results)
-    } catch (error) {
-      console.log(error)
-      return res.status(500).json({ message: "Internal server error", error });
-    }
-    return res.status(200).json({
-      message: "Petsitter Profile has been updated.",
-      data: results,
-    });
-  };
+    console.log(results);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Internal server error", error });
+  }
+  return res.status(200).json({
+    message: "Petsitter Profile has been updated.",
+    data: results,
+  });
+};
 
-  export const checkPetsitterProfile = async (req, res) => {
-    const param = req.params.id;
-  
-    try {
-      const results = await sql`
+export const checkPetsitterProfile = async (req, res) => {
+  const param = req.params.id;
+
+  try {
+    const results = await sql`
         SELECT 1
         FROM pet_sitter_profiles
         WHERE pet_sitter_id = ${param}
         LIMIT 1;
       `;
-      const profileExists = results.length > 0;
-      res.status(200).json({ exists: profileExists });
-    } catch (error) {
-      res.status(500).json({ message: "Internal server error", error: error.message });
-    }
-  };
+    const profileExists = results.length > 0;
+    res.status(200).json({ exists: profileExists });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+};

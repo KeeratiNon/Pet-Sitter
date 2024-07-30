@@ -18,16 +18,7 @@ const Search = () => {
   const [years, setYears] = useState("");
   const [selectedPet, setSelectedPet] = useState([]);
   const [selectedRatings, setSelectedRatings] = useState("");
-  const [filters, setFilters] = useState({
-    pet_type: [],
-    rating: [],
-    experience: "",
-    searchText: "",
-  });
- 
-  useEffect(() => {
-    setSelectedPet(filters.pet_type || []);
-  }, [filters.pet_type]);
+  
 
   const handlePetChange = (event) => {
     const value = event.target.value;

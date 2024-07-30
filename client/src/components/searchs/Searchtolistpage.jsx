@@ -17,6 +17,7 @@ const Searchtolistpage = ({
   setFilters,
   selectedPet,
   setSelectedPet,
+  selectedRatings,
   setSelectedRatings,
   years,
   setYears,
@@ -25,18 +26,37 @@ const Searchtolistpage = ({
   searchText,
 }) => {
   
-  function handlePetChange(event) {
+  const handlePetChange = (event) => {
     const value = event.target.value;
-    setSelectedPet((prevSelectedPets) =>
-      prevSelectedPets.includes(value)
-        ? prevSelectedPets.filter((pet) => pet !== value)
-        : [...prevSelectedPets, value]
-    );
-  }
-  const handleRatingChange = (rating) => {
-    setSelectedRatings(rating);
-    setFilters({ ...filters, rating: rating });
+    setSelectedPet((prevSelectedPets) => {
+      if (prevSelectedPets && Array.isArray(prevSelectedPets)) {
+        return prevSelectedPets.includes(value)
+          ? prevSelectedPets.filter((pet) => pet !== value)
+          : [...prevSelectedPets, value];
+      }
+      return [value];
+    });
   };
+  const handleRatingChange = (rating) => {
+    setSelectedRatings((prevRatings) => {
+      if (prevRatings && Array.isArray(prevRatings)) {
+        return prevRatings.includes(rating)
+          ? prevRatings.filter((r) => r !== rating)
+          : [...prevRatings, rating];
+      }
+      return [rating];
+    });
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      rating: (selectedRatings || []).includes(rating)
+        ? selectedRatings.filter((r) => r !== rating)
+        : [...(selectedRatings || []), rating],
+    }));
+  };
+  
+  
+  
+  
   //ดึงรูปเข้าไปใน array
   const renderStars = (count) => {
     return Array.from({ length: count }, (_, index) => (
@@ -165,7 +185,7 @@ const Searchtolistpage = ({
                     <MenuItem value={3}>5+ Years</MenuItem>
                   </Select>
                 </FormControl>
-                <div className=" md:flex md:flex-row-reverse gap-4 ">
+                <div className=" flex flex-col md:flex md:flex-row-reverse gap-4  ">
                   <Button
                     className="btn-primary w-full   "
                     onClick={handleSearch}
@@ -174,7 +194,7 @@ const Searchtolistpage = ({
                   </Button>
 
                   <Button
-                    className=" hidden btn-secondary w-full md:block  "
+                    className="  btn-secondary w-full  "
                     onClick={handleClearFilters}
                   >
                     Clear
