@@ -41,6 +41,7 @@ const SearchListPage = () => {
         pet_type: location.state.selectedPet || [],
         rating: location.state.selectedRatings || [],
         experience: location.state.years || "",
+        searchText: location.state.searchText || "",
       });
     }
   }, [location.state]);
@@ -51,26 +52,29 @@ const SearchListPage = () => {
         const petTypeParam = Array.isArray(filters.pet_type)
           ? filters.pet_type.join(",")
           : "";
-       
+        const ratingParam = Array.isArray(filters.rating)
+          ? filters.rating.join(",")
+          : "";
 
         const response = await axios.get("http://localhost:4000/search", {
           params: {
             page,
             pageSize,
             q: searchText,
-            rating: filters.rating,
+            rating: ratingParam,
             experience: filters.experience,
             pet_type: petTypeParam,
           },
         });
 
-        setProfiles(response.data.data);
+        setProfiles(response.data.data || []);
         setTotal(response.data.total || 0);
       } catch (error) {
         console.error(
           "Error fetching profiles:",
           error.response ? error.response.data : error.message
         );
+        setProfiles([]);
         setTotal(0);
       }
     };
@@ -79,12 +83,14 @@ const SearchListPage = () => {
   }, [page, pageSize, searchText, filters]);
 
   const handlePageChange = (event, value) => {
-    setPage(value);
-  };
+    if (value > 0) {
+        setPage(value);
+    }
+};
 
   const handleClearFilters = () => {
     setSelectedPet([]);
-    setSelectedRatings(null);
+    setSelectedRatings([]);
     setSearchText("");
     setYears("");
     setFilters({
@@ -102,12 +108,15 @@ const SearchListPage = () => {
 
   const filteredProfiles = profiles.filter((profile) => {
     const matchType =
-    filters.pet_type && Array.isArray(filters.pet_type) && filters.pet_type.length > 0
+      filters.pet_type &&
+      Array.isArray(filters.pet_type) &&
+      filters.pet_type.length > 0
         ? filters.pet_type.some((type) => profile.pet_type.includes(type))
         : true;
-    const matchRating = filters.rating && Array.isArray(filters.rating) && filters.rating.length
-      ? filters.rating.includes(profile.rating)
-      : true;
+    const matchRating =
+    filters.rating && Array.isArray(filters.rating) && filters.rating.length
+        ? filters.rating.includes(profile.rating)
+        : true;
     const matchExperience = filters.experience
       ? profile.experience === filters.experience
       : true;
