@@ -24,18 +24,20 @@ const ImageGallery = ({ profiles }) => {
   return (
     <div className="relative lg:py-[40px] flex justify-center overflow-x-hidden bg-[#FAFAFB]">
       <div className="flex gap-4 items-center w-fit  mx-auto">
-        {getSlides().map((slide, index) => ( // ใช้ getSlides เพื่อรับรูปภาพ 3 รูป
-          <div
-            key={index}
-            className="w-[375px] lg:w-[550px] lg:block"
-          >
-            <img
-              src={slide}
-              className="w-full h-[281px] lg:h-[413px]"
-              alt={`Slide ${slideIndex + index}`} // ใช้ slideIndex + index เป็น alt text
-            />
-          </div>
-        ))}
+        {getSlides().map(
+          (
+            slide,
+            index // ใช้ getSlides เพื่อรับรูปภาพ 3 รูป
+          ) => (
+            <div key={index} className="w-[375px] lg:w-[550px] lg:block">
+              <img
+                src={slide}
+                className="w-full h-[281px] lg:h-[413px]"
+                alt={`Slide ${slideIndex + index}`} // ใช้ slideIndex + index เป็น alt text
+              />
+            </div>
+          )
+        )}
       </div>
       <button
         className="prev absolute top-1/2 left-[16px] transform -translate-y-1/2 size-[56px] text-primarygray-400  font-bold text-lg transition-all ease-in-out bg-white bg-opacity-50 hover:bg-opacity-90 rounded-full"
