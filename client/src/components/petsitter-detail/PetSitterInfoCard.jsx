@@ -5,6 +5,7 @@ import locationIcon from "../../assets/images/location-icon.png";
 
 import ModalPopup from "../BookingPopup";
 import TypeList from "../searchs/TypeList"
+import StarRating from "../searchs/StarRating"
 
 const PetSitterInfoCard = ({ profiles }) => {
   const [showModal, setShowModal] = useState(false); // State สำหรับ modal
@@ -26,11 +27,8 @@ const PetSitterInfoCard = ({ profiles }) => {
               </p>
             </div>
             <div className="flex text-[16px] lg:text-[20px]">
-              <p>⭐</p>
-              <p>⭐</p>
-              <p>⭐</p>
-              <p>⭐</p>
-              <p>⭐</p>
+              <StarRating rating={profiles.rating}/>
+              
             </div>
             <div className="flex gap-[6px] ">
               <img src={locationIcon}></img>

@@ -23,6 +23,7 @@ const CustomDatePicker = ({ selectedDate, setSelectedDate }) => {
           wrapperClassName="w-full"
           placeholderText="Select Date"
           minDate={minDate} // ไม่สามารถเลือกวันในอดีตได้
+          dateFormat="dd MMM, yyyy"
         />
       </div>
     </div>
@@ -30,4 +31,3 @@ const CustomDatePicker = ({ selectedDate, setSelectedDate }) => {
 };
 
 export default CustomDatePicker;
-

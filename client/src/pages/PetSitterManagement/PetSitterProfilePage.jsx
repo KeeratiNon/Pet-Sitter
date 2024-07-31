@@ -199,6 +199,7 @@ const PetSitterProfilePage = () => {
 
       const response = await axios.get(`${SERVER_API_URL}/petsitter/profile/check/${id}`);
       const profileExists = response.data.exists;
+      console.log(profileExists)
 
       if (profileExists) {
         console.log("Updating existing profile");

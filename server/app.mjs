@@ -19,6 +19,7 @@ dotenv.config();
 import { userRouter } from "./routes/user.mjs";
 import { bookingRouter } from "./routes/booking.mjs";
 import { protect } from "./middlewares/protect.mjs";
+import bookingHistoryRouter from "./routes/bookingHistory.mjs"; // นำเข้า Route สำหรับ Booking History
 
 const app = express();
 const port = 4000;
@@ -39,7 +40,7 @@ app.use(express.json());
 app.use("/auth", authRouter);
 app.use("/", petSitterProfileRouter);
 app.use("/petsitter/booking", petSitterBookingRouter);
-
+app.use("/booking-history", bookingHistoryRouter); // ใช้ Route สำหรับ Booking History
 
 
 
