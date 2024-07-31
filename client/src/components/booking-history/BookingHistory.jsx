@@ -1,6 +1,5 @@
-import BookingHistoryWaiting from "./BookingHistoryWaiting";
 import BookingHistoryService from "./BookingHistoryService";
-import BookingHistorySuccess from "./BookingHistorySuccess";
+
 const BookingHistory = () => {
   return (
     <div className="bg-white flex flex-col lg:rounded-[16px] py-[24px] px-[16px]  lg:p-[40px] gap-[24px] lg:gap-[60px] w-full max-w-[956px]">
@@ -9,9 +8,7 @@ const BookingHistory = () => {
           Booking History
         </p>
       </div>
-      <BookingHistoryWaiting/>
       <BookingHistoryService/>
-      <BookingHistorySuccess/>
     </div>
   );
 };

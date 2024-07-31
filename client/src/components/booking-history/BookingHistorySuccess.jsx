@@ -106,10 +106,10 @@ const BookingHistorySuccess = () => {
             </button>
             <button
               type="button"
-              className="bg-primaryorange-500 flex rounded-[99px] py-[12px] px-[24px] gap-[8px] "
+              className="bg-primaryorange-100 flex rounded-[99px] py-[12px] px-[24px] gap-[8px] "
             >
               <p className="text-white text-[16px] leading-[24px] font-bold">
-              Review
+                Your Review
               </p>
             </button>
           </div>
