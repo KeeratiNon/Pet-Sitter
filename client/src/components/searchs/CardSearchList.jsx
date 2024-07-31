@@ -1,6 +1,8 @@
+/* eslint-disable react/prop-types */
 import StarRating from "./StarRating";
 import RoomIcon from "@mui/icons-material/Room";
 import TypeList from "./TypeList";
+import BackToTop from "./BackToTop";
 import { Link } from "react-router-dom";
 
 const CardSearchList = ({ profiles }) => {
@@ -9,12 +11,12 @@ const CardSearchList = ({ profiles }) => {
       <div className=" w-full   rounded-[16px] p-4 gap-4 flex flex-col  xl:flex-row md:gap-6  md:bg-white  ">
         <div className="  md:w-[245px] md:h-[184px]  ">
           <img
-            src={profiles.image_gallery}
+            src={profiles.image_gallery[0]}
             alt="profild-web"
             className="hidden  rounded-lg md:w-[245px] md:h-[184px] md:block   "
           />
           <img
-            src={profiles.image_gallery}
+            src={profiles.image_gallery[0]}
             alt="card-img"
             className=" w-full  md:min-w-full md:min-h-[184px] rounded-[8px] md:hidden "
           />
@@ -55,6 +57,7 @@ const CardSearchList = ({ profiles }) => {
             <TypeList types={profiles.pet_type} />
           </div>
         </div>
+        <BackToTop />
       </div>
    
   );

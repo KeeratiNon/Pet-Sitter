@@ -74,7 +74,9 @@ export const searchPetsitterProfile = async (req, res) => {
     const pageSize = parseInt(req.query.pageSize) || 5;
     const offset = (page - 1) * pageSize;
     const searchText = req.query.q || "";
-    const selectedRatings = req.query.rating || [];
+    const selectedRatings = Array.isArray(req.query.rating)
+      ? req.query.rating
+      : req.query.rating ? req.query.rating.split(',') : [];
     const years = req.query.experience || "";
     const selectedPet = req.query.pet_type ? req.query.pet_type.split(",") : [];
 

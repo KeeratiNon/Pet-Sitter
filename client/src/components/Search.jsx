@@ -128,7 +128,11 @@ const Search = () => {
               <div className="flex flex-wrap gap-[8px]  ">
                 {["5", "4", "3", "2", "1"].map((rating, index) => (
                   <button
-                    className="  gap-[3px] pt-[4] pr-[8px] pb-[4px] pl-[8px]   text-[16px] leading-7 flex flex-wrap items-center border-gray-200 rounded-[8px] border  md:ml-1 "
+                  className={`gap-[3px] pt-[4px] pr-[8px] pb-[4px] pl-[8px] text-[16px] leading-7 flex items-center border-gray-200 rounded-[8px] border md:ml-1 ${
+                    selectedRatings.includes(rating)
+                      ? 'bg-orange-500 text-white'
+                      : 'bg-white text-gray-800'
+                  }`}
                     key={index}
                     onClick={() => handleRatingChange(rating)}
                   >

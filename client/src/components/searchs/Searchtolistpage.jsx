@@ -2,7 +2,7 @@
 import Checkbox from "@mui/material/Checkbox";
 
 import { Button } from "@mui/base";
-
+import { useState } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -39,18 +39,21 @@ const Searchtolistpage = ({
   };
   const handleRatingChange = (rating) => {
     setSelectedRatings((prevRatings) => {
-      if (prevRatings && Array.isArray(prevRatings)) {
-        return prevRatings.includes(rating)
-          ? prevRatings.filter((r) => r !== rating)
-          : [...prevRatings, rating];
+      if (prevRatings.includes(rating)) {
+        // Remove rating if already active
+        return prevRatings.filter((r) => r !== rating);
+      } else {
+        // Add rating if not active
+        return [...prevRatings, rating];
       }
-      return [rating];
     });
+
+    // Update filters
     setFilters((prevFilters) => ({
       ...prevFilters,
-      rating: (selectedRatings || []).includes(rating)
+      rating: selectedRatings.includes(rating)
         ? selectedRatings.filter((r) => r !== rating)
-        : [...(selectedRatings || []), rating],
+        : [...selectedRatings, rating],
     }));
   };
   
@@ -65,6 +68,7 @@ const Searchtolistpage = ({
   };
   const handleSearch = () => {
     setFilters({ ...filters, searchText: searchText });
+    
   };
 
   const handleExperienceChange = (event) => {
@@ -85,7 +89,7 @@ const Searchtolistpage = ({
     <aside>
       <div className="  md:pr-[40px] ">
         <div
-          className="  md:bg-white     "
+          className="  md:bg-white  md:rounded-2xl   "
           style={{ boxShadow: "4px 4px 24px 0px rgba(0, 0, 0, 0.04)" }}
         >
           <div className="hidden md:block md:pr-[24px] md:pl-[24px] md:pt-[24px] md:pb-[40px] ">
@@ -156,7 +160,9 @@ const Searchtolistpage = ({
                 <div className="flex flex-wrap gap-[8px]  ">
                   {["5", "4", "3", "2", "1"].map((rating, index) => (
                     <button
-                      className="  gap-[3px] pt-[4] pr-[8px] pb-[4px] pl-[8px]   text-[16px] leading-7 flex flex-wrap items-center border-gray-200 rounded-[8px] border  "
+                      className={`gap-[3px] pt-[4] pr-[8px] pb-[4px] pl-[8px] text-[16px] leading-7 flex flex-wrap items-center border-gray-200 rounded-[8px] border ${
+                        selectedRatings.includes(rating) ? 'bg-orange-500 text-white' : 'bg-white text-gray-800'
+                      }`}
                       key={index}
                       onClick={() => handleRatingChange(rating)}
                     >
