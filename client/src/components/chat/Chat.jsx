@@ -15,7 +15,6 @@ const Chat = () => {
     inputMessage,
     setInputMessage,
     getChatRoomList,
-    setupSocket,
     joinChatRoom,
     getMessages,
     sendMessage,
@@ -35,14 +34,6 @@ const Chat = () => {
 
   useEffect(() => {
     getChatRoomList();
-    if (!socket) {
-      setupSocket();
-    }
-    return () => {
-      if (socket) {
-        socket.disconnect();
-      }
-    };
   }, [socket]);
 
   return (
@@ -51,10 +42,11 @@ const Chat = () => {
         <h3 className="text-white mx-[40px] mb-[24px] text-[24px] leading-[32px] font-bold">
           Messages
         </h3>
-        {chatRoomList.map((chatRoom) => {
-          return (
-            <ul className="flex flex-col gap-[8px]" key={chatRoom.chatRoom}>
+        <ul className="flex flex-col gap-[8px]">
+          {chatRoomList.map((chatRoom,index) => {
+            return (
               <li
+                key={index}
                 onClick={() => {
                   joinChatRoom(chatRoom);
                   clearReadCount(chatRoom.chatRoomId);
@@ -62,26 +54,28 @@ const Chat = () => {
               >
                 <PetSitter chatRoom={chatRoom} />
               </li>
-            </ul>
-          );
-        })}
+            );
+          })}
+        </ul>
       </section>
       <section className="flex flex-col w-[100%]">
         <main className="flex">
           {selectedChatRoom && (
             <div className="flex flex-col w-full">
-              {chatRoomList.filter((list)=>list.targetId === selectedChatRoom.targetId).map((chatRoom) => {
-                return (
-                  <div key={chatRoom.chatRoom}>
-                    <HeaderPetSitter chatRoom={chatRoom} />
-                  </div>
-                );
-              })}
+              {chatRoomList
+                .filter((list) => list.targetId === selectedChatRoom.targetId)
+                .map((chatRoom,index) => {
+                  return (
+                    <div key={index}>
+                      <HeaderPetSitter chatRoom={chatRoom} />
+                    </div>
+                  );
+                })}
               <div className="flex flex-1 ">
                 <MainChat
                   historyMessage={historyMessage}
                   getMessages={getMessages}
-                  chatRoomId={selectedChatRoom}
+                  chatRoom={selectedChatRoom}
                 />
               </div>
               <hr className="border-t-[1px] border-gray-200" />

@@ -98,7 +98,7 @@ const LoginPetSitterPage = () => {
                 <button type="submit" className="btn-primary">
                   Login
                 </button>
-                <div className="w-[100%] flex gap-[20px] items-center">
+                {/* <div className="w-[100%] flex gap-[20px] items-center">
                   <span className="flex flex-1 h-[1px] bg-gray-200"></span>
                   <span className="text-gray-400 text-[18px] leading-[26px] font-medium">
                     Or Continue With
@@ -108,7 +108,7 @@ const LoginPetSitterPage = () => {
                 <div className="w-[100%] flex justify-center items-center gap-[12px]">
                   <LoginFacebook />
                   <LoginGoogle />
-                </div>
+                </div> */}
                 <div className="flex justify-center items-center gap-[8px]">
                   <span>
                     <p>Don't have an account?</p>

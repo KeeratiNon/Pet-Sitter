@@ -6,7 +6,7 @@ import { Server } from "socket.io";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import { chatRouter } from "./routes/chatroom.mjs";
-mongoose.connect("mongodb://127.0.0.1/PetSitter");
+mongoose.connect(process.env.MONGODB_URL);
 import "./models/chatrooms.mjs";
 
 import bodyParser from "body-parser";
@@ -20,6 +20,7 @@ import { userRouter } from "./routes/user.mjs";
 import { bookingRouter } from "./routes/booking.mjs";
 import { protect } from "./middlewares/protect.mjs";
 import bookingHistoryRouter from "./routes/bookingHistory.mjs"; // นำเข้า Route สำหรับ Booking History
+import { handleImageUpload } from "./utils/image.mjs";
 
 const app = express();
 const port = 4000;
@@ -82,15 +83,23 @@ io.on("connection", (socket) => {
     // console.log("user disconnected:", socket.userId);
   });
 
-  socket.on("sendMessage", async ({ chatRoomId, targetId, message }) => {
-    if (message) {
+  socket.on("sendMessage", async ({ chatRoomId, targetId, message, images }) => {
+    if (message || images) {
       try {
         const newMessage = {
           message,
           senderId: Number(socket.userId),
           receiverId: targetId,
-          isRead: false
+          isRead: false,
         };
+        if (images) {
+          const imageSrc = []
+          for(const img of images){
+            imageSrc.push(await handleImageUpload(img))
+          }
+          console.log(imageSrc)
+          newMessage.images = imageSrc
+        }
         const reverseChatRoomId = chatRoomId.chatRoomId
           .split("/")
           .reverse()
@@ -114,11 +123,11 @@ io.on("connection", (socket) => {
 
   socket.on("joinRoom", async ({ chatRoomId, targetId, isReadCount }) => {
     try {
-      const reverseChatRoomId = chatRoomId
-          .split("/")
-          .reverse()
-          .join("/");
       if (chatRoomId) {
+        const reverseChatRoomId = chatRoomId
+            .split("/")
+            .reverse()
+            .join("/");
         const chatRoom = await ChatRoom.findOne({
           $or: [
             { chatRoomId: chatRoomId },
@@ -142,7 +151,8 @@ io.on("connection", (socket) => {
           users: [Number(socket.userId),Number(targetId)]
         });
         await newChatRoom.save();
-        socket.join(chatRoomId);
+        socket.join(newChatRoomId);
+        io.to(socket.id).emit("roomCreated", {newChatRoomId, targetId})
       }
     } catch (error) {
       console.error("Error joining room:", error);
