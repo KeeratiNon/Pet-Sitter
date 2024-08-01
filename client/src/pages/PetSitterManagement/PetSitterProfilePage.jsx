@@ -3,9 +3,6 @@ import { useState, useEffect } from "react";
 import { SERVER_API_URL } from "../../core/config.mjs";
 import { PetSitterProfileSchema } from "../../schemas/PetSitterProfile";
 import petSitterGreenCircle from "../../assets/svgs/pet-sitter-management/pet-sitter-greenCircle.svg";
-import supabase from "../../utils/storage";
-import { v4 as uuidv4 } from "uuid";
-
 
 import Sidebar from "../../components/petSitterManagement/petSitterProfileForm/PetProfileSidebar";
 import Navbar from "../../components/petSitterManagement/petSitterProfileForm/PetSitterNavbar";
@@ -60,13 +57,11 @@ const PetSitterProfilePage = () => {
 
   const [errors, setErrors] = useState({});
 
-
   const getIdFromUrl = () => {
     const url = window.location.href;
     return url.substring(url.lastIndexOf("/") + 1);
   };
-  
-  
+
   useEffect(() => {
     const fetchData = async () => {
       const id = getIdFromUrl();
@@ -96,8 +91,6 @@ const PetSitterProfilePage = () => {
           province: data.province || "",
           post_code: data.post_code || "",
         });
-
-
       } catch (error) {
         console.error("Error fetching petsitter profile data:", error);
       }
@@ -113,82 +106,6 @@ const PetSitterProfilePage = () => {
     }));
   };
 
-  const handlePetTypeSelect = (event) => {
-    const selectedPet = event.target.value;
-    if (selectedPet && !formData.pet_type.includes(selectedPet)) {
-      setFormData((prev) => ({
-        ...prev,
-        pet_type: [...prev.pet_type, selectedPet],
-      }));
-    }
-  };
-
-  const handlePetTypeRemove = (pet) => {
-    setFormData((prev) => ({
-      ...prev,
-      pet_type: prev.pet_type.filter((p) => p !== pet),
-    }));
-  };
-
-  const handleImageUpload = async (event) => {
-    if (formData.image_gallery.length < 10) {
-      const file = event.target.files[0];
-      if (file) {
-        const profileId = getIdFromUrl();
-        const fileName = `${profileId}/${uuidv4()}`;
-        try {
-          const { data, error } = await supabase
-            .storage
-            .from('petsitter_image_gallery')
-            .upload(fileName, file, { upsert: true });
-  
-          if (error) {
-            throw error;
-          }
-  
-          const { data: publicUrlData, error: urlError } = supabase
-            .storage
-            .from('petsitter_image_gallery')
-            .getPublicUrl(fileName);
-            console.log(publicUrlData);
-          if (urlError) {
-            throw urlError;
-          }
-  
-          setFormData((prev) => ({
-            ...prev,
-            image_gallery: [...prev.image_gallery, publicUrlData.publicUrl],
-          }));
-        } catch (error) {
-          console.error('Error uploading or fetching image URL:', error);
-        }
-      }
-    }
-  };
-
-  const handleRemoveImage = async (index) => {
-    const imageUrl = formData.image_gallery[index];
-    const fileName = imageUrl.split('/').pop();
-  
-    try {
-      const { error } = await supabase
-        .storage
-        .from('petsitter_image_gallery')
-        .remove([fileName]);
-  
-      if (error) {
-        throw error;
-      }
-  
-      setFormData((prev) => ({
-        ...prev,
-        image_gallery: prev.image_gallery.filter((_, i) => i !== index),
-      }));
-    } catch (error) {
-      console.error('Error removing image from gallery:', error);
-    }
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -197,7 +114,9 @@ const PetSitterProfilePage = () => {
 
       const id = getIdFromUrl();
 
-      const response = await axios.get(`${SERVER_API_URL}/petsitter/profile/check/${id}`);
+      const response = await axios.get(
+        `${SERVER_API_URL}/petsitter/profile/check/${id}`
+      );
       const profileExists = response.data.exists;
       console.log(profileExists)
 
@@ -332,8 +251,7 @@ const PetSitterProfilePage = () => {
               />
               <PetTypeForm
                 pet_type={formData.pet_type}
-                handlePetTypeSelect={handlePetTypeSelect}
-                handlePetTypeRemove={handlePetTypeRemove}
+                setFormData={setFormData}
                 petOptions={["Dog", "Cat", "Bird", "Rabbit"]}
               />
               <ServicesForm
@@ -346,8 +264,8 @@ const PetSitterProfilePage = () => {
               />
               <ImageGalleryForm
                 image_gallery={formData.image_gallery}
-                handleImageUpload={handleImageUpload}
-                handleRemoveImage={handleRemoveImage}
+                setFormData={setFormData}
+                getIdFromUrl={getIdFromUrl}
               />
             </div>
             <div className="w-[93%] rounded-2xl bg-primarygray-100 px-20 py-10 flex flex-col gap-6">

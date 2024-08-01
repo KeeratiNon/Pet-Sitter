@@ -6,13 +6,13 @@ import iconMessage from "../../assets/svgs/icons/icon-message.svg";
 import iconHamburg from "../../assets/svgs/icons/icon-hamburger.svg";
 import iconUser from "../../assets/svgs/icons/icon-image-user.svg";
 import iconProfile from "../../assets/svgs/icons/icon-profile.svg";
-import iconYourPet from "../../assets/svgs/icons/icon-your-pet.svg";
 import iconBooking from "../../assets/svgs/icons/icon-booking.svg";
 import iconLogout from "../../assets/svgs/icons/icon-logout.svg";
+import iconPetsitterPayment from "../../assets/svgs/pet-sitter-management/pet-sitter-payment.svg";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/authentication";
 
-const Navbar = () => {
+const PetsitterNavbar = () => {
   const { logout, state } = useAuth();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -130,15 +130,15 @@ const Navbar = () => {
             <>
               <li className="flex gap-3 p-4">
                 <img src={iconProfile} alt="icon-profile" />
-                <Link to="/user/profile">Profile</Link>
+                <Link to="/petsitter/profile/:id">Profile</Link>
               </li>
               <li className="flex gap-3 p-4">
-                <img src={iconYourPet} alt="icon-your-pet" />
-                <Link to="/user/pet">Your Pet</Link>
+                <img src={iconBooking} alt="icon-petsitter-booking" />
+                <Link to="/petsitter/booking/:id">Booking List</Link>
               </li>
               <li className="flex gap-3 p-4">
-                <img src={iconBooking} alt="icon-booking" />
-                <Link to="/user/booking-history">Booking History</Link>
+                <img src={iconPetsitterPayment} alt="icon-petsitter-payment" />
+                <Link to="/petsitter/payment-option">Payment Option</Link>
               </li>
               <hr />
               <li className="flex gap-3 p-4">
@@ -158,4 +158,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default PetsitterNavbar;

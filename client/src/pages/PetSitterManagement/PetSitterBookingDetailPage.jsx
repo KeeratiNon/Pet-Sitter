@@ -3,6 +3,7 @@ import axios from "axios";
 
 import Sidebar from "../../components/petSitterManagement/bookingList/BookingListSidebar";
 import Navbar from "../../components/petSitterManagement/petSitterProfileForm/PetSitterNavbar";
+
 import { SERVER_API_URL } from "../../core/config.mjs";
 import PetsitterBookingDetail from "../../components/petSitterManagement/bookingList/PetSitterBookingDetail";
 
@@ -16,6 +17,7 @@ const PetsitterBookingDetailPage = () => {
   const getIdFromUrl = () => {
     const url = window.location.href;
     return url.substring(url.lastIndexOf("/") + 1);
+    console.log("Extracted ID:", id);
   };
 
   useEffect(() => {
@@ -39,6 +41,8 @@ const PetsitterBookingDetailPage = () => {
     fetchData();
   }, []);
 
+  const bookingId = getIdFromUrl();
+
   return (
     <div className="flex bg-primarygray-100">
       <Sidebar />
@@ -46,7 +50,7 @@ const PetsitterBookingDetailPage = () => {
         <Navbar formData={formData} />
         <main>
           <div>
-            <PetsitterBookingDetail />
+            <PetsitterBookingDetail bookingId={bookingId} />
           </div>
         </main>
       </div>

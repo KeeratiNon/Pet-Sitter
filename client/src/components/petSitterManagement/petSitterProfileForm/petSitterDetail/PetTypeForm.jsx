@@ -1,10 +1,30 @@
+import React, { useState } from 'react';
+
 const PetTypeForm = ({
-  pet_type =[],
-  currentSelection="",
-  handlePetTypeSelect,
-  handlePetTypeRemove,
-  petOptions=[],
+  pet_type = [],
+  setFormData,
+  petOptions = [],
 }) => {
+  const [currentSelection, setCurrentSelection] = useState("");
+
+  const handlePetTypeSelect = (event) => {
+    const selectedPet = event.target.value;
+    if (selectedPet && !pet_type.includes(selectedPet)) {
+      setFormData((prev) => ({
+        ...prev,
+        pet_type: [...prev.pet_type, selectedPet],
+      }));
+      setCurrentSelection(""); 
+    }
+  };
+
+  const handlePetTypeRemove = (pet) => {
+    setFormData((prev) => ({
+      ...prev,
+      pet_type: prev.pet_type.filter((p) => p !== pet),
+    }));
+  };
+
   return (
     <div className="flex flex-col gap-[4px]">
       <label className="text-[16px] leading-[24px] text-black font-medium">
@@ -32,6 +52,7 @@ const PetTypeForm = ({
           className="min-w-[120px] focus:outline-none"
         >
           <option value="" hidden>
+            Select a pet type
           </option>
           {petOptions.map((pet, index) => (
             <option key={index} value={pet}>

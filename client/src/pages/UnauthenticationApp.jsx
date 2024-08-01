@@ -9,7 +9,7 @@ import SearchListPage from './SearchListPage'
 import PetSitterDetailPage from './PetSitterDetailPage'
 import ErrorPage from './ErrorPage';
 
-import Navbar from '../components/navbar/Navbar';
+import Navbar from '../components/navbar/PetownerNavbar';
 
 const UnautenticationApp = () => {
     const location = useLocation();

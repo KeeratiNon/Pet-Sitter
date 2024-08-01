@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import HomePage from "./Homepage";
 import ErrorPage from "./ErrorPage";
@@ -14,20 +14,27 @@ import BookingPopup from "../components/BookingPopup";
 import SearchListPage from "./SearchListPage";
 import PetSitterDetailPage from "./PetSitterDetailPage";
 
-import Navbar from "../components/navbar/Navbar";
+import PetownerNavbar from "../components/navbar/PetownerNavbar";
+import PetsitterNavbar from "../components/navbar/PetsitterNavbar";
+
 import UserManagementPage from "./user/UserManagementPage";
 import UserPetManagementPage from "./user/UserPetManagementPage";
+import { useAuth } from "../contexts/authentication";
 
 const AutenticationApp = () => {
   const location = useLocation();
-  const hideNavbarPaths = ["/petsitter"];
+  const { state } = useAuth();
 
+  const hideNavbarPaths = ["/petsitter"];
   const shouldShowNavbar = !hideNavbarPaths.some((path) =>
     location.pathname.startsWith(path)
   );
+
   return (
     <>
-      {shouldShowNavbar && <Navbar />}
+      {shouldShowNavbar && (
+        state.user?.role === "petsitter" ? <PetsitterNavbar /> : <PetownerNavbar />
+      )}
 
       <Routes>
         <Route path="*" element={<ErrorPage />} />
@@ -42,7 +49,7 @@ const AutenticationApp = () => {
           element={<PetSitterBookingListPage />}
         />
         <Route
-          path="/petsitter/booking/detail/:id"
+          path="/petsitter/booking/detail/:bookingId"
           element={<PetSitterBookingDetailPage />}
         />
         <Route
