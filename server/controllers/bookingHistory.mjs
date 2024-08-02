@@ -51,3 +51,20 @@ export const getBookingHistory = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+export const postReviwes = async (req, res) => {
+  const newReview = {
+    ...req.body,
+    created_at: new Date(),
+  };
+  
+  try {
+    const result =
+      await sql`INSERT INTO user_reviews (booking_id, rating, review, created_at ) 
+      VALUES (${newReview.booking_id},${newReview.rating},${newReview.review},${newReview.created_at}) 
+      RETURNING * `;
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

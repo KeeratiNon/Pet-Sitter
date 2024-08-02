@@ -1,19 +1,21 @@
-import React from "react";
+/* eslint-disable react/prop-types */
+
+
 import cross from "../../assets/svgs/icons/icon-cross.svg";
 import star2 from "../../assets/svgs/star2.svg";
 const ReviewHistory = ({ showReview, setShowReview, reviewData }) => {
   if (!showReview) {
     return null;
   }
-  
+
   const { rating = 0, text = "" } = reviewData || {};
-  
+
   return (
     <>
-      <div className="bg-black fixed inset-0 bg-opacity-40 flex items-end justify-center md:items-center">
-        <div className="bg-white rounded-t-[16px] w-full h-[calc(50vh-24px)]  md:w-[800px]  md:rounded-2xl  ">
-          <div className="flex justify-between border-b-[1px] rounded-[1px] p-4 gap-[10px] ">
-            <h4 className="size-5 leading-7 w-full text-gray-600 font-bold ">
+      <div className="bg-black fixed w-full  inset-0 bg-opacity-40  flex items-end justify-center md:items-center">
+        <div className="bg-white flex flex-col  rounded-t-[16px] w-full md:w-[800px] md:h-[600px] md:rounded-2xl   ">
+          <div className="flex justify-between  w-full border-b  p-4 gap-[10px] md:h-[80px] md:py-6 md:px-10 ">
+            <h4 className="text-[20px] leading-7  text-gray-600 font-bold ">
               Rating & Review
             </h4>
             <img
@@ -24,33 +26,41 @@ const ReviewHistory = ({ showReview, setShowReview, reviewData }) => {
             />
           </div>
 
-          <div className=" w-full flex flex-col items-center gap-[80px] pt-[40px] pr-[16px] pb-[24px] pl-[16px]  ">
-            <div className="border-b-[1px] w-full flex  items-baseline  justify-between md:justify-normal md:gap-4 ">
-              <div className=" flex  gap-4  ">
-                <img src="" alt="profile" />
-                <div>
-                  <p>John Wick</p>
-                  <p>Tue,13 Apr 2023</p>
+          <div className=" w-full flex flex-col    items-center gap-[80px] pt-[40px] pr-[16px] pb-[24px] pl-[16px]  md:p-10 md:justify-between md:h-full ">
+            <div className=" w-full   ">
+             <div className="flex  border-b justify-between md:pt-[24px] md:pr-[24px] md:pb-[40px] md:pl-[24px] md:gap-10 md:justify-start ">
+                <div className="flex gap-4">
+                  <img src="" alt="profile" />
+                  <div>
+                    <p>John Wick</p>
+                    <p>Tue,13 Apr 2023</p>
+                  </div>
+                </div>
+                <div className="flex gap-[2px]  rounded-lg md:gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <img
+                      key={i}
+                      src={star2}
+                      alt="star"
+                      className={`size-3 md:size-5 ${
+                        i + 1 <= rating ? "opacity-100" : "opacity-0"
+                      }`}
+                    />
+                  ))}
                 </div>
               </div>
-              <div className="flex">
-                {[...Array(5)].map((_, i) => (
-                  <img
-                    key={i}
-                    src={star2}
-                    alt="star"
-                    className={`size-3 md:size-5 ${
-                      i + 1 <= rating ? "opacity-100" : "opacity-50"
-                    }`}
-                  />
-                ))}
+
+              <div className=" ">
+                <p className="  px-4">{text}</p>
               </div>
             </div>
-            <p className="text-center px-4">{text}</p>
-            <button className="btn-secondary w-[157px] h-[48px] rounded-[99px] py-3 px-6 ">
-              {" "}
-              View Pet Sitter
-            </button>
+
+            
+              <button className="btn-secondary w-[157px] h-[48px] rounded-[99px] py-3 px-6 ">
+                {" "}
+                View Pet Sitter
+              </button>
+           
           </div>
         </div>
       </div>

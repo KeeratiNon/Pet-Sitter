@@ -1,13 +1,14 @@
 import BookingHistoryService from "./BookingHistoryService";
-import BookingHistorySuccess from "./BookingHistorySuccess";
-import BookingHistoryWaiting from "./BookingHistoryWaiting"
+
 import RatingHistory from "./RatingHistory";
 import { useState } from "react";
 import ReviewHistory from "./ReviewHistory";
+import ReportHistory from "./ReportHistory";
 
 const BookingHistory = () => {
   const [showModal, setShowModal] = useState(false);
   const [showReview, setShowReview] = useState(false);
+  const [showReport, setShowReport] = useState(false);
   const [reviewData, setReviewData] = useState({ rating: 0, text: "" });
   return (
     <div className="relative">
@@ -17,19 +18,34 @@ const BookingHistory = () => {
             Booking History
           </p>
         </div>
-        <BookingHistoryWaiting />
-        <BookingHistoryService />
-        <BookingHistorySuccess />
+        <BookingHistoryService
+          showModal={showModal}
+          setShowModal={setShowModal}
+          showReview={showReview}
+          setShowReview={setShowReview}
+          setReviewData={setReviewData}
+          showReport={showReport}
+          setShowReport={setShowReport}
+        />
+        {/* pop up */}
+        <RatingHistory
+          showModal={showModal}
+          setShowModal={setShowModal}
+          showReview={showReview}
+          setShowReview={setShowReview}
+          setReviewData={setReviewData}
+        />
+        <ReviewHistory
+          showReview={showReview}
+          setShowReview={setShowReview}
+          reviewData={reviewData}
+        />
+
+        <ReportHistory 
+        showReport={showReport} 
+        setShowReport={setShowReport} />
+        {/* pop up */}
       </div>
-      <BookingHistoryService/>
-      <button
-        type="submit"
-        className="btn-primary"
-        onClick={() => setShowModal(true)}
-      ></button>
-     <RatingHistory showModal={showModal} setShowModal={setShowModal} showReview={showReview} setShowReview={setShowReview}  setReviewData={setReviewData} />
-     <ReviewHistory showReview={showReview} setShowReview={setShowReview} reviewData={reviewData}  />
-      
     </div>
   );
 };
