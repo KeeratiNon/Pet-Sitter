@@ -1,8 +1,9 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { SERVER_API_URL } from "../core/config.mjs";
 import axios from "axios";
 import { io } from "socket.io-client";
 import { getToken } from "../utils/localStorage.mjs";
+import { useNavigate } from "react-router-dom";
 
 const SocketContext = createContext();
 
@@ -12,6 +13,19 @@ const SocketProvider = ({ children }) => {
   const [selectedChatRoom, setSelectedChatRoom] = useState(null);
   const [inputMessage, setInputMessage] = useState("");
   const [historyMessage, setHistoryMessage] = useState([]);
+
+  const navigate = useNavigate()
+
+  useEffect(()=>{
+    if (!socket) {
+      setupSocket();
+    }
+    return () => {
+      if (socket) {
+        socket.disconnect();
+      }
+    };
+  },[socket])
 
   const getChatRoomList = async () => {
     try {
@@ -54,25 +68,41 @@ const SocketProvider = ({ children }) => {
       });
 
       newSocket.on("newMessage", (message) => {
-        console.log("New message received:", message);
-        setHistoryMessage((prevMessages) => [...prevMessages, message]);
+        setHistoryMessage((prevMessages) => [...prevMessages, message.newMessage]);
       });
+
+      newSocket.on("roomCreated", (chatRoom) => {
+        const {newChatRoomId, targetId} = chatRoom
+        setSelectedChatRoom({newChatRoomId, targetId})
+        navigate("/chat")
+      })
+
+      newSocket.on("joinOneRoom", () => {
+        navigate("/chat")
+      })
 
       setSocket(newSocket);
     }
   };
 
   const joinChatRoom = ({ chatRoomId, targetId, isReadCount }) => {
-    setSelectedChatRoom({ chatRoomId, targetId });
+    let image = null
+    {chatRoomList
+      .filter((list) => list.targetId === targetId)
+      .map((chatRoom) => {
+        image = chatRoom.image
+      })}
+    setSelectedChatRoom({ chatRoomId, targetId, image });
     socket.emit("joinRoom", { chatRoomId, targetId, isReadCount });
   };
 
-  const sendMessage = (chatRoomId) => {
-    if (inputMessage.trim()) {
+  const sendMessage = ({chatRoomId, images}) => {
+    if (inputMessage.trim() || images) {
       socket.emit("sendMessage", {
         chatRoomId: selectedChatRoom,
         targetId: chatRoomId.targetId,
         message: inputMessage,
+        images
       });
       setInputMessage("");
     }

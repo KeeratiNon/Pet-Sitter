@@ -84,7 +84,7 @@ const FooterPetSitter = ({
       <button
         className="p-[12px] bg-orange-500 rounded-full"
         onClick={() => {
-          sendMessage(chatRoomId);
+          sendMessage({chatRoomId, images});
           clearImages()
         }}
       >

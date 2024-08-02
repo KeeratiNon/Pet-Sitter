@@ -3,11 +3,12 @@ import sql from "../utils/db.mjs"; // นำเข้าโมดูลฐาน
 export const getBookingHistory = async (req, res) => {
   try {
     const userId = req.user.id; // รับค่า userId จากการ authenticate (ถ้ามี)
-    console.log(userId);
+    // console.log(userId);
 
     // ใช้ SQL query ในการดึงข้อมูลและจัดรูปแบบวันที่และเวลา
     const rows = await sql`
       SELECT 
+        bookings.pet_sitter_id,
         to_char(bookings.booking_date, 'DD Mon, YYYY') AS formatted_booking_date,
         to_char(bookings.booking_time_start, 'HH12:MI AM') AS formatted_booking_time_start,
         to_char(bookings.booking_time_end, 'HH12:MI AM') AS formatted_booking_time_end,
@@ -30,6 +31,7 @@ export const getBookingHistory = async (req, res) => {
         ON booking_pets.pet_id = pets.id
       WHERE bookings.user_id = ${userId}
       GROUP BY 
+        bookings.pet_sitter_id,
         bookings.booking_date,
         bookings.booking_time_start,
         bookings.booking_time_end,

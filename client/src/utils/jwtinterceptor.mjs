@@ -24,8 +24,8 @@ const jwtInterceptor = () => {
         error.response.status === 401 &&
         error.response.statusText === "Unauthorized"
       ) {
-        // removeAllTokens()
-        // window.location.replace("/");
+        removeAllTokens()
+        window.location.replace("/");
       }
       return Promise.reject(error);
     }

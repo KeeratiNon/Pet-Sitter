@@ -16,13 +16,18 @@ const messageSchema = new mongoose.Schema({
     isRead: {
         type: Boolean,
         default: false
+    },
+    images: {
+        type: [String],
+        default: []
     }
 })
 
 const chatSchema = new mongoose.Schema({
     chatRoomId: {
         type: String,
-        require: true
+        require: true,
+        unique: true
     },
     messages: [messageSchema],
     users: [Number]
