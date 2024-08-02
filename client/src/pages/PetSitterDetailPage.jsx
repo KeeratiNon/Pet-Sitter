@@ -9,7 +9,7 @@ import Footer from "../components/Footer";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
 const PetSitterDetailPage = () => {
-  const { setItem } = useLocalStorage("petSitterId");
+  const { setItem } = useLocalStorage();
   const [profiles, setProfiles] = useState({});
   let { id } = useParams();
 
@@ -19,7 +19,9 @@ const PetSitterDetailPage = () => {
       const response = await axios.get(`http://localhost:4000/search/${id}`);
       setProfiles(response.data.data);
       console.log(response.data.data);
-      setItem(id);
+      setItem("petSitterId", id);
+      setItem("petSitterFirstname", response.data.data.firstname);
+      setItem("petSitterLastname", response.data.data.lastname);
     } catch (error) {
       console.error(error);
     }

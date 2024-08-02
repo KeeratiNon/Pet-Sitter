@@ -1,5 +1,5 @@
-export const useLocalStorage = (key) => {
-  const setItem = (value) => {
+export const useLocalStorage = () => {
+  const setItem = (key, value) => {
     try {
       window.localStorage.setItem(key, JSON.stringify(value));
     } catch (error) {
@@ -7,16 +7,17 @@ export const useLocalStorage = (key) => {
     }
   };
 
-  const getItem = () => {
+  const getItem = (key) => {
     try {
       const item = window.localStorage.getItem(key);
       return item === null ? null : JSON.parse(item);
     } catch (error) {
       console.log("error", error);
+      return null;
     }
   };
 
-  const removeItem = () => {
+  const removeItem = (key) => {
     try {
       window.localStorage.removeItem(key);
     } catch (error) {

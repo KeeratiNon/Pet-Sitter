@@ -1,46 +1,51 @@
+import React from "react";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 import PetForm from "../forms/PetForm";
 import InfomationForm from "../forms/InfomationForm";
 import PayMentForm from "../forms/PayMentForm";
 
+const stripePromise = loadStripe("your_stripe_public_key");
+
 const BookingForms = ({
   page,
-  data,
-  setData,
+  petData,
+  bookingData,
+  setBookingData,
   handlePrev,
   handleNext,
   setIsModalOpen,
-  width,
 }) => {
   switch (page) {
     case 0:
       return (
         <PetForm
-          width={width}
           onPrev={handlePrev}
           onNext={handleNext}
-          data={data}
-          setData={setData}
+          petData={petData}
+          bookingData={bookingData}
+          setBookingData={setBookingData}
         />
       );
     case 1:
       return (
         <InfomationForm
-          width={width}
           onPrev={handlePrev}
           onNext={handleNext}
-          data={data}
-          setData={setData}
+          bookingData={bookingData}
+          setBookingData={setBookingData}
         />
       );
     case 2:
       return (
-        <PayMentForm
-          width={width}
-          onPrev={handlePrev}
-          onConfirm={setIsModalOpen}
-          data={data}
-          setData={setData}
-        />
+        <Elements stripe={stripePromise}>
+          <PayMentForm
+            onPrev={handlePrev}
+            onConfirm={setIsModalOpen}
+            bookingData={bookingData}
+            setBookingData={setBookingData}
+          />
+        </Elements>
       );
     default:
       return null;

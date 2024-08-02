@@ -1,7 +1,15 @@
-import BookingDetail from "../cards/BookingDetail";
+import BookingSummary from "../booking/BookingSummary";
 
-const InfomationForm = ({ onPrev, onNext, data, setData }) => {
-  const handleOnSubmit = (event) => {
+const InfomationForm = ({ onPrev, onNext, bookingData, setBookingData }) => {
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setBookingData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const onSubmit = (event) => {
     event.preventDefault();
     onNext();
   };
@@ -9,7 +17,7 @@ const InfomationForm = ({ onPrev, onNext, data, setData }) => {
   return (
     <form
       className="flex flex-col gap-4 py-10 px-4 rounded-2xl md:bg-white md:p-10"
-      onSubmit={handleOnSubmit}
+      onSubmit={onSubmit}
     >
       <div className="flex flex-wrap gap-4 md:gap-10">
         <div className="w-full flex flex-col gap-1 md:flex-1">
@@ -21,10 +29,8 @@ const InfomationForm = ({ onPrev, onNext, data, setData }) => {
             name="first_name"
             placeholder="First name"
             className="input-box"
-            value={data.first_name}
-            onChange={(event) =>
-              setData({ ...data, first_name: event.target.value })
-            }
+            value={bookingData.first_name || ""}
+            onChange={handleInputChange}
           />
         </div>
 
@@ -37,10 +43,8 @@ const InfomationForm = ({ onPrev, onNext, data, setData }) => {
             name="last_name"
             placeholder="Last name"
             className="input-box"
-            value={data.last_name}
-            onChange={(event) =>
-              setData({ ...data, last_name: event.target.value })
-            }
+            value={bookingData.last_name || ""}
+            onChange={handleInputChange}
           />
         </div>
       </div>
@@ -55,10 +59,8 @@ const InfomationForm = ({ onPrev, onNext, data, setData }) => {
             name="email"
             placeholder="youremail@company.com"
             className="input-box"
-            value={data.email}
-            onChange={(event) =>
-              setData({ ...data, email: event.target.value })
-            }
+            value={bookingData.email || ""}
+            onChange={handleInputChange}
           />
         </div>
 
@@ -71,10 +73,8 @@ const InfomationForm = ({ onPrev, onNext, data, setData }) => {
             name="phone_number"
             placeholder="xxx-xxx-xxxx"
             className="input-box"
-            value={data.phone_number}
-            onChange={(event) =>
-              setData({ ...data, phone_number: event.target.value })
-            }
+            value={bookingData.phone_number || ""}
+            onChange={handleInputChange}
           />
         </div>
       </div>
@@ -88,22 +88,19 @@ const InfomationForm = ({ onPrev, onNext, data, setData }) => {
           name="message"
           as="textarea"
           rows={4}
-          resize={false}
           className="input-box"
-          value={data.message}
-          onChange={(event) =>
-            setData({ ...data, message: event.target.value })
-          }
+          value={bookingData.message || ""}
+          onChange={handleInputChange}
         />
       </div>
 
-      <div className="md:hidden">
-        <BookingDetail data={data} />
+      <div className="w-full md:hidden">
+        <BookingSummary bookingData={bookingData} />
       </div>
 
       <div className="flex justify-between gap-[10px] py-6 px-4 bg-white md:rounded-b-2xl">
         <button
-          type="submit"
+          type="button"
           className="btn-secondary md:w-[120px]"
           onClick={onPrev}
         >
