@@ -1,41 +1,162 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
+import { useAuth } from "../../contexts/authentication";
+import { SERVER_API_URL } from "../../core/config.mjs";
 import FormNavigation from "../../components/booking/FormNavigation";
 import BookingForms from "../../components/booking/BookingForms";
 import BookingIllustrations from "../../components/booking/BookingIllustrations";
 import BookingSummary from "../../components/booking/BookingSummary";
 import BookingConfirm from "../../components/booking/BookingConfirm";
+import axios from "axios";
 
 const BookingPage = () => {
-  const { getItem } = useLocalStorage();
-  const petSitterId = getItem("petSitterId");
-  const bookingData = getItem("bookingData");
+  const { state } = useAuth();
+  const user_id = state.user.id;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [page, setPage] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const formList = ["Your Pet", "Information", "Payment"];
 
-  const initialData = {
-    pet_sitter_id: petSitterId || "",
-    booking_time_start: bookingData?.startTime || "",
-    booking_time_end: bookingData?.endTime || "",
-    pet_name: [],
+  const { getItem } = useLocalStorage();
+  const petSitterId = getItem("petSitterId");
+  const petSitterFirstname = getItem("petSitterFirstname");
+  const petSitterLastname = getItem("petSitterLastname");
+  const bookingDate = getItem("bookingDate");
+  const bookingStart = getItem("bookingStart");
+  const bookingEnd = getItem("bookingEnd");
+
+  const createDateWithTime = (timeString) => {
+    const [hours, minutes] = timeString.split(":").map(Number);
+    const totalMinutes = parseInt(hours) * 60 + parseInt(minutes);
+    return totalMinutes;
+  };
+
+  const [bookingData, setBookingData] = useState({
+    user_id: user_id || "",
     first_name: "",
     last_name: "",
     email: "",
     phone_number: "",
+    booking_date: bookingDate?.slice(0, 10) || "",
+    booking_time_start: [
+      createDateWithTime(bookingStart?.value || ""),
+      bookingStart?.label || "",
+    ],
+    booking_time_end: [
+      createDateWithTime(bookingEnd?.value || ""),
+      bookingEnd?.label || "",
+    ],
+    pet_sitter_id: petSitterId || "",
+    pet_sitter_firstname: petSitterFirstname || "",
+    pet_sitter_lastname: petSitterLastname || "",
+    pet_id: [],
+    pet_name: [],
     status: "",
     message: "",
     card_number: "",
     card_owner: "",
     expiry_date: "",
     cvv: "",
+  });
+
+  const [petData, setPetData] = useState();
+
+  const getPetProfileData = async () => {
+    const userId = state.user.id;
+
+    try {
+      const response = await axios.get(`${SERVER_API_URL}/user/pet/${userId}`);
+      setPetData(response.data.data);
+    } catch (error) {
+      console.error("Error fetching pet profile data:", error);
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const [data, setData] = useState(initialData);
+  const getUserProfileData = async (userId) => {
+    try {
+      const response = await axios.get(
+        `${SERVER_API_URL}/user/profile/${userId}`
+      );
+
+      if (response.data && response.data.data) {
+        const userProfileData = response.data.data;
+
+        setBookingData({
+          user_id: user_id || "",
+          first_name: userProfileData.firstname || "",
+          last_name: userProfileData.lastname || "",
+          email: userProfileData.email || "",
+          phone_number: userProfileData.phone_number || "",
+          booking_date: bookingDate?.slice(0, 10) || "",
+          booking_time_start: [
+            createDateWithTime(bookingStart?.value || ""),
+            bookingStart?.label || "",
+          ],
+          booking_time_end: [
+            createDateWithTime(bookingEnd?.value || ""),
+            bookingEnd?.label || "",
+          ],
+          pet_sitter_id: petSitterId || "",
+          pet_sitter_firstname: petSitterFirstname || "",
+          pet_sitter_lastname: petSitterLastname || "",
+          pet_id: [],
+          pet_name: [],
+          status: "",
+          message: "",
+          card_number: "",
+          card_owner: "",
+          expiry_date: "",
+          cvv: "",
+        });
+      } else {
+        setBookingData({
+          user_id: user_id || "",
+          first_name: "",
+          last_name: "",
+          email: "",
+          phone_number: "",
+          booking_date: bookingDate?.slice(0, 10) || "",
+          booking_time_start: [
+            createDateWithTime(bookingStart?.value || ""),
+            bookingStart?.label || "",
+          ],
+          booking_time_end: [
+            createDateWithTime(bookingEnd?.value || ""),
+            bookingEnd?.label || "",
+          ],
+          pet_sitter_id: petSitterId || "",
+          pet_sitter_firstname: petSitterFirstname || "",
+          pet_sitter_lastname: petSitterLastname || "",
+          pet_id: [],
+          pet_name: [],
+          status: "",
+          message: "",
+          card_number: "",
+          card_owner: "",
+          expiry_date: "",
+          cvv: "",
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching user profile data:", error);
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getPetProfileData(user_id);
+    getUserProfileData(user_id);
+  }, []);
 
   const handleSubmit = async () => {
     navigate("/booking-confirmation");
@@ -50,15 +171,15 @@ const BookingPage = () => {
       prevPage === 0 ? formList.length - 1 : prevPage - 1
     );
 
-  const [width, setWidth] = useState(window.innerWidth);
+  console.log(bookingData);
 
-  useEffect(() => {
-    const handleResize = () => setWidth(window.innerWidth);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-  console.log(data);
+  if (error) {
+    return <div>Error fetching pet profile data: {error.message}</div>;
+  }
 
   return (
     <section className="overflow-hidden bg-[#F6F6F9] relative md:pt-10 md:px-20 md:flex md:justify-center md:gap-9 min-h-[calc(100dvh-72px)]">
@@ -67,17 +188,19 @@ const BookingPage = () => {
         <div className="md:bg-white md:rounded-2xl">
           <BookingForms
             page={page}
-            data={data}
-            setData={setData}
+            petData={petData}
+            bookingData={bookingData}
+            setBookingData={setBookingData}
             handlePrev={handlePrev}
             handleNext={handleNext}
             setIsModalOpen={setIsModalOpen}
-            width={width}
           />
         </div>
       </div>
       <BookingIllustrations />
-      <BookingSummary data={data} width={width} />
+      <div className="hidden md:block">
+        <BookingSummary bookingData={bookingData} />
+      </div>
       <BookingConfirm
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
