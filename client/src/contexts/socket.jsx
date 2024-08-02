@@ -68,11 +68,16 @@ const SocketProvider = ({ children }) => {
       });
 
       newSocket.on("newMessage", (message) => {
-        setHistoryMessage((prevMessages) => [...prevMessages, message]);
+        setHistoryMessage((prevMessages) => [...prevMessages, message.newMessage]);
       });
 
-      newSocket.on("roomCreated", ({chatRoomId, targetId}) => {
-        setSelectedChatRoom({chatRoomId, targetId})
+      newSocket.on("roomCreated", (chatRoom) => {
+        const {newChatRoomId, targetId} = chatRoom
+        setSelectedChatRoom({newChatRoomId, targetId})
+        navigate("/chat")
+      })
+
+      newSocket.on("joinOneRoom", () => {
         navigate("/chat")
       })
 

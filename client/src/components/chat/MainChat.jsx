@@ -8,7 +8,6 @@ const MainChat = ({ chatRoom, getMessages, historyMessage }) => {
 
   useEffect(() => {
     getMessages(chatRoom.chatRoomId);
-    console.log("a")
   }, [chatRoom.chatRoomId]);
 
   useEffect(() => {
@@ -24,15 +23,17 @@ const MainChat = ({ chatRoom, getMessages, historyMessage }) => {
       className="flex flex-col gap-[24px] w-[100%] overflow-y-scroll h-[calc(100dvh-266px)]"
     >
       <section className="flex flex-col w-full gap-[16px] p-[40px]">
-        {historyMessage.map((message, index) => (
-          <Message
-            key={index}
-            isSender={message.senderId === Number(state.user.id)}
-            message={message.message}
-            imageSrc={chatRoom.image}
-            images={message.images}
-          />
-        ))}
+        {historyMessage.map((message, index) => {
+          return (
+            <Message
+              key={index}
+              isSender={message.senderId === Number(state.user.id)}
+              message={message.message}
+              imageSrc={chatRoom.image}
+              images={message.images}
+            />
+          )
+})}
       </section>
     </div>
   );

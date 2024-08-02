@@ -26,7 +26,8 @@ const messageSchema = new mongoose.Schema({
 const chatSchema = new mongoose.Schema({
     chatRoomId: {
         type: String,
-        require: true
+        require: true,
+        unique: true
     },
     messages: [messageSchema],
     users: [Number]

@@ -20,7 +20,10 @@ export const getChatRoomList = async (req, res) => {
           chatRoom.chatRoomId.split("/").find((id) => id !== req.user.id)
         );
         const isReadCount = chatRoom.messages.reduce(
-          (acc, curr) => (!curr.isRead && curr.receiverId === Number(req.user.id) ? acc + 1 : acc),
+          (acc, curr) =>
+            !curr.isRead && curr.senderId !== Number(req.user.id)
+              ? acc + 1
+              : acc,
           0
         );
         let data;
@@ -36,7 +39,7 @@ export const getChatRoomList = async (req, res) => {
           name: `${data[0].firstname} ${data[0].lastname}`,
           targetId,
           isReadCount,
-          image: `${data[0].image || data[0].profile_image}`
+          image: `${data[0].image || data[0].profile_image}`,
         };
       })
   );

@@ -4,10 +4,14 @@ import girl from "../../assets/images/girl.png";
 import changeIcon from "../../assets/svgs/icons/icon-change.svg";
 import phone from "../../assets/svgs/icons/icon-phone.svg";
 import { SERVER_API_URL } from "../../core/config.mjs";
+import { useSocket } from "../../contexts/socket";
+import { useAuth } from "../../contexts/authentication";
 
 const BookingHistoryService = () => {
   const [bookings, setBookings] = useState([]);
   const [reviewedBookings, setReviewedBookings] = useState({});
+  const {joinChatRoom,chatRoomList,setChatRoomList} = useSocket()
+  const {state} = useAuth()
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -64,6 +68,18 @@ const BookingHistoryService = () => {
 
   const handleReviewClick = (bookingId) => {
     setReviewedBookings((prev) => ({ ...prev, [bookingId]: true }));
+  };
+
+  const clearReadCount = (chatRoomId) => {
+    const newChatRoomList = [...chatRoomList];
+    newChatRoomList.map((chatRoom) => {
+      if (chatRoom.chatRoomId === chatRoomId) {
+        chatRoom.isReadCount = 0;
+        return chatRoom;
+      }
+      return chatRoom;
+    });
+    setChatRoomList(newChatRoomList);
   };
 
   return (
@@ -221,6 +237,12 @@ const BookingHistoryService = () => {
                   <button
                     type="button"
                     className="bg-primaryorange-500 flex rounded-[99px] py-[12px] px-[24px] gap-[8px]"
+                    onClick={()=>{
+                      const chatRoomId = `${state.user.id}/${booking.pet_sitter_id}`
+                      const targetId = Number(booking.pet_sitter_id)
+                      joinChatRoom({chatRoomId,targetId})
+                      clearReadCount(chatRoomId)
+                    }}
                   >
                     <p className="text-white text-[16px] leading-[24px] font-bold">
                       Send Message

@@ -38,7 +38,7 @@ const Chat = () => {
 
   return (
     <div className="flex h-[calc(100dvh-72px)]">
-      <section className="bg-black py-[40px] max-w-[368px]">
+      <section className="bg-black py-[40px] min-w-[368px]">
         <h3 className="text-white mx-[40px] mb-[24px] text-[24px] leading-[32px] font-bold">
           Messages
         </h3>

@@ -12,7 +12,7 @@ const Message = ({ isSender, message, imageSrc, images }) => {
         }`}
       >
         {message}
-        {images.map((img)=><img src={img} className="w-[240px] h-[240px] rounded-[8px]"/>)}
+        {images && images.map((img,index)=><img key={index} src={img} className="w-[240px] h-[240px] rounded-[8px]"/>)}
       </div>
     </div>
   );

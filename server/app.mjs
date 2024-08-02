@@ -34,8 +34,8 @@ const io = new Server(server, {
 });
 
 app.use(cors());
-app.use(bodyParser.json({ limit: '50mb' })); 
-app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
 app.use(express.json());
 app.use("/auth", authRouter);
@@ -43,11 +43,7 @@ app.use("/", petSitterProfileRouter);
 app.use("/petsitter/booking", petSitterBookingRouter);
 app.use("/booking-history", bookingHistoryRouter); // ใช้ Route สำหรับ Booking History
 
-
-
-
 app.use("/user", userRouter);
-
 
 app.get("/profiles", (req, res) => {
   res.json(profiles);
@@ -83,76 +79,75 @@ io.on("connection", (socket) => {
     // console.log("user disconnected:", socket.userId);
   });
 
-  socket.on("sendMessage", async ({ chatRoomId, targetId, message, images }) => {
-    if (message || images) {
-      try {
-        const newMessage = {
-          message,
-          senderId: Number(socket.userId),
-          receiverId: targetId,
-          isRead: false,
-        };
-        if (images) {
-          const imageSrc = []
-          for(const img of images){
-            imageSrc.push(await handleImageUpload(img))
+  socket.on(
+    "sendMessage",
+    async ({ chatRoomId, targetId, message, images }) => {
+      if (message || images) {
+        try {
+          const newMessage = {
+            message,
+            senderId: Number(socket.userId),
+            receiverId: targetId,
+            isRead: false,
+          };
+          if (images) {
+            const imageSrc = [];
+            for (const img of images) {
+              imageSrc.push(await handleImageUpload(img));
+            }
+            // console.log(imageSrc)
+            newMessage.images = imageSrc;
           }
-          console.log(imageSrc)
-          newMessage.images = imageSrc
-        }
-        const reverseChatRoomId = chatRoomId.chatRoomId
-          .split("/")
-          .reverse()
-          .join("/");
-        const chatRoom = await ChatRoom.findOneAndUpdate(
-          {
-            $or: [
-              { chatRoomId: chatRoomId.chatRoomId },
-              { chatRoomId: reverseChatRoomId },
-            ],
-          },
-          { $push: { messages: newMessage } },
-          { new: true, upsert: true }
-        );
-        io.to(chatRoom.chatRoomId).emit("newMessage", newMessage);
-      } catch (error) {
-        console.error("Error saving message:", error);
-      }
-    }
-  });
-
-  socket.on("joinRoom", async ({ chatRoomId, targetId, isReadCount }) => {
-    try {
-      if (chatRoomId) {
-        const reverseChatRoomId = chatRoomId
+          const reverseChatRoomId = chatRoomId.chatRoomId
             .split("/")
             .reverse()
             .join("/");
-        const chatRoom = await ChatRoom.findOne({
-          $or: [
-            { chatRoomId: chatRoomId },
-            { chatRoomId: reverseChatRoomId },
-          ],
-        });
-        if (chatRoom) {
-          if (isReadCount) {
-            await ChatRoom.updateMany({},{ 
-              $set: { "messages.$[].isRead": true }
-            })
-          }
-          socket.join(chatRoomId);
-          return;
+          const chatRoom = await ChatRoom.findOneAndUpdate(
+            {
+              $or: [
+                { chatRoomId: chatRoomId.chatRoomId },
+                { chatRoomId: reverseChatRoomId },
+              ],
+            },
+            { $push: { messages: newMessage } },
+            { new: true, upsert: true }
+          );
+          const newChatRoom = chatRoom.chatRoomId
+          io.to(chatRoom.chatRoomId).emit("newMessage", {newMessage, newChatRoom});
+        } catch (error) {
+          console.error("Error saving message:", error);
         }
+      }
+    }
+  );
+
+  socket.on("joinRoom", async ({ chatRoomId, targetId, isReadCount }) => {
+    try {
+      const reverseChatRoomId = chatRoomId.split("/").reverse().join("/");
+      const chatRoom = await ChatRoom.findOne({
+        $or: [{ chatRoomId: chatRoomId }, { chatRoomId: reverseChatRoomId }],
+      });
+      if (chatRoom) {
+        if (isReadCount) {
+          await ChatRoom.updateMany(
+            {},
+            {
+              $set: { "messages.$[].isRead": true },
+            }
+          );
+        }
+        socket.join(chatRoom.chatRoomId);
+        io.to(socket.id).emit("joinOneRoom");
       } else {
         const newChatRoomId = `${socket.userId}/${targetId}`;
         const newChatRoom = new ChatRoom({
           chatRoomId: newChatRoomId,
           messages: [],
-          users: [Number(socket.userId),Number(targetId)]
+          users: [Number(socket.userId), Number(targetId)],
         });
         await newChatRoom.save();
         socket.join(newChatRoomId);
-        io.to(socket.id).emit("roomCreated", {newChatRoomId, targetId})
+        io.to(socket.id).emit("roomCreated", { newChatRoomId, targetId });
       }
     } catch (error) {
       console.error("Error joining room:", error);
