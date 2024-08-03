@@ -153,7 +153,7 @@ const BookingHistoryService = ({
         >
           <div className="flex flex-col gap-[16px]">
             <div className="flex flex-col xs:flex-row border-primarygray-200 border-b pb-[16px] gap-[8px] xs:gap-[16px]">
-              <div className="flex gap-[16px]">
+              <div className="flex gap-[16px]" >
                 <img
                   src={booking.profile_image}
                   alt="Profile"
@@ -336,7 +336,6 @@ const BookingHistoryService = ({
         showModal={showModal}
         setShowModal={setShowModal}
         text={"Change date"}
-        booking={"Confirm"}
       />
       <BookingHistoryDetailPopup
         showDetail={showDetail}
@@ -348,3 +347,7 @@ const BookingHistoryService = ({
 };
 
 export default BookingHistoryService;
+
+
+
+
