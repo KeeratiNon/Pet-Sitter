@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import cross from "../../assets/svgs/icons/icon-cross.svg";
 
 const ReportHistory = ({ showReport, setShowReport }) => {

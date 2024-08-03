@@ -3,12 +3,20 @@
 
 import cross from "../../assets/svgs/icons/icon-cross.svg";
 import star2 from "../../assets/svgs/star2.svg";
+
+
 const ReviewHistory = ({ showReview, setShowReview, reviewData }) => {
   if (!showReview) {
     return null;
   }
 
   const { rating = 0, text = "" } = reviewData || {};
+
+
+
+
+
+
 
   return (
     <>

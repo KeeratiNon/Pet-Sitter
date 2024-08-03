@@ -68,3 +68,27 @@ export const postReviwes = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+export const getReview = async (req, res) => {
+  try {
+    const result = await sql`
+      SELECT
+        user_reviews.id,
+        user_reviews.rating,
+        user_reviews.review,
+        pet_sitter_profiles.profile_image,
+        pet_sitter_profiles.firstname,
+        pet_sitter_profiles.lastname
+      FROM 
+        user_reviews
+      INNER JOIN 
+        bookings on user_reviews.id = bookings.id
+      INNER JOIN 
+        pet_sitter_profiles on bookings.id = pet_sitter_profiles.pet_sitter_id
+      
+    `;
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
