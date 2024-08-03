@@ -1,11 +1,11 @@
 import express from 'express';
-import { getBookingHistory, postReport, postReviwes } from '../controllers/bookingHistory.mjs';
-import { protect } from '../middlewares/protect.mjs'; // สมมติว่ามี middleware สำหรับการ authenticate
+import { getBookingHistory, getBookingHistoryDetail, postReport, postReviwes } from '../controllers/bookingHistory.mjs';
+import { protect } from '../middlewares/protect.mjs'; // Middleware สำหรับการ authenticate
 
 const router = express.Router();
 
-// กำหนดเส้นทาง GET สำหรับการดึงข้อมูล Booking History
-router.get('/', [protect], getBookingHistory);
+router.get('/', [protect], getBookingHistory); // เส้นทางสำหรับดึงข้อมูลการจองทั้งหมด
+router.get('/:bookingId', [protect], getBookingHistoryDetail); // เส้นทางสำหรับดึงข้อมูลการจองเฉพาะ bookingId
 
 
 
