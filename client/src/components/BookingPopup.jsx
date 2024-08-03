@@ -6,7 +6,7 @@ import CustomTimePicker from "./cards/CustomTimePicker";
 import { useNavigate } from "react-router-dom";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
-const BookingPopup = ({ showModal, setShowModal }) => {
+const BookingPopup = ({ showModal, setShowModal, text }) => {
   const { setItem } = useLocalStorage("bookingData");
   const navigate = useNavigate();
 
@@ -28,7 +28,7 @@ const BookingPopup = ({ showModal, setShowModal }) => {
       <div className="bg-white rounded-t-[16px] lg:rounded-[16px] w-full max-w-[560px] mx-auto flex flex-col h-[calc(100vh-24px)] max-h-[788px] lg:h-[438px]">
         <div className="flex justify-between border-b-[1px] p-[16px] gap-[10px] lg:py-[24px] lg:px-[40px] items-center">
           <h1 className="text-primarygray-600 text-[20px] leading-[28px] lg:text-[24px] lg:leading-[32px] font-bold">
-            Booking
+            {text}
           </h1>
           <img
             src={cross}
@@ -40,7 +40,7 @@ const BookingPopup = ({ showModal, setShowModal }) => {
         <div className="flex flex-col justify-between flex-grow py-[24px] px-[16px] lg:p-[40px] lg:gap-[60px]">
           <div className="flex flex-col gap-[12px] lg:gap-[24px]">
             <p className="text-primarygray-600 text-[16px] leading-[28px] lg:text-[18px] lg:leading-[26px] font-medium">
-              Select date and time you want to schedule the service
+              Select date and time you want to schedule the service.
             </p>
             <CustomDatePicker
               selectedDate={selectedDate}

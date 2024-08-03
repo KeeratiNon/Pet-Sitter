@@ -51,7 +51,7 @@ const PetSitterInfoCard = ({ profiles }) => {
           </button>
         </div>
       </div>
-      <ModalPopup showModal={showModal} setShowModal={setShowModal} /> 
+      <ModalPopup showModal={showModal} setShowModal={setShowModal} text={"Booking"}/> 
     </div>
   );
 };
