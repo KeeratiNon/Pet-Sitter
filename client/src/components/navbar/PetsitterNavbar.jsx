@@ -130,11 +130,11 @@ const PetsitterNavbar = () => {
             <>
               <li className="flex gap-3 p-4">
                 <img src={iconProfile} alt="icon-profile" />
-                <Link to="/petsitter/profile/:id">Profile</Link>
+                <Link to="/petsitter/profile">Profile</Link>
               </li>
               <li className="flex gap-3 p-4">
                 <img src={iconBooking} alt="icon-petsitter-booking" />
-                <Link to="/petsitter/booking/:id">Booking List</Link>
+                <Link to="/petsitter/booking">Booking List</Link>
               </li>
               <li className="flex gap-3 p-4">
                 <img src={iconPetsitterPayment} alt="icon-petsitter-payment" />

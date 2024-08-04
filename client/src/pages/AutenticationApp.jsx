@@ -41,19 +41,19 @@ const AutenticationApp = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/popup" element={<BookingPopup />} />
         <Route
-          path="/petsitter/profile/:id"
+          path="/petsitter/profile"
           element={<PetSitterProfilePage />}
         />
         <Route
-          path="/petsitter/booking/:id"
+          path="/petsitter/booking"
           element={<PetSitterBookingListPage />}
         />
         <Route
-          path="/petsitter/booking/detail/:bookingId"
+          path="/petsitter/booking/detail"
           element={<PetSitterBookingDetailPage />}
         />
         <Route
-          path="/petsitter/payment-option/:id"
+          path="/petsitter/payment-option"
           element={<PetSitterPaymentOptionPage />}
         />
         <Route path="/booking" element={<BookingPage />} />

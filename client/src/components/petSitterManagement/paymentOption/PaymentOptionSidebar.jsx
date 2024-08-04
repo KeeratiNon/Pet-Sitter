@@ -25,7 +25,7 @@ const Sidebar = () => {
       </Link>
 
       <Link
-        to="/petsitter/booking-list"
+        to="/petsitter/booking"
         className="flex items-center px-[24px] py-[16px]"
       >
         <img

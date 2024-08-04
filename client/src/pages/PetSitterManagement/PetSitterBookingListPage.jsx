@@ -17,18 +17,12 @@ const PetsitterBookingListPage = () => {
   const [status, setStatus] = useState("All status");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const getIdFromUrl = () => {
-    const url = window.location.href;
-    return url.substring(url.lastIndexOf("/") + 1);
-  };
-
   useEffect(() => {
     const fetchData = async () => {
-      const id = getIdFromUrl();
       try {
         // Fetching petsitter profile data
         const profileResponse = await axios.get(
-          `${SERVER_API_URL}/petsitter/profile/${id}`
+          `${SERVER_API_URL}/petsitter/profile`
         );
         const profileData = profileResponse.data.data;
         setFormData({
@@ -39,7 +33,7 @@ const PetsitterBookingListPage = () => {
 
         // Fetching bookings data
         const bookingsResponse = await axios.get(
-          `${SERVER_API_URL}/petsitter/booking/${id}`,
+          `${SERVER_API_URL}/petsitter/booking`,
           {
             params: {
               searchQuery,

@@ -56,18 +56,13 @@ const PetSitterProfilePage = () => {
   });
 
   const [errors, setErrors] = useState({});
-
-  const getIdFromUrl = () => {
-    const url = window.location.href;
-    return url.substring(url.lastIndexOf("/") + 1);
-  };
+  const [petsitterId, setPetsitterId] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
-      const id = getIdFromUrl();
       try {
         const response = await axios.get(
-          `${SERVER_API_URL}/petsitter/profile/${id}`
+          `${SERVER_API_URL}/petsitter/profile`
         );
         const data = response.data.data;
         setFormData({
@@ -91,6 +86,7 @@ const PetSitterProfilePage = () => {
           province: data.province || "",
           post_code: data.post_code || "",
         });
+        setPetsitterId(data.id);
       } catch (error) {
         console.error("Error fetching petsitter profile data:", error);
       }
@@ -112,10 +108,9 @@ const PetSitterProfilePage = () => {
       await PetSitterProfileSchema.validate(formData, { abortEarly: false });
       console.log("Form Submitted");
 
-      const id = getIdFromUrl();
 
       const response = await axios.get(
-        `${SERVER_API_URL}/petsitter/profile/check/${id}`
+        `${SERVER_API_URL}/petsitter/profile/check`
       );
       const profileExists = response.data.exists;
       console.log(profileExists)
@@ -123,14 +118,14 @@ const PetSitterProfilePage = () => {
       if (profileExists) {
         console.log("Updating existing profile");
         const response = await axios.put(
-          `${SERVER_API_URL}/petsitter/profile/${id}`,
+          `${SERVER_API_URL}/petsitter/profile`,
           formData
         );
         console.log("Petsitter Profile has been updated:", response.data);
       } else {
         console.log("Creating new profile");
         const response = await axios.post(
-          `${SERVER_API_URL}/petsitter/profile/${id}`,
+          `${SERVER_API_URL}/petsitter/profile`,
           formData
         );
         console.log("Petsitter Profile has been created:", response.data);
@@ -193,7 +188,7 @@ const PetSitterProfilePage = () => {
                 <ProfileImageForm
                   profileImage={formData.profile_image}
                   setFormData={setFormData}
-                  profileId={getIdFromUrl()}
+                  petsitterId = {petsitterId}
                 />
               </div>
               <div className="grid grid-cols-3 gap-6">
@@ -265,7 +260,7 @@ const PetSitterProfilePage = () => {
               <ImageGalleryForm
                 image_gallery={formData.image_gallery}
                 setFormData={setFormData}
-                getIdFromUrl={getIdFromUrl}
+                petsitterId = {petsitterId}
               />
             </div>
             <div className="w-[93%] rounded-2xl bg-primarygray-100 px-20 py-10 flex flex-col gap-6">

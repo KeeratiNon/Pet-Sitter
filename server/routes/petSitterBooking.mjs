@@ -11,5 +11,5 @@ petSitterBookingRouter.use((req, res, next) => {
     next();
   });
 
-petSitterBookingRouter.get("/:id",[protect], viewAllPetsitterBookingList);
-petSitterBookingRouter.get("/detail/:id",[protect], viewPetsitterBookingDetail);
+petSitterBookingRouter.get("",[protect], viewAllPetsitterBookingList);
+petSitterBookingRouter.get("/detail",[protect], viewPetsitterBookingDetail);

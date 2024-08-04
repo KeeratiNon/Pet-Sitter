@@ -3,15 +3,23 @@ import sql from '../utils/db.mjs';
 const calculateDuration = (startTime, endTime) => {
   const start = new Date(`1970-01-01T${startTime}Z`);
   const end = new Date(`1970-01-01T${endTime}Z`);
-  const duration = (end - start) / (1000 * 60 * 60);
-  return duration;
+  let durationInMinutes = (end - start) / (1000 * 60);
+
+  if (durationInMinutes < 0) {
+    durationInMinutes += 24 * 60; // Adjust for negative durations assuming it spans midnight
+  }
+
+  const hours = Math.floor(durationInMinutes / 60);
+  const minutes = durationInMinutes % 60;
+
+  return `${hours > 0 ? `${hours} Hour${hours > 1 ? 's' : ''}` : ''} ${minutes > 0 ? `${minutes} Minute${minutes > 1 ? 's' : ''}` : ''}`.trim();
 };
 
 const formatBookedDate = (date, startTime, endTime) => {
   const options = { day: '2-digit', month: 'short', year: 'numeric' };
   const formattedDate = new Intl.DateTimeFormat('en-US', options).format(new Date(date));
 
-  const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true, timeZone: 'UTC' };
+  const timeOptions = { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'UTC' };
   const formattedStartTime = new Date(`1970-01-01T${startTime}Z`).toLocaleTimeString('en-US', timeOptions);
   const formattedEndTime = new Date(`1970-01-01T${endTime}Z`).toLocaleTimeString('en-US', timeOptions);
 
@@ -19,14 +27,14 @@ const formatBookedDate = (date, startTime, endTime) => {
 };
 
 export const viewAllPetsitterBookingList = async (req, res) => {
-  const { id } = req.params;
+  const userId = req.user.id;
   const { searchQuery = '', status = 'All status' } = req.query;
 
   try {
     let query = sql`
       SELECT id, firstname, lastname, booking_date, booking_time_start, booking_time_end, status 
       FROM bookings 
-      WHERE pet_sitter_id = ${id}
+      WHERE pet_sitter_id = ${userId}
     `;
 
     if (searchQuery) {
@@ -47,7 +55,7 @@ export const viewAllPetsitterBookingList = async (req, res) => {
       WHERE booking_id IN (
         SELECT id 
         FROM bookings 
-        WHERE pet_sitter_id = ${id}
+        WHERE pet_sitter_id = ${userId}
       ) 
       GROUP BY booking_id
     `;
@@ -61,7 +69,7 @@ export const viewAllPetsitterBookingList = async (req, res) => {
         id: booking.id,
         petOwnerName: `${booking.firstname} ${booking.lastname}`,
         petCount,
-        duration: `${duration} hours`,
+        duration,
         bookedDate,
         status: booking.status,
       };
@@ -75,7 +83,7 @@ export const viewAllPetsitterBookingList = async (req, res) => {
 };
 
 export const viewPetsitterBookingDetail = async (req, res) => {
-  const { id } = req.params;
+  const userId = req.user.id;
 
   try {
     const booking = await sql`
@@ -99,7 +107,7 @@ export const viewPetsitterBookingDetail = async (req, res) => {
       LEFT JOIN booking_pets ON bookings.id = booking_pets.booking_id
       LEFT JOIN pets ON booking_pets.pet_id = pets.id
       LEFT JOIN booking_payments ON bookings.id = booking_payments.booking_id
-      WHERE bookings.id = ${id}
+      WHERE bookings.pet_sitter_id = ${userId}
       GROUP BY bookings.id, user_profiles.id_number, user_profiles.date_of_birth, booking_payments.amount, booking_payments.created_at, booking_payments.transaction_number
     `;
 
@@ -121,7 +129,7 @@ export const viewPetsitterBookingDetail = async (req, res) => {
       date_of_birth: bookingDetails.date_of_birth,
       petCount: bookingDetails.pet_count,
       pets: bookingDetails.pets,
-      duration: `${duration} hours`,
+      duration,
       booking_date: bookedDate,
       total_paid: bookingDetails.amount,
       transaction_date: formatBookedDate(bookingDetails.transaction_date, bookingDetails.booking_time_start, bookingDetails.booking_time_end),

@@ -25,7 +25,7 @@ const Sidebar = () => {
       </div>
 
       <Link
-        to="/petsitter/booking/"
+        to="/petsitter/booking"
         className="flex items-center px-[24px] py-[16px]"
       >
         <img
@@ -37,7 +37,7 @@ const Sidebar = () => {
       </Link>
 
       <Link
-        to="/petsitter/payment-option/"
+        to="/petsitter/payment-option"
         className="flex gap-[16px] px-[24px] py-[16px]"
       >
         <img src={petSitterPayment} className="w-[24px] h-[24px]" />

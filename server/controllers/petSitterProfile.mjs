@@ -1,7 +1,7 @@
 import sql from "../utils/db.mjs";
 
 export const createPetsitterProfile = async (req, res) => {
-  const param = req.params.id;
+  const petsitterId = req.user.id;
 
   const {
     profile_image,
@@ -39,15 +39,15 @@ export const createPetsitterProfile = async (req, res) => {
       WITH updated_pet_sitter AS (
         UPDATE pet_sitters
         SET phone_number = ${petsitter.phone_number}, email = ${petsitter.email}, updated_at = ${petsitter.updated_at}
-        WHERE id = ${param}
+        WHERE id = ${petsitterId}
         RETURNING id
       ),
       inserted_profile AS (
         INSERT INTO pet_sitter_profiles (
-          profile_image, firstname, lastname, experience, introduction, bank, account_number, pet_sitter_name, pet_type, services, my_place, image_gallery, updated_at, pet_sitter_id
+          profile_image, firstname, lastname, experience, introduction, bank, account_number, pet_sitter_name, pet_type, services, my_place, image_gallery, created_at, updated_at, pet_sitter_id
         )
         VALUES (
-          ${petsitter.profile_image}, ${petsitter.first_name}, ${petsitter.last_name}, ${petsitter.experience}, ${petsitter.introduction}, ${petsitter.bank}, ${petsitter.account_number}, ${petsitter.petsitter_name}, ${petsitter.pet_type}, ${petsitter.services}, ${petsitter.my_place}, ${petsitter.image_gallery}, ${petsitter.updated_at}, (SELECT id FROM updated_pet_sitter)
+          ${petsitter.profile_image}, ${petsitter.first_name}, ${petsitter.last_name}, ${petsitter.experience}, ${petsitter.introduction}, ${petsitter.bank}, ${petsitter.account_number}, ${petsitter.petsitter_name}, ${petsitter.pet_type}, ${petsitter.services}, ${petsitter.my_place}, ${petsitter.image_gallery}, ${petsitter.created_at}, ${petsitter.updated_at}, (SELECT id FROM updated_pet_sitter)
         )
         RETURNING id
       )
@@ -186,17 +186,17 @@ export const searchPetsitterProfile = async (req, res) => {
 };
 
 export const viewPetsitterProfile = async (req, res) => {
-  const param = req.params.id;
+  const petsitterId = req.user.id;
 
   let results;
   try {
-    results = await sql` 
-          SELECT *
-          FROM pet_sitters
-          INNER JOIN pet_sitter_profiles on pet_sitter_profiles.pet_sitter_id = pet_sitters.id
-          INNER JOIN pet_sitter_address on pet_sitter_address.pet_sitter_profile_id = pet_sitter_profiles.id        
-          WHERE pet_sitters.id = ${param}
-          `;
+    results = await sql`
+      SELECT pet_sitters.*, pet_sitter_profiles.profile_image, pet_sitter_profiles.*, pet_sitter_address.*
+      FROM pet_sitters
+      INNER JOIN pet_sitter_profiles ON pet_sitter_profiles.pet_sitter_id = pet_sitters.id
+      INNER JOIN pet_sitter_address ON pet_sitter_address.pet_sitter_profile_id = pet_sitter_profiles.id
+      WHERE pet_sitters.id = ${petsitterId}
+    `;
   } catch (error) {
     return res.status(500).json({
       message: "Internal server error",
@@ -216,7 +216,8 @@ export const viewPetsitterProfile = async (req, res) => {
 };
 
 export const updatePetsitterProfile = async (req, res) => {
-  const param = req.params.id;
+  const petsitterId = req.user.id;
+
 
   const {
     profile_image,
@@ -252,13 +253,13 @@ export const updatePetsitterProfile = async (req, res) => {
         WITH updated_pet_sitter AS (
           UPDATE pet_sitters
           SET phone_number = ${petsitter.phone_number}, email = ${petsitter.email}, updated_at = ${petsitter.updated_at}
-          WHERE id = ${param}
+          WHERE id = ${petsitterId}
           RETURNING id
         ),
         updated_profile AS (
           UPDATE pet_sitter_profiles
           SET profile_image = ${petsitter.profile_image}, firstname = ${petsitter.first_name}, lastname = ${petsitter.last_name}, experience = ${petsitter.experience}, introduction = ${petsitter.introduction}, bank = ${petsitter.bank}, account_number = ${petsitter.account_number}, pet_sitter_name = ${petsitter.petsitter_name}, pet_type = ${petsitter.pet_type}, services = ${petsitter.services}, my_place = ${petsitter.my_place}, image_gallery = ${petsitter.image_gallery}, updated_at = ${petsitter.updated_at}
-          WHERE pet_sitter_id = ${param}
+          WHERE pet_sitter_id = ${petsitterId}
           RETURNING id
         )
         UPDATE pet_sitter_address
@@ -278,13 +279,13 @@ export const updatePetsitterProfile = async (req, res) => {
 };
 
 export const checkPetsitterProfile = async (req, res) => {
-  const param = req.params.id;
+  const petsitterId = req.user.id;
 
   try {
     const results = await sql`
         SELECT 1
         FROM pet_sitter_profiles
-        WHERE pet_sitter_id = ${param}
+        WHERE pet_sitter_id = ${petsitterId}
         LIMIT 1;
       `;
     const profileExists = results.length > 0;

@@ -4,6 +4,7 @@ import prevIcon from "../../../assets/svgs/icons/icon-prev.svg";
 import blueCircle from "../../../assets/svgs/pet-sitter-management/pet-sitter-blueCircle.svg";
 import eyeIcon from "../../../assets/svgs/pet-sitter-management/pet-sitter-eye.svg";
 import catImage from "../../../assets/images/catright.png";
+import { SERVER_API_URL } from "../../../core/config.mjs";
 
 
 const PetsitterBookingDetail = ({ bookingId }) => {
@@ -16,7 +17,7 @@ const PetsitterBookingDetail = ({ bookingId }) => {
       const fetchBookingDetail = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:4000/petsitter/booking/detail/${bookingId}`
+            `${SERVER_API_URL}/petsitter/booking/detail`
           );
           setBookingDetail(response.data);
         } catch (error) {

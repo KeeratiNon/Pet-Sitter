@@ -3,12 +3,12 @@ import { v4 as uuidv4 } from 'uuid';
 import supabase from '../../../../utils/storage';
 import PetSitterAddImgGallery from '../../../../assets/svgs/pet-sitter-management/pet-sitter-addImgGallery.svg';
 
-const ImageGalleryForm = ({ image_gallery, setFormData, getIdFromUrl }) => {
+const ImageGalleryForm = ({ image_gallery, setFormData, petsitterId }) => {
   const handleImageUpload = async (event) => {
     if (image_gallery.length < 10) {
       const file = event.target.files[0];
       if (file) {
-        const profileId = getIdFromUrl();
+        const profileId = petsitterId();
         const fileName = `${profileId}/${uuidv4()}`;
         try {
           const { data, error } = await supabase

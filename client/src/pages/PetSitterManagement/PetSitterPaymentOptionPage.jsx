@@ -7,7 +7,6 @@ import BookingList from "../../components/petSitterManagement/bookingList/PetSit
 import { SERVER_API_URL } from "../../core/config.mjs";
 
 
-
 const PetSitterPaymentOptionPage = () => {
     const [formData, setFormData] = useState({
         profile_image: "",
@@ -15,17 +14,12 @@ const PetSitterPaymentOptionPage = () => {
         last_name: "",
       });
     
-      const getIdFromUrl = () => {
-        const url = window.location.href;
-        return url.substring(url.lastIndexOf("/") + 1);
-      };
     
       useEffect(() => {
         const fetchData = async () => {
-          const id = getIdFromUrl();
           try {
             const response = await axios.get(
-              `${SERVER_API_URL}/petsitter/profile/${id}`
+              `${SERVER_API_URL}/petsitter/profile`
             );
             const data = response.data.data;
             setFormData({

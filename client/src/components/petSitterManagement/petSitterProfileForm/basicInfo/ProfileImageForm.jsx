@@ -4,12 +4,12 @@ import petSitterAddImage from "../../../../assets/svgs/pet-sitter-management/pet
 import supabase from "../../../../utils/storage";
 import { v4 as uuidv4 } from "uuid";
   
-const ProfileImage = ({ profileImage, setFormData, profileId }) => {
+const ProfileImage = ({ profileImage, setFormData, petsitterId }) => {
   const handleChange = async (event) => {
     const file = event.target.files[0];
     
     if (file) {
-      const fileName = `${profileId}/${uuidv4()}`;
+      const fileName = `${petsitterId}/${uuidv4()}`;
       try {
         const { data, error } = await supabase
           .storage
