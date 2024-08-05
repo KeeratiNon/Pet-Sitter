@@ -6,3 +6,4 @@ export const bookingRouter = Router();
 bookingRouter.get("/", bookingList);
 bookingRouter.get("/:bookingId", bookingId);
 bookingRouter.post("/", booking);
+bookingRouter.put("/:bookingId", updateBooking); // เพิ่มเส้นทางสำหรับอัปเดตการจอง
