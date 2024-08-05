@@ -15,3 +15,4 @@ bookingRouter.post("/paymentIntent", [protect], createPaymentIntent);
 bookingRouter.post("/cancelPaymentIntent", [protect], cancelPaymentIntent);
 bookingRouter.post("/", [protect], saveBookingData);
 bookingRouter.get("/information", [protect], bookingInformation);
+bookingRouter.put("/:bookingId", updateBooking); // เพิ่มเส้นทางสำหรับอัปเดตการจอง

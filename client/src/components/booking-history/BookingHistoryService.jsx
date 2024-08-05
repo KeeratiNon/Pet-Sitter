@@ -336,6 +336,7 @@ const BookingHistoryService = ({
         showModal={showModal}
         setShowModal={setShowModal}
         text={"Change date"}
+        booking={"Confirm"}
       />
       <BookingHistoryDetailPopup
         showDetail={showDetail}

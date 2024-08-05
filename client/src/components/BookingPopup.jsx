@@ -6,7 +6,7 @@ import CustomTimePicker from "./cards/CustomTimePicker";
 import { useNavigate } from "react-router-dom";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
-const BookingPopup = ({ showModal, setShowModal, text }) => {
+const BookingPopup = ({ showModal, setShowModal, text, booking }) => {
   const { setItem } = useLocalStorage();
   const navigate = useNavigate();
 
@@ -78,7 +78,7 @@ const BookingPopup = ({ showModal, setShowModal, text }) => {
             className="btn-primary flex-shrink-0"
             onClick={handleContinue}
           >
-            Continue
+            {booking}
           </button>
         </div>
       </div>

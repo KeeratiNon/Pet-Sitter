@@ -251,3 +251,31 @@ export const cancelPaymentIntent = async (req, res) => {
       .json({ message: `Failed to cancel payment intent: ${error.message}` });
   }
 };
+
+
+// ฟังก์ชันสำหรับอัปเดตข้อมูลการจอง
+export const updateBooking = async (req, res) => {
+  const bookingId = req.params.bookingId;
+  const { date, startTime, endTime } = req.body;
+
+  try {
+    const result = await sql`
+      UPDATE bookings 
+      SET 
+        booking_date = ${date}, 
+        booking_time_start = ${startTime}, 
+        booking_time_end = ${endTime},
+        updated_at = NOW()
+      WHERE id = ${bookingId}
+      RETURNING *`;
+
+    if (result.count === 0) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    res.status(200).json({ message: "Booking updated successfully", data: result[0] });
+  } catch (error) {
+    console.error("Error updating booking:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
