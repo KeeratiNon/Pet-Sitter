@@ -76,7 +76,8 @@ export const getBookingHistoryDetail = async (req, res) => {
         booking_payments.amount,
         bookings.id AS booking_id,
         array_agg(pets.pet_name) AS pet_names,
-        to_char(bookings.updated_at, 'Dy, DD Mon YYYY | HH12:MI AM') AS formatted_updated_at 
+        to_char(bookings.updated_at, 'Dy, DD Mon YYYY | HH12:MI AM') AS formatted_updated_at,
+        booking_payments.transaction_number -- เพิ่มคอลัมน์ transaction_number
       FROM bookings
       JOIN pet_sitter_profiles 
         ON bookings.pet_sitter_id = pet_sitter_profiles.pet_sitter_id
@@ -99,7 +100,8 @@ export const getBookingHistoryDetail = async (req, res) => {
         booking_payments.created_at,
         booking_payments.amount,
         bookings.id,
-        bookings.updated_at
+        bookings.updated_at,
+        booking_payments.transaction_number -- รวมคอลัมน์ใน GROUP BY ด้วย
     `;
 
     if (rows.length === 0) {

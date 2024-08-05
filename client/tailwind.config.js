@@ -41,8 +41,9 @@ export default {
         },
       },
       screens: {
+        xxxs: '405px',
         xxs: '452px', 
-        xs: '577px', // เพิ่ม breakpoint ใหม่ xs ที่ 450px
+        xs: '577px', 
         sm: '640px',
         md: '768px',
         lg: '1024px',

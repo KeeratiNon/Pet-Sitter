@@ -4,6 +4,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import changeIcon from "../../assets/svgs/icons/icon-change.svg";
+import changeIconWhite from "../../assets/svgs/icons/icon-change-white.svg";
 import phone from "../../assets/svgs/icons/icon-phone.svg";
 import { SERVER_API_URL } from "../../core/config.mjs";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
@@ -25,8 +26,8 @@ const BookingHistoryService = ({
 
   const [bookings, setBookings] = useState([]);
   const [reviewedBookings, setReviewedBookings] = useState({});
-  const {joinChatRoom,chatRoomList,setChatRoomList} = useSocket()
-  const {state} = useAuth()
+  const { joinChatRoom, chatRoomList, setChatRoomList } = useSocket();
+  const { state } = useAuth();
   const [showModal, setShowModal] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
   const [selectedBookingId, setSelectedBookingId] = useState(null); // State for selected booking ID
@@ -152,7 +153,7 @@ const BookingHistoryService = ({
         >
           <div className="flex flex-col gap-[16px]">
             <div className="flex flex-col xs:flex-row border-primarygray-200 border-b pb-[16px] gap-[8px] xs:gap-[16px]">
-              <div className="flex gap-[16px]" >
+              <div className="flex gap-[16px]">
                 <img
                   src={booking.profile_image}
                   alt="Profile"
@@ -346,6 +347,3 @@ const BookingHistoryService = ({
 };
 
 export default BookingHistoryService;
-
-
-

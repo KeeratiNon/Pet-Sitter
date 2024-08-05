@@ -25,8 +25,8 @@ const BookingPopup = ({ showModal, setShowModal, text }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center lg:items-center items-start z-50 pt-[24px] lg:pt-0">
-      <div className="bg-white rounded-t-[16px] lg:rounded-[16px] w-full max-w-[560px] mx-auto flex flex-col h-[calc(100vh-24px)] max-h-[788px] lg:h-[438px]">
-        <div className="flex justify-between border-b-[1px] p-[16px] gap-[10px] lg:py-[24px] lg:px-[40px] items-center">
+      <div className="bg-white rounded-t-[16px] lg:rounded-[16px] w-full max-w-[560px] mx-auto flex flex-col h-[calc(100vh-24px)]  lg:h-[438px]">
+        <div className="flex justify-between border-b-[1px] p-[16px] gap-[10px] lg:py-[24px] lg:px-[40px] items-center lg:max-h-[80px]">
           <h1 className="text-primarygray-600 text-[20px] leading-[28px] lg:text-[24px] lg:leading-[32px] font-bold">
             {text}
           </h1>
@@ -73,7 +73,7 @@ const BookingPopup = ({ showModal, setShowModal, text }) => {
           </div>
           <button
             type="submit"
-            className="btn-primary mt-4 flex-shrink-0"
+            className="btn-primary flex-shrink-0"
             onClick={handleContinue}
           >
             Continue

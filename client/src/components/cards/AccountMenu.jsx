@@ -55,14 +55,15 @@ const AccountMenu = () => {
       </li>
       <li>
         <Link
+          to="/user/booking-history"
           className={`group w-full flex items-center gap-3 py-3 px-6 ${
-            location.pathname === "/user/booking" ? "bg-[#FFF1EC]" : ""
+            location.pathname === "/user/booking-history" ? "bg-[#FFF1EC]" : ""
           } md:py-5 md:px-6`}
         >
           <IconUserBooking fill={"#AEB1C3"} />
           <span
             className={`text-[18px] leading-[27px] font-bold group-hover:text-[#FF7037] ${
-              location.pathname === "/user/booking"
+              location.pathname === "/user/booking-history"
                 ? "text-[#FF7037]"
                 : "text-[#5B5D6F]"
             }`}
