@@ -24,6 +24,37 @@ export const useCalculateBooking = () => {
     return [hoursDisplay, minutesDisplay].filter(Boolean).join(" ");
   };
 
+  const calculateTotalCostForBookingDetail = (
+    pets,
+    bookingTimeStart,
+    bookingTimeEnd
+  ) => {
+    let countPet = pets.length;
+    let startMinutes = bookingTimeStart[0];
+    let endMinutes = bookingTimeEnd[0];
+
+    let hours = (endMinutes - startMinutes) / 60;
+
+    let perHour = 200;
+    let firstPetCost = 600;
+    let additionalPetCost = 300;
+
+    let totalHourCost = hours * perHour;
+    let totalPetCost = 0;
+
+    if (countPet > 0) {
+      totalPetCost += firstPetCost;
+      totalPetCost += (countPet - 1) * additionalPetCost;
+    }
+
+    let totalCost = totalHourCost + totalPetCost;
+
+    return totalCost.toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  };
+
   const calculateTotalCost = (pets, bookingTimeStart, bookingTimeEnd) => {
     let countPet = pets.length;
     let startMinutes = bookingTimeStart[0];
@@ -48,13 +79,11 @@ export const useCalculateBooking = () => {
     return totalCost.toFixed(2);
   };
 
-  const duration = (bookingTotalMinutes) => {
-    if (bookingTotalMinutes < 0) {
-      bookingTotalMinutes += 24 * 60;
-    }
+  const duration = (bookingTimeStart, bookingTimeEnd) => {
+    let durationInMinutes = bookingTimeEnd - bookingTimeStart;
 
-    const hours = Math.floor(bookingTotalMinutes / 60);
-    const minutes = bookingTotalMinutes % 60;
+    const hours = Math.floor(durationInMinutes / 60);
+    const minutes = durationInMinutes % 60;
 
     const hoursDisplay =
       hours > 0 ? `${hours} Hour${hours > 1 ? "s" : ""}` : "";
@@ -63,5 +92,11 @@ export const useCalculateBooking = () => {
 
     return [hoursDisplay, minutesDisplay].filter(Boolean).join(" ");
   };
-  return { formatDate, calculateDuration, calculateTotalCost, duration };
+  return {
+    formatDate,
+    calculateDuration,
+    calculateTotalCostForBookingDetail,
+    calculateTotalCost,
+    duration,
+  };
 };
