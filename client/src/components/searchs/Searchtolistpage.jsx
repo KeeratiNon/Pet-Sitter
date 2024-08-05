@@ -67,22 +67,24 @@ const Searchtolistpage = ({
     ));
   };
   const handleSearch = () => {
-    setFilters({ ...filters, searchText: searchText });
+    setFilters({
+        ...filters,
+        searchText,
+        rating: selectedRatings,
+        pet_type: selectedPet,
+        experience: years
+    });
     
-  };
+};
 
   const handleExperienceChange = (event) => {
-    setYears(event.target.value);
-
-    setFilters({
-      ...filters,
-      experience:
-        event.target.value === 1
-          ? "0-2 Years"
-          : event.target.value === 2
-          ? "3-5 Years"
-          : "5+ Years",
-    });
+    const value = event.target.value;
+    setYears(value);
+  
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      experience: value,
+    }));
   };
 
   return (

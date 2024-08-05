@@ -97,11 +97,13 @@ export const searchPetsitterProfile = async (req, res) => {
       ? sql`AND pet_sitter_profiles.rating = ANY(${sql.array(selectedRatings)})`
       : sql``
       }
-      ${
-        years
-          ? sql`AND pet_sitter_profiles.experience ILIKE ${`%${years}%`}`
-          : sql``
-      }
+      ${years
+    ? years === "1"
+      ? sql`AND pet_sitter_profiles.experience BETWEEN 0 AND 2`
+      : years === "2"
+      ? sql`AND pet_sitter_profiles.experience BETWEEN 3 AND 5`
+      : sql`AND pet_sitter_profiles.experience > 5`
+    : sql``}
       ${       
         selectedPet.length > 0
           ? sql`AND EXISTS (SELECT 1 FROM UNNEST(pet_sitter_profiles.pet_type) AS pet WHERE pet = ANY(${sql.array(selectedPet)}))`
@@ -140,11 +142,13 @@ export const searchPetsitterProfile = async (req, res) => {
       ? sql`AND pet_sitter_profiles.rating = ANY(${sql.array(selectedRatings)})`
       : sql``
       }
-      ${
-        years
-          ? sql`AND pet_sitter_profiles.experience ILIKE ${`%${years}%`}`
-          : sql``
-      }
+      ${years
+    ? years === "1"
+      ? sql`AND pet_sitter_profiles.experience BETWEEN 0 AND 2`
+      : years === "2"
+      ? sql`AND pet_sitter_profiles.experience BETWEEN 3 AND 5`
+      : sql`AND pet_sitter_profiles.experience > 5`
+    : sql``}
       ${
 
         selectedPet.length > 0

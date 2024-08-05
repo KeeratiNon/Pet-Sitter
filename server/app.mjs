@@ -42,8 +42,13 @@ app.use("/auth", authRouter);
 app.use("/", petSitterProfileRouter);
 app.use("/petsitter/booking", petSitterBookingRouter);
 app.use("/booking-history", bookingHistoryRouter); // ใช้ Route สำหรับ Booking History
+
+
+
+
+
 app.use("/review", bookingHistoryRouter)
-app.use("/reviews", bookingHistoryRouter)
+
 
 
 

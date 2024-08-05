@@ -7,7 +7,7 @@ import girl from "../../assets/images/girl.png";
 import changeIcon from "../../assets/svgs/icons/icon-change.svg";
 import phone from "../../assets/svgs/icons/icon-phone.svg";
 import { SERVER_API_URL } from "../../core/config.mjs";
-import { useLocalStorage }  from "../../hooks/useLocalStorage" ;
+import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { useSocket } from "../../contexts/socket";
 import { useAuth } from "../../contexts/authentication";
 
@@ -24,16 +24,15 @@ const BookingHistoryService = ({
 
   const [bookings, setBookings] = useState([]);
   const [reviewedBookings, setReviewedBookings] = useState({});
-  const {joinChatRoom,chatRoomList,setChatRoomList} = useSocket()
-  const {state} = useAuth()
+  const { joinChatRoom, chatRoomList, setChatRoomList } = useSocket();
+  const { state } = useAuth();
 
   useEffect(() => {
     const fetchBookings = async () => {
       try {
         const response = await axios.get(`${SERVER_API_URL}/booking-history`);
-        
+
         setBookings(response.data);
-        
       } catch (error) {
         console.error("Error fetching booking history:", error);
       }
@@ -41,6 +40,10 @@ const BookingHistoryService = ({
 
     fetchBookings();
   }, []);
+
+  
+
+  
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -92,7 +95,7 @@ const BookingHistoryService = ({
 
   const handleReviewClick = (bookingId) => {
     setReviewedBookings((prev) => ({ ...prev, [bookingId]: true }));
-    setItem("bookingId", bookingId)
+    setItem("bookingId", bookingId);
     setShowModal(true);
   };
 
@@ -111,7 +114,6 @@ const BookingHistoryService = ({
   return (
     <div className="flex flex-col gap-[24px]">
       {bookings.map((booking, index) => (
-        
         <div
           key={index}
           className="flex flex-col border-primarygray-200 border rounded-[16px] p-[16px] lg:p-[24px] gap-[16px] lg:gap-[36px] w-full"
@@ -266,11 +268,11 @@ const BookingHistoryService = ({
                   <button
                     type="button"
                     className="bg-primaryorange-500 flex rounded-[99px] py-[12px] px-[24px] gap-[8px]"
-                    onClick={()=>{
-                      const chatRoomId = `${state.user.id}/${booking.pet_sitter_id}`
-                      const targetId = Number(booking.pet_sitter_id)
-                      joinChatRoom({chatRoomId,targetId})
-                      clearReadCount(chatRoomId)
+                    onClick={() => {
+                      const chatRoomId = `${state.user.id}/${booking.pet_sitter_id}`;
+                      const targetId = Number(booking.pet_sitter_id);
+                      joinChatRoom({ chatRoomId, targetId });
+                      clearReadCount(chatRoomId);
                     }}
                   >
                     <p className="text-white text-[16px] leading-[24px] font-bold">

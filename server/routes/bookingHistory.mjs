@@ -6,7 +6,10 @@ const router = express.Router();
 
 // กำหนดเส้นทาง GET สำหรับการดึงข้อมูล Booking History
 router.get('/', [protect], getBookingHistory);
-router.get('/reviews', getReview) //เรียกดู review&rating
+
+
+
+
 router.post('/', postReviwes) //สร้าง review&rating
 
 

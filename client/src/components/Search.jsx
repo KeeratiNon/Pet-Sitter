@@ -156,9 +156,9 @@ const Search = () => {
                   label="Year"
                   onChange={handleChange}
                 >
-                  <MenuItem value={"0-2 Years"}>0-2 Years</MenuItem>
-                  <MenuItem value={"3-5 Years"}>3-5 Years</MenuItem>
-                  <MenuItem value={"5+ Years"}>5+ Years</MenuItem>
+                  <MenuItem value={1}>0-2 Years</MenuItem>
+                  <MenuItem value={2}>3-5 Years</MenuItem>
+                  <MenuItem value={3}>5+ Years</MenuItem>
                 </Select>
               </FormControl>
               <Button className="btn-primary w-full md:w-fit md:ml-5  " onClick={handleSearch}>
