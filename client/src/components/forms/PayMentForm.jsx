@@ -5,41 +5,125 @@ import {
   CardExpiryElement,
   CardCvcElement,
 } from "@stripe/react-stripe-js";
+import axios from "axios";
+import { SERVER_API_URL } from "../../core/config.mjs";
+import { useState } from "react";
+import { useCalculateBooking } from "../../hooks/useCalculateBooking";
 import BookingSummary from "../booking/BookingSummary";
+import BookingConfirm from "../booking/BookingConfirm";
 
-const PayMentForm = ({ onPrev, onConfirm, bookingData, setBookingData }) => {
+const PayMentForm = ({ onPrev, bookingData, setBookingData }) => {
+  const { calculateTotalCost } = useCalculateBooking();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [clientSecret, setClientSecret] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
   const stripe = useStripe();
   const elements = useElements();
 
-  const onSubmit = async (event) => {
-    event.preventDefault();
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setBookingData({ ...bookingData, [name]: value });
+  };
 
+  const createPaymentIntent = async () => {
+    setLoading(true);
+    const totalAmount =
+      calculateTotalCost(
+        bookingData.pet_name,
+        bookingData.booking_time_start,
+        bookingData.booking_time_end
+      ) * 100;
+
+    console.log(totalAmount * 100);
+
+    try {
+      const response = await axios.post(
+        `${SERVER_API_URL}/bookings/paymentIntent`,
+        {
+          amount: totalAmount,
+        }
+      );
+
+      if (response.data && response.data.clientSecret) {
+        setClientSecret(response.data.clientSecret);
+        setIsModalOpen(true);
+      } else {
+        throw new Error("Client secret not found in response");
+      }
+    } catch (error) {
+      console.error("Error fetching client secret:", error);
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const confirmPayment = async (clientSecret) => {
     if (!stripe || !elements) {
       return;
     }
 
     const cardNumberElement = elements.getElement(CardNumberElement);
 
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
-      type: "card",
-      card: cardNumberElement,
-      billing_details: {
-        name: bookingData.card_owner,
-      },
-    });
+    const { error, paymentIntent } = await stripe.confirmCardPayment(
+      clientSecret,
+      {
+        payment_method: {
+          card: cardNumberElement,
+          billing_details: {
+            name: bookingData.card_owner,
+          },
+        },
+      }
+    );
 
     if (error) {
-      console.log("[error]", error);
+      console.log("error", error.message);
+      return null;
     } else {
-      console.log("PaymentMethod", paymentMethod);
-      onConfirm(true); // Or handle confirmation however you need
+      console.log("paymentIntent", paymentIntent);
+      return paymentIntent;
+    }
+  };
+
+  const saveBookingData = async (paymentIntent) => {
+    const newBooking = {
+      ...bookingData,
+      transaction_number: paymentIntent.created,
+      amount: paymentIntent.amount,
+    };
+
+    try {
+      const response = await axios.post(
+        `${SERVER_API_URL}/bookings`,
+        newBooking
+      );
+      console.log("Booking saved:", response.data);
+      navigate("/booking-confirmation");
+    } catch (error) {
+      console.error("Error saving booking data:", error);
+    }
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    await createPaymentIntent();
+  };
+
+  const handleConfirm = async () => {
+    const paymentIntent = await confirmPayment(clientSecret);
+    if (paymentIntent) {
+      saveBookingData(paymentIntent);
     }
   };
 
   return (
     <form
       className="flex flex-col gap-4 py-10 px-4 rounded-2xl md:bg-white md:p-10"
-      onSubmit={onSubmit}
+      onSubmit={handleSubmit}
     >
       <h3 className="text-[24px] leading-[32px] font-bold text-[#3A3B46]">
         Credit Card
@@ -61,9 +145,7 @@ const PayMentForm = ({ onPrev, onConfirm, bookingData, setBookingData }) => {
             placeholder="Card owner name"
             className="input-box"
             value={bookingData.card_owner}
-            onChange={(event) =>
-              setBookingData({ ...bookingData, card_owner: event.target.value })
-            }
+            onChange={handleInputChange}
           />
         </div>
       </div>
@@ -96,6 +178,15 @@ const PayMentForm = ({ onPrev, onConfirm, bookingData, setBookingData }) => {
           Confirm Booking
         </button>
       </div>
+
+      {loading && <p className="text-blue-500">Loading ...</p>}
+      {error && <p className="text-red-500">{error}</p>}
+
+      <BookingConfirm
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        handleConfirm={handleConfirm}
+      />
     </form>
   );
 };

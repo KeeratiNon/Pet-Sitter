@@ -26,7 +26,7 @@ const AccountMenu = () => {
               location.pathname === "/user/profile"
                 ? "text-[#FF7037]"
                 : "text-[#5B5D6F]"
-            }`}
+            } md:block`}
           >
             Profile
           </span>
@@ -47,7 +47,7 @@ const AccountMenu = () => {
               location.pathname === "/user/pet"
                 ? "text-[#FF7037]"
                 : "text-[#5B5D6F]"
-            }`}
+            } md:block`}
           >
             Your Pet
           </span>
@@ -65,7 +65,7 @@ const AccountMenu = () => {
               location.pathname === "/user/booking-history"
                 ? "text-[#FF7037]"
                 : "text-[#5B5D6F]"
-            }`}
+            } md:block`}
           >
             Booking History
           </span>

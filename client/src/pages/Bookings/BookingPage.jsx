@@ -9,16 +9,18 @@ import BookingIllustrations from "../../components/booking/BookingIllustrations"
 import BookingSummary from "../../components/booking/BookingSummary";
 import BookingConfirm from "../../components/booking/BookingConfirm";
 import axios from "axios";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PB_KEY);
 
 const BookingPage = () => {
   const { state } = useAuth();
   const user_id = state.user.id;
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
 
   const formList = ["Your Pet", "Information", "Payment"];
 
@@ -58,10 +60,7 @@ const BookingPage = () => {
     pet_name: [],
     status: "",
     message: "",
-    card_number: "",
     card_owner: "",
-    expiry_date: "",
-    cvv: "",
   });
 
   const [petData, setPetData] = useState();
@@ -111,10 +110,7 @@ const BookingPage = () => {
           pet_name: [],
           status: "",
           message: "",
-          card_number: "",
           card_owner: "",
-          expiry_date: "",
-          cvv: "",
         });
       } else {
         setBookingData({
@@ -139,10 +135,7 @@ const BookingPage = () => {
           pet_name: [],
           status: "",
           message: "",
-          card_number: "",
           card_owner: "",
-          expiry_date: "",
-          cvv: "",
         });
       }
     } catch (error) {
@@ -158,18 +151,17 @@ const BookingPage = () => {
     getUserProfileData(user_id);
   }, []);
 
-  const handleSubmit = async () => {
-    navigate("/booking-confirmation");
-  };
-
-  const handleNext = () =>
+  const handleNext = () => {
     setPage((prevPage) =>
       prevPage === formList.length - 1 ? 0 : prevPage + 1
     );
-  const handlePrev = () =>
+  };
+
+  const handlePrev = () => {
     setPage((prevPage) =>
       prevPage === 0 ? formList.length - 1 : prevPage - 1
     );
+  };
 
   console.log(bookingData);
 
@@ -178,35 +170,31 @@ const BookingPage = () => {
   }
 
   if (error) {
-    return <div>Error fetching pet profile data: {error.message}</div>;
+    return <div>Error fetching data: {error.message}</div>;
   }
 
   return (
-    <section className="overflow-hidden bg-[#F6F6F9] relative md:pt-10 md:px-20 md:flex md:justify-center md:gap-9 min-h-[calc(100dvh-72px)]">
-      <div className="flex flex-col gap-4 flex-auto z-0">
-        <FormNavigation formList={formList} page={page} />
-        <div className="md:bg-white md:rounded-2xl">
-          <BookingForms
-            page={page}
-            petData={petData}
-            bookingData={bookingData}
-            setBookingData={setBookingData}
-            handlePrev={handlePrev}
-            handleNext={handleNext}
-            setIsModalOpen={setIsModalOpen}
-          />
+    <Elements stripe={stripePromise}>
+      <section className="overflow-hidden bg-[#F6F6F9] relative md:pt-10 md:px-20 md:flex md:justify-center md:gap-9 min-h-[calc(100dvh-72px)]">
+        <div className="flex flex-col gap-4 flex-auto z-0">
+          <FormNavigation formList={formList} page={page} />
+          <div className="md:bg-white md:rounded-2xl">
+            <BookingForms
+              page={page}
+              petData={petData}
+              bookingData={bookingData}
+              setBookingData={setBookingData}
+              handlePrev={handlePrev}
+              handleNext={handleNext}
+            />
+          </div>
         </div>
-      </div>
-      <BookingIllustrations />
-      <div className="hidden md:block">
-        <BookingSummary bookingData={bookingData} />
-      </div>
-      <BookingConfirm
-        open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSubmit={handleSubmit}
-      />
-    </section>
+        <BookingIllustrations />
+        <div className="hidden md:block">
+          <BookingSummary bookingData={bookingData} />
+        </div>
+      </section>
+    </Elements>
   );
 };
 

@@ -18,6 +18,8 @@
     "@mui/material": "^5.16.1",
     "@mui/styled-engine-sc": "^6.0.0-alpha.18",
     "@mui/x-date-pickers": "^7.10.0",
+    "@stripe/react-stripe-js": "^2.7.3",
+    "@stripe/stripe-js": "^4.1.0",
     "@supabase/supabase-js": "^2.44.4",
     "axios": "^1.7.2",
     "dayjs": "^1.11.11",

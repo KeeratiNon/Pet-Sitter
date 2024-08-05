@@ -1,11 +1,6 @@
-import React from "react";
-import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
 import PetForm from "../forms/PetForm";
 import InfomationForm from "../forms/InfomationForm";
 import PayMentForm from "../forms/PayMentForm";
-
-const stripePromise = loadStripe("your_stripe_public_key");
 
 const BookingForms = ({
   page,
@@ -38,14 +33,11 @@ const BookingForms = ({
       );
     case 2:
       return (
-        <Elements stripe={stripePromise}>
-          <PayMentForm
-            onPrev={handlePrev}
-            onConfirm={setIsModalOpen}
-            bookingData={bookingData}
-            setBookingData={setBookingData}
-          />
-        </Elements>
+        <PayMentForm
+          onPrev={handlePrev}
+          bookingData={bookingData}
+          setBookingData={setBookingData}
+        />
       );
     default:
       return null;

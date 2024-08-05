@@ -70,8 +70,8 @@ app.use("/report", bookingHistoryRouter)
 app.use("/user", userRouter);
 
 
-app.use("/petsitter/profile", petSitterProfileRouter);
 
+app.use("/petsitter/profile", petSitterProfileRouter);
 
 app.get("/profiles", (req, res) => {
   res.json(profiles);
@@ -150,7 +150,7 @@ io.on("connection", (socket) => {
             { new: true, upsert: true }
           );
           const newChatRoom = chatRoom.chatRoomId
-          users[String(targetId)].emit("newMessage", {newMessage, newChatRoom})
+          io.to(chatRoom.chatRoomId).emit("newMessage", {newMessage, newChatRoom});
         } catch (error) {
           console.error("Error saving message:", error);
         }
