@@ -8,16 +8,22 @@ export const registerUser = async (req, res) => {
   if (!email || !phone || !password) {
     return res.status(400).json({ message: "Missing required fields" });
   }
-
-  const user = {
-    email,
-    phone,
-    password,
-    created_at: new Date(),
-    updated_at: new Date(),
-  };
-
   try {
+    const existingUsers = await sql`
+      select * from users where email = ${email}`;
+
+    if (existingUsers.length > 0) {
+      return res.status(400).json({ message: "Email already registered" });
+    }
+
+    const user = {
+      email,
+      phone,
+      password,
+      created_at: new Date(),
+      updated_at: new Date(),
+    };
+
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(user.password, salt);
 
@@ -45,6 +51,14 @@ export const registerPetSitter = async (req, res) => {
     return res.status(400).json({ message: "Missing required fields" });
   }
 
+  try {
+    const existingUsers = await sql`
+      select * from pet_sitters where email = ${email}`;
+
+    if (existingUsers.length > 0) {
+      return res.status(400).json({ message: "Email already registered" });
+    }
+
   const user = {
     email,
     phone,
@@ -53,7 +67,6 @@ export const registerPetSitter = async (req, res) => {
     updated_at: new Date(),
   };
 
-  try {
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(user.password, salt);
 
@@ -95,7 +108,7 @@ export const loginUser = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user.id, email: user.email, role:"user" },
+      { id: user.id, email: user.email, role: "user" },
       process.env.JWT_SECRET,
       {
         expiresIn: "1d",
@@ -133,7 +146,7 @@ export const loginPetSitter = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user.id, email: user.email, role:"petsitter" },
+      { id: user.id, email: user.email, role: "petsitter" },
       process.env.JWT_SECRET,
       {
         expiresIn: "1d",
