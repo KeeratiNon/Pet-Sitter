@@ -4,6 +4,22 @@ import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
+const formatTime = (time) => {
+  if (Array.isArray(time) && time.length > 0) {
+    time = time[0];
+  }
+  if (typeof time === "number") {
+    const hours = String(Math.floor(time / 60)).padStart(2, "0");
+    const minutes = String(time % 60).padStart(2, "0");
+    return `${hours}:${minutes}:00`;
+  } else if (typeof time === "string") {
+    const [hours, minutes] = time.split(":");
+    return `${hours}:${minutes}:00`;
+  } else {
+    throw new Error("Invalid time format");
+  }
+};
+
 export const bookingList = async (req, res) => {
   let result;
 
@@ -47,85 +63,110 @@ export const bookingId = async (req, res) => {
 };
 
 export const booking = async (req, res) => {
-  const newBooking = {
-    ...req.body,
-    created_at: new Date(),
-    updated_at: new Date(),
-  };
-
   try {
+    const newBooking = {
+      ...req.body,
+      created_at: new Date(),
+      updated_at: new Date(),
+    };
+
+    newBooking.booking_time_start = formatTime(newBooking.booking_time_start);
+    newBooking.booking_time_end = formatTime(newBooking.booking_time_end);
+
+    newBooking.amount = newBooking.amount / 100;
+
+    console.log(newBooking);
+
     const petIds = newBooking.pet_id;
 
-    const result = await sql`
-      WITH new_booking AS (
+    const cleanValue = (value) => (value === undefined ? null : value);
+
+    const result = await sql.begin(async (sql) => {
+      const [newBookingResult] = await sql`
         INSERT INTO bookings (
-          pet_sitter_id, 
-          user_id, 
-          firstname, 
-          lastname, 
-          email, 
-          phone_number, 
-          booking_date, 
-          booking_time_start, 
-          booking_time_end, 
-          created_at, 
+          pet_sitter_id,
+          user_id,
+          firstname,
+          lastname,
+          email,
+          phone_number,
+          additional_message,
+          status,
+          booking_date,
+          booking_time_start,
+          booking_time_end,
+          created_at,
           updated_at
         )
         VALUES (
-          ${newBooking.pet_sitter_id}, 
-          ${newBooking.user_id}, 
-          ${newBooking.firstname}, 
-          ${newBooking.lastname}, 
-          ${newBooking.email}, 
-          ${newBooking.phone_number}, 
-          ${newBooking.booking_date}, 
-          ${newBooking.booking_time_start[0]}, 
-          ${newBooking.booking_time_end[0]}, 
-          ${newBooking.created_at}, 
-          ${newBooking.updated_at}
+          ${cleanValue(newBooking.pet_sitter_id)}, 
+          ${cleanValue(newBooking.user_id)}, 
+          ${cleanValue(newBooking.first_name)}, 
+          ${cleanValue(newBooking.last_name)}, 
+          ${cleanValue(newBooking.email)}, 
+          ${cleanValue(newBooking.phone_number)}, 
+          ${cleanValue(newBooking.message)},
+          ${cleanValue(newBooking.status)},
+          ${cleanValue(newBooking.booking_date)}, 
+          ${cleanValue(newBooking.booking_time_start)}, 
+          ${cleanValue(newBooking.booking_time_end)}, 
+          ${cleanValue(newBooking.created_at)}, 
+          ${cleanValue(newBooking.updated_at)}
         )
         RETURNING id
-      ),
-      inserted_pets AS (
-        INSERT INTO booking_pets (
-          booking_id, 
-          pet_id, 
-          created_at, 
+      `;
+
+      const newBookingId = newBookingResult.id;
+      for (const pet_id of petIds) {
+        await sql`
+          INSERT INTO booking_pets (
+            booking_id, 
+            pet_id, 
+            created_at, 
+            updated_at
+          )
+          VALUES (
+            ${newBookingId}, 
+            ${cleanValue(pet_id)}, 
+            ${cleanValue(newBooking.created_at)}, 
+            ${cleanValue(newBooking.updated_at)}
+          )
+        `;
+      }
+
+      const paymentResult = await sql`
+        INSERT INTO booking_payments (
+          booking_id,
+          transaction_number,
+          amount,
+          created_at,
           updated_at
         )
-        VALUES
-        ${sql(
-          petIds.map(
-            (pet_id) =>
-              sql`((SELECT id FROM new_booking), ${pet_id}, ${newBooking.created_at}, ${newBooking.updated_at})`
-          )
-        )}
+        VALUES (
+          ${newBookingId},
+          ${cleanValue(newBooking.transaction_number)},
+          ${cleanValue(newBooking.amount)},
+          ${cleanValue(newBooking.created_at)},
+          ${cleanValue(newBooking.updated_at)}
+        )
         RETURNING *
-      )
-      INSERT INTO booking_payments (
-        booking_id, 
-        transaction_number, 
-        amount, 
-        created_at, 
-        updated_at
-      )
-      VALUES (
-        (SELECT id FROM new_booking), 
-        ${newBooking.transaction_number}, 
-        ${newBooking.amount}, 
-        ${newBooking.created_at}, 
-        ${newBooking.updated_at}
-      )
-      RETURNING *;
-    `;
+      `;
+
+      return {
+        newBooking: newBookingResult,
+        payment: paymentResult,
+      };
+    });
 
     return res.status(201).json({
       message: `Created booking successfully`,
       data: result,
     });
-  } catch {
+  } catch (error) {
+    console.error("Error creating booking:", error);
     return res.status(500).json({
       message: `Server could not create booking because of database connection issue`,
+      error: error.message,
     });
   }
 };
@@ -141,7 +182,10 @@ export const createPaymentIntent = async (req, res) => {
     });
 
     if (paymentIntent.client_secret) {
-      res.send({ clientSecret: paymentIntent.client_secret });
+      res.send({
+        clientSecret: paymentIntent.client_secret,
+        paymentIntentId: paymentIntent.id,
+      });
     } else {
       throw new Error("Failed to generate client secret");
     }
@@ -150,5 +194,24 @@ export const createPaymentIntent = async (req, res) => {
     res.status(500).json({
       message: `Failed to create payment intent: ${error.message}`,
     });
+  }
+};
+
+export const cancelPaymentIntent = async (req, res) => {
+  const { paymentIntentId } = req.body;
+
+  try {
+    const canceledPaymentIntent = await stripe.paymentIntents.cancel(
+      paymentIntentId
+    );
+    res.status(200).json({
+      message: "Payment intent canceled successfully",
+      data: canceledPaymentIntent,
+    });
+  } catch (error) {
+    console.error("Error canceling payment intent:", error);
+    res
+      .status(500)
+      .json({ message: `Failed to cancel payment intent: ${error.message}` });
   }
 };

@@ -7,7 +7,6 @@ import FormNavigation from "../../components/booking/FormNavigation";
 import BookingForms from "../../components/booking/BookingForms";
 import BookingIllustrations from "../../components/booking/BookingIllustrations";
 import BookingSummary from "../../components/booking/BookingSummary";
-import BookingConfirm from "../../components/booking/BookingConfirm";
 import axios from "axios";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
@@ -39,7 +38,7 @@ const BookingPage = () => {
   };
 
   const [bookingData, setBookingData] = useState({
-    user_id: user_id || "",
+    user_id: Number(user_id) || "",
     first_name: "",
     last_name: "",
     email: "",
@@ -53,12 +52,12 @@ const BookingPage = () => {
       createDateWithTime(bookingEnd?.value || ""),
       bookingEnd?.label || "",
     ],
-    pet_sitter_id: petSitterId || "",
+    pet_sitter_id: Number(petSitterId) || "",
     pet_sitter_firstname: petSitterFirstname || "",
     pet_sitter_lastname: petSitterLastname || "",
     pet_id: [],
     pet_name: [],
-    status: "",
+    status: "Waiting for comfirm",
     message: "",
     card_owner: "",
   });
@@ -89,7 +88,7 @@ const BookingPage = () => {
         const userProfileData = response.data.data;
 
         setBookingData({
-          user_id: user_id || "",
+          user_id: Number(user_id) || "",
           first_name: userProfileData.firstname || "",
           last_name: userProfileData.lastname || "",
           email: userProfileData.email || "",
@@ -103,18 +102,18 @@ const BookingPage = () => {
             createDateWithTime(bookingEnd?.value || ""),
             bookingEnd?.label || "",
           ],
-          pet_sitter_id: petSitterId || "",
+          pet_sitter_id: Number(petSitterId) || "",
           pet_sitter_firstname: petSitterFirstname || "",
           pet_sitter_lastname: petSitterLastname || "",
           pet_id: [],
           pet_name: [],
-          status: "",
+          status: "Waiting for comfirm",
           message: "",
           card_owner: "",
         });
       } else {
         setBookingData({
-          user_id: user_id || "",
+          user_id: Number(user_id) || "",
           first_name: "",
           last_name: "",
           email: "",
@@ -128,12 +127,12 @@ const BookingPage = () => {
             createDateWithTime(bookingEnd?.value || ""),
             bookingEnd?.label || "",
           ],
-          pet_sitter_id: petSitterId || "",
+          pet_sitter_id: Number(petSitterId) || "",
           pet_sitter_firstname: petSitterFirstname || "",
           pet_sitter_lastname: petSitterLastname || "",
           pet_id: [],
           pet_name: [],
-          status: "",
+          status: "Waiting for comfirm",
           message: "",
           card_owner: "",
         });

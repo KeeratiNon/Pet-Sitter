@@ -39,7 +39,7 @@ const PetForm = ({ onNext, petData, bookingData, setBookingData }) => {
       if (checked) {
         return {
           ...prevData,
-          pet_id: [...prevData.pet_id, petId],
+          pet_id: [...prevData.pet_id, Number(petId)],
           pet_name: [...prevData.pet_name, petName],
         };
       } else {
