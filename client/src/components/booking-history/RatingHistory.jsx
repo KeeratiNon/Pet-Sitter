@@ -62,10 +62,10 @@ const RatingHistory = ({
         console.log('Review submitted successfully:');
 
         // อัปเดตสถานะหรือข้อมูลในคอมโพเนนต์ตามที่ต้องการ
-        setReviewData({
+        setReviewData((prev) => ({ ...prev,
           rating: rating,
           text: userReview.review,
-        });
+        }));
 
         // ปิด modal และแสดงรีวิว
         setShowModal(false);

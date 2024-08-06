@@ -38,25 +38,34 @@ const Searchtolistpage = ({
     });
   };
   const handleRatingChange = (rating) => {
+    const numericRating = parseFloat(rating);
+    
     setSelectedRatings((prevRatings) => {
-      if (prevRatings.includes(rating)) {
-        // Remove rating if already active
-        return prevRatings.filter((r) => r !== rating);
-      } else {
-        // Add rating if not active
-        return [...prevRatings, rating];
+      let newRatings = [...prevRatings];
+      
+      const ratingsToAdd = [numericRating];
+      if (numericRating % 1 === 0) {
+        ratingsToAdd.push(numericRating + 0.5);
       }
+      
+      ratingsToAdd.forEach(r => {
+        if (newRatings.includes(r)) {
+          newRatings = newRatings.filter(rating => rating !== r);
+        } else {
+          newRatings.push(r);
+        }
+      });
+      
+      return newRatings;
     });
-
-    // Update filters
+    
     setFilters((prevFilters) => ({
       ...prevFilters,
-      rating: selectedRatings.includes(rating)
-        ? selectedRatings.filter((r) => r !== rating)
-        : [...selectedRatings, rating],
+      rating: selectedRatings.includes(numericRating)
+        ? selectedRatings.filter((r) => r !== numericRating)
+        : [...selectedRatings, numericRating],
     }));
   };
-  
   
   
   
@@ -160,10 +169,10 @@ const Searchtolistpage = ({
                 </label>
                 {/* วนรูปตามจำนวนเลข */}
                 <div className="flex flex-wrap gap-[8px]  ">
-                  {["5", "4", "3", "2", "1"].map((rating, index) => (
+                  {["5",  "4",  "3",  "2",  "1"].map((rating, index) => (
                     <button
                       className={`gap-[3px] pt-[4] pr-[8px] pb-[4px] pl-[8px] text-[16px] leading-7 flex flex-wrap items-center border-gray-200 rounded-[8px] border ${
-                        selectedRatings.includes(rating) ? 'bg-orange-500 text-white' : 'bg-white text-gray-800'
+                        selectedRatings.includes(parseFloat(rating)) ? 'bg-orange-500 text-white' : 'bg-white text-gray-800'
                       }`}
                       key={index}
                       onClick={() => handleRatingChange(rating)}

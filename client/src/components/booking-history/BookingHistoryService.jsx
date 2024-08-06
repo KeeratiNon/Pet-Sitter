@@ -12,12 +12,12 @@ import { useSocket } from "../../contexts/socket";
 import { useAuth } from "../../contexts/authentication";
 
 const BookingHistoryService = ({
-  showModal,
+  
   setShowModal,
-  showReview,
+  
   setShowReview,
   setReviewData,
-  showReport,
+  
   setShowReport,
 }) => {
   const { setItem } = useLocalStorage();
@@ -97,7 +97,20 @@ const BookingHistoryService = ({
     setReviewedBookings((prev) => ({ ...prev, [bookingId]: true }));
     setItem("bookingId", bookingId);
     setShowModal(true);
-  };
+    const selectedBooking = bookings.find((booking) => booking.booking_id === bookingId);
+    console.log(selectedBooking)
+    if (selectedBooking) {
+      setReviewData({
+        pet_sitter_id: selectedBooking.pet_sitter_id,
+        firstname: selectedBooking.firstname,
+        lastname: selectedBooking.lastname,
+        booking_date: selectedBooking.formatted_booking_date,
+        profile_image: selectedBooking.profile_image || girl
+      });
+    }}
+
+
+
 
   const clearReadCount = (chatRoomId) => {
     const newChatRoomList = [...chatRoomList];

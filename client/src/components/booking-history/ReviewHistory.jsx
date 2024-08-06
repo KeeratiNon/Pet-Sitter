@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 
 
+import { Link } from "react-router-dom";
 import cross from "../../assets/svgs/icons/icon-cross.svg";
 import star2 from "../../assets/svgs/star2.svg";
 
@@ -10,8 +11,17 @@ const ReviewHistory = ({ showReview, setShowReview, reviewData }) => {
     return null;
   }
 
-  const { rating = 0, text = "" } = reviewData || {};
-
+  const {
+    rating = 0,
+    text = "",
+    profile_image = "",  
+    firstname = "",      
+    lastname = "",       
+    booking_date = "" , 
+    pet_sitter_id= pet_sitter_id,
+  } = reviewData ;
+  
+  
 
 
 
@@ -38,10 +48,10 @@ const ReviewHistory = ({ showReview, setShowReview, reviewData }) => {
             <div className=" w-full   ">
              <div className="flex  border-b justify-between md:pt-[24px] md:pr-[24px] md:pb-[40px] md:pl-[24px] md:gap-10 md:justify-start ">
                 <div className="flex gap-4">
-                  <img src="" alt="profile" />
+                  <img src={profile_image} alt="profile"  className="w-[56px] h-[56px] rounded-[99px] "/>
                   <div>
-                    <p>John Wick</p>
-                    <p>Tue,13 Apr 2023</p>
+                    <p>{firstname} {lastname}</p>
+                    <p>{booking_date}</p>
                   </div>
                 </div>
                 <div className="flex gap-[2px]  rounded-lg md:gap-1">
@@ -63,11 +73,11 @@ const ReviewHistory = ({ showReview, setShowReview, reviewData }) => {
               </div>
             </div>
 
-            
-              <button className="btn-secondary w-[157px] h-[48px] rounded-[99px] py-3 px-6 ">
+                <Link to={`/search/${pet_sitter_id}` }><button className="btn-secondary w-[157px] h-[48px] rounded-[99px] py-3 px-6 ">
                 {" "}
                 View Pet Sitter
-              </button>
+              </button></Link>
+              
            
           </div>
         </div>

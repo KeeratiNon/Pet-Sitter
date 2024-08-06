@@ -21,6 +21,7 @@ import { bookingRouter } from "./routes/booking.mjs";
 import { protect } from "./middlewares/protect.mjs";
 import bookingHistoryRouter from "./routes/bookingHistory.mjs"; // นำเข้า Route สำหรับ Booking History
 import { handleImageUpload } from "./utils/image.mjs";
+import { userReview } from "./routes/review.mjs";
 
 const app = express();
 const port = 4000;
@@ -46,7 +47,7 @@ app.use("/booking-history", bookingHistoryRouter); // ใช้ Route สำห�
 
 
 
-
+app.use("/", userReview)
 app.use("/review", bookingHistoryRouter)
 
 

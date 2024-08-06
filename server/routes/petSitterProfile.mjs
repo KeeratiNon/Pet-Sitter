@@ -11,7 +11,9 @@ petSitterProfileRouter.post("/petsitter/profile/:id",[protect], createPetsitterP
 petSitterProfileRouter.get("/petsitter/profile/:id",[protect], viewPetsitterProfile);
 
 
+
 petSitterProfileRouter.get("/search/:id", viewPetsitterProfile);
+
 
 petSitterProfileRouter.get('/petsitter/profile/check/:id', checkPetsitterProfile);
 

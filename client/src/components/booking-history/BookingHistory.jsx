@@ -10,7 +10,7 @@ const BookingHistory = () => {
   const [showModal, setShowModal] = useState(false);
   const [showReview, setShowReview] = useState(false);
   const [showReport, setShowReport] = useState(false);
-  const [reviewData, setReviewData] = useState(null);
+  const [reviewData, setReviewData] = useState(false);
 
   
 

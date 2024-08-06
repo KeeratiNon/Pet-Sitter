@@ -43,7 +43,6 @@ const SearchListPage = () => {
         experience: location.state.years || "",
         searchText: location.state.searchText || "",
       });
-      
     }
   }, [location.state]);
 
@@ -67,8 +66,8 @@ const SearchListPage = () => {
             pet_type: petTypeParam,
           },
         });
-        
-  
+
+        console.log(response.data.data);
         setProfiles(response.data.data || []);
         setTotal(response.data.total || 0);
       } catch (error) {
@@ -86,9 +85,9 @@ const SearchListPage = () => {
 
   const handlePageChange = (event, value) => {
     if (value > 0) {
-        setPage(value);
+      setPage(value);
     }
-};
+  };
 
   const handleClearFilters = () => {
     setSelectedPet([]);
@@ -104,44 +103,23 @@ const SearchListPage = () => {
   };
 
   const handleSearch = () => {
-    setFilters({ ...filters, searchText: searchText, rating: selectedRatings });
+    // สร้างชุดของ rating ที่จะส่งไปยังเซิร์ฟเวอร์
+    const updatedRatings = selectedRatings.flatMap((rating) => {
+      const numRating = parseFloat(rating);
+      if (numRating % 1 === 0) {
+        return [rating, (numRating + 0.5).toFixed(1)]; // เพิ่มค่าเศษ
+      }
+      return [rating];
+    });
+
+    setFilters({
+      ...filters,
+      searchText: searchText,
+      rating: updatedRatings,
+    });
     setPage(1);
   };
 
-  // const filteredProfiles = profiles.filter((profile) => {
-    
-  //   const matchType =
-  //     filters.pet_type &&
-  //     Array.isArray(filters.pet_type) &&
-  //     filters.pet_type.length > 0
-  //       ? filters.pet_type.some((type) => profile.pet_type.includes(type))
-  //       : true;
-  //   const matchRating =
-  //   filters.rating && Array.isArray(filters.rating) && filters.rating.length
-  //       ? filters.rating.includes(profile.rating)
-  //       : true;
-  //   const matchExperience = filters.experience
-  //     ? filters.experience ===  profile.experience
-  //     : true;
-  //   const matchSearchText = filters.searchText
-  //     ? filters.searchText
-  //         .toLowerCase()
-  //         .split(" ")
-  //         .every(
-  //           (word) =>
-  //             (profile.pet_sitter_name &&
-  //               profile.pet_sitter_name.toLowerCase().includes(word)) ||
-  //             (profile.firstname &&
-  //               profile.firstname.toLowerCase().includes(word)) ||
-  //             (profile.district &&
-  //               profile.district.toLowerCase().includes(word)) ||
-  //             (profile.province &&
-  //               profile.province.toLowerCase().includes(word))
-  //         )
-  //     : true;
-          
-  //   return matchType && matchRating && matchExperience && matchSearchText;
-  // });
   return (
     <>
       <section className=" md:bg-gray-100  md:pr-[70px] md:pl-[92px] ">
