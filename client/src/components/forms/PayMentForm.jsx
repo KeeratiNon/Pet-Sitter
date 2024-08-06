@@ -46,6 +46,7 @@ const PayMentForm = ({ onPrev, bookingData, setBookingData }) => {
         bookingData.booking_time_end
       ) * 100;
 
+    console.log();
 
     try {
       const response = await axios.post(
@@ -140,7 +141,7 @@ const PayMentForm = ({ onPrev, bookingData, setBookingData }) => {
     }
   };
 
-  const handleSubmit = async (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
     await createPaymentIntent();
   };
@@ -165,7 +166,7 @@ const PayMentForm = ({ onPrev, bookingData, setBookingData }) => {
   return (
     <form
       className="flex flex-col gap-4 py-10 px-4 rounded-2xl md:bg-white md:p-10"
-      onSubmit={handleSubmit}
+      onSubmit={onSubmit}
     >
       <h3 className="text-[24px] leading-[32px] font-bold text-[#3A3B46]">
         Credit Card
