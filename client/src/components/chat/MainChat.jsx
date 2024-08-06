@@ -1,10 +1,12 @@
 import React, { useEffect, useRef } from "react";
 import { useAuth } from "../../contexts/authentication";
 import Message from "./Message";
+import { useSocket } from "../../contexts/socket";
 
 const MainChat = ({ chatRoom, getMessages, historyMessage }) => {
   const chatContainerRef = useRef(null);
   const { state } = useAuth();
+  const { socket } = useSocket();
 
   useEffect(() => {
     getMessages(chatRoom.chatRoomId);
@@ -14,6 +16,16 @@ const MainChat = ({ chatRoom, getMessages, historyMessage }) => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop =
         chatContainerRef.current.scrollHeight;
+    }
+    if (
+      historyMessage.length &&
+      state.user.id !== historyMessage[historyMessage.length - 1].senderId
+    ) {
+      const messageIndex = historyMessage.length - 1;
+      socket.emit("readMessage", {
+        messageIndex,
+        chatRoomId: chatRoom.chatRoomId,
+      });
     }
   }, [historyMessage]);
 
@@ -32,8 +44,8 @@ const MainChat = ({ chatRoom, getMessages, historyMessage }) => {
               imageSrc={chatRoom.image}
               images={message.images}
             />
-          )
-})}
+          );
+        })}
       </section>
     </div>
   );

@@ -72,8 +72,11 @@ io.use((socket, next) => {
   }
 });
 
+const users = {}
+
 io.on("connection", (socket) => {
   // console.log("a user connected:", socket.userId);
+  users[socket.userId] = socket
 
   socket.on("disconnect", () => {
     // console.log("user disconnected:", socket.userId);
@@ -98,14 +101,14 @@ io.on("connection", (socket) => {
             // console.log(imageSrc)
             newMessage.images = imageSrc;
           }
-          const reverseChatRoomId = chatRoomId.chatRoomId
+          const reverseChatRoomId = chatRoomId
             .split("/")
             .reverse()
             .join("/");
           const chatRoom = await ChatRoom.findOneAndUpdate(
             {
               $or: [
-                { chatRoomId: chatRoomId.chatRoomId },
+                { chatRoomId: chatRoomId },
                 { chatRoomId: reverseChatRoomId },
               ],
             },
@@ -113,7 +116,7 @@ io.on("connection", (socket) => {
             { new: true, upsert: true }
           );
           const newChatRoom = chatRoom.chatRoomId
-          io.to(chatRoom.chatRoomId).emit("newMessage", {newMessage, newChatRoom});
+          users[String(targetId)].emit("newMessage", {newMessage, newChatRoom})
         } catch (error) {
           console.error("Error saving message:", error);
         }
@@ -153,6 +156,16 @@ io.on("connection", (socket) => {
       console.error("Error joining room:", error);
     }
   });
+
+  socket.on("readMessage", async({messageIndex,chatRoomId}) => {
+    const updateQuery = {};
+    updateQuery[`messages.${messageIndex}.isRead`] = true;
+
+    await ChatRoom.findOneAndUpdate(
+        { "chatRoomId": chatRoomId },
+        { $set: updateQuery },
+    );
+  })
 });
 
 server.listen(port, () => {

@@ -4,6 +4,7 @@ import axios from "axios";
 import { io } from "socket.io-client";
 import { getToken } from "../utils/localStorage.mjs";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "./authentication";
 
 const SocketContext = createContext();
 
@@ -13,6 +14,8 @@ const SocketProvider = ({ children }) => {
   const [selectedChatRoom, setSelectedChatRoom] = useState(null);
   const [inputMessage, setInputMessage] = useState("");
   const [historyMessage, setHistoryMessage] = useState([]);
+
+  const {state} = useAuth()
 
   const navigate = useNavigate()
 
@@ -68,6 +71,15 @@ const SocketProvider = ({ children }) => {
       });
 
       newSocket.on("newMessage", (message) => {
+        setChatRoomList((prev)=>{
+          const newChatRoomList = [...prev].map((chatRoom)=>{
+            if (chatRoom.chatRoomId === message.newChatRoom && state.user.id === String(message.newMessage.receiverId)) {
+              chatRoom.isReadCount++
+            }
+            return chatRoom
+          })
+          return newChatRoomList
+        })
         setHistoryMessage((prevMessages) => [...prevMessages, message.newMessage]);
       });
 
@@ -99,8 +111,8 @@ const SocketProvider = ({ children }) => {
   const sendMessage = ({chatRoomId, images}) => {
     if (inputMessage.trim() || images) {
       socket.emit("sendMessage", {
-        chatRoomId: selectedChatRoom,
-        targetId: chatRoomId.targetId,
+        chatRoomId,
+        targetId: selectedChatRoom.targetId,
         message: inputMessage,
         images
       });
