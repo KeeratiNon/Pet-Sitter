@@ -34,6 +34,10 @@ import { bookingRouter } from "./routes/booking.mjs";
 import { protect } from "./middlewares/protect.mjs";
 
 
+import { bookingRouter } from "./routes/booking.mjs";
+import { protect } from "./middlewares/protect.mjs";
+
+
 const app = express();
 const port = 4000;
 
