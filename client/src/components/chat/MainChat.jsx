@@ -6,7 +6,7 @@ import { useSocket } from "../../contexts/socket";
 const MainChat = ({ chatRoom, getMessages, historyMessage }) => {
   const chatContainerRef = useRef(null);
   const { state } = useAuth();
-  const { socket } = useSocket();
+  const { socket, setHasNewNotification } = useSocket();
 
   useEffect(() => {
     getMessages(chatRoom.chatRoomId);
@@ -26,6 +26,7 @@ const MainChat = ({ chatRoom, getMessages, historyMessage }) => {
         messageIndex,
         chatRoomId: chatRoom.chatRoomId,
       });
+      setHasNewNotification(false);
     }
   }, [historyMessage]);
 

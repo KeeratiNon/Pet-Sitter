@@ -14,12 +14,13 @@ const SocketProvider = ({ children }) => {
   const [selectedChatRoom, setSelectedChatRoom] = useState(null);
   const [inputMessage, setInputMessage] = useState("");
   const [historyMessage, setHistoryMessage] = useState([]);
+  const [hasNewNotification, setHasNewNotification] = useState(false);
 
-  const {state} = useAuth()
+  const { state } = useAuth();
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  useEffect(()=>{
+  useEffect(() => {
     if (!socket) {
       setupSocket();
     }
@@ -28,7 +29,7 @@ const SocketProvider = ({ children }) => {
         socket.disconnect();
       }
     };
-  },[socket])
+  }, [socket]);
 
   const getChatRoomList = async () => {
     try {
@@ -71,50 +72,62 @@ const SocketProvider = ({ children }) => {
       });
 
       newSocket.on("newMessage", (message) => {
-        setChatRoomList((prev)=>{
-          const newChatRoomList = [...prev].map((chatRoom)=>{
-            if (chatRoom.chatRoomId === message.newChatRoom && state.user.id === String(message.newMessage.receiverId)) {
-              chatRoom.isReadCount++
+        setHistoryMessage((prevMessages) => [
+          ...prevMessages,
+          message.newMessage,
+        ]);
+      });
+
+      newSocket.on("countMessage", (message) => {
+        setChatRoomList((prev) => {
+          const newChatRoomList = [...prev].map((chatRoom) => {
+            if (
+              chatRoom.chatRoomId === message.newChatRoom &&
+              state.user.id === String(message.newMessage.receiverId)
+            ) {
+              chatRoom.isReadCount++;
             }
-            return chatRoom
-          })
-          return newChatRoomList
-        })
-        setHistoryMessage((prevMessages) => [...prevMessages, message.newMessage]);
+            return chatRoom;
+          });
+          return newChatRoomList;
+        });
+        setHasNewNotification(true);
       });
 
       newSocket.on("roomCreated", (chatRoom) => {
-        const {newChatRoomId, targetId} = chatRoom
-        setSelectedChatRoom({newChatRoomId, targetId})
-        navigate("/chat")
-      })
+        const { newChatRoomId, targetId } = chatRoom;
+        setSelectedChatRoom({ newChatRoomId, targetId });
+        navigate("/chat");
+      });
 
       newSocket.on("joinOneRoom", () => {
-        navigate("/chat")
-      })
+        navigate("/chat");
+      });
 
       setSocket(newSocket);
     }
   };
 
   const joinChatRoom = ({ chatRoomId, targetId, isReadCount }) => {
-    let image = null
-    {chatRoomList
-      .filter((list) => list.targetId === targetId)
-      .map((chatRoom) => {
-        image = chatRoom.image
-      })}
+    let image = null;
+    {
+      chatRoomList
+        .filter((list) => list.targetId === targetId)
+        .map((chatRoom) => {
+          image = chatRoom.image;
+        });
+    }
     setSelectedChatRoom({ chatRoomId, targetId, image });
     socket.emit("joinRoom", { chatRoomId, targetId, isReadCount });
   };
 
-  const sendMessage = ({chatRoomId, images}) => {
+  const sendMessage = ({ chatRoomId, images }) => {
     if (inputMessage.trim() || images) {
       socket.emit("sendMessage", {
         chatRoomId,
         targetId: selectedChatRoom.targetId,
         message: inputMessage,
-        images
+        images,
       });
       setInputMessage("");
     }
@@ -128,6 +141,7 @@ const SocketProvider = ({ children }) => {
         selectedChatRoom,
         historyMessage,
         inputMessage,
+        hasNewNotification,
         setChatRoomList,
         setInputMessage,
         getChatRoomList,
@@ -135,6 +149,7 @@ const SocketProvider = ({ children }) => {
         joinChatRoom,
         getMessages,
         sendMessage,
+        setHasNewNotification,
       }}
     >
       {children}
