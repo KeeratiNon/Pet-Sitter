@@ -218,7 +218,6 @@ export const viewPetsitterProfile = async (req, res) => {
 export const updatePetsitterProfile = async (req, res) => {
   const petsitterId = req.user.id;
 
-
   const {
     profile_image,
     first_name,
@@ -285,7 +284,7 @@ export const checkPetsitterProfile = async (req, res) => {
     const results = await sql`
         SELECT 1
         FROM pet_sitter_profiles
-        WHERE pet_sitter_id = ${petsitterId}
+        WHERE pet_sitter_profiles.pet_sitter_id = ${petsitterId}
         LIMIT 1;
       `;
     const profileExists = results.length > 0;
@@ -297,4 +296,20 @@ export const checkPetsitterProfile = async (req, res) => {
   }
 };
 
+export const getProfilePicAndName = async (req, res) => {
+  const petsitterId = req.user.id;
+  try {
+    const result = await sql`
+      SELECT profile_image, firstname, lastname
+      FROM pet_sitter_profiles
+      WHERE pet_sitter_id = ${petsitterId}`;
 
+    if (result.length === 0) {
+      return res.status(404).json({ message: "No data found" });
+    }
+
+    res.status(200).json({ message: "Data retrieved successfully", result });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error", error: error.message });
+  }
+};

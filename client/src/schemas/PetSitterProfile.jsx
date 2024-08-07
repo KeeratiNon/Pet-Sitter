@@ -50,4 +50,7 @@ export const PetSitterProfileSchema = Yup.object().shape({
     1000,
     "Services must be at most 1000 characters long"
   ),
+  image_gallery: Yup.array()
+    .min(3, "Please upload at least 3 images")
+    .required("Please upload at least 3 images"),
 });

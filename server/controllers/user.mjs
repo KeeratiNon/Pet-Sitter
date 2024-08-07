@@ -179,3 +179,22 @@ export const deletePetProfile = async (req, res) => {
     message: `Pet delete successfully`,
   });
 };
+
+
+export const getProfilePicAndName = async (req, res) => {
+  const UserId = req.user.id;
+  try {
+    const result = await sql`
+      SELECT image, firstname, lastname
+      FROM user_profiles
+      WHERE user_id = ${UserId}`;
+
+    if (result.length === 0) {
+      return res.status(404).json({ message: "No data found" });
+    }
+
+    res.status(200).json({ message: "Data retrieved successfully", result });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error", error: error.message });
+  }
+};

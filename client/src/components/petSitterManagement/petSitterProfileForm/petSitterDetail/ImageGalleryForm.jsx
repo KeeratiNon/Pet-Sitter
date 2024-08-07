@@ -65,7 +65,7 @@ const ImageGalleryForm = ({ image_gallery, setFormData, petsitterId }) => {
   return (
     <div className="flex flex-col gap-[12px]">
       <label className="text-[16px] leading-[24px] text-black font-medium">
-        Image Gallery (Maximum 10 images)
+        Image Gallery* (minimum 3 images, maximum 10 images)
       </label>
       <div className="container mx-auto">
         <div className="flex gap-[24px] flex-wrap">

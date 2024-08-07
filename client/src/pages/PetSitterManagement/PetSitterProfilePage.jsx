@@ -61,9 +61,7 @@ const PetSitterProfilePage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `${SERVER_API_URL}/petsitter/profile`
-        );
+        const response = await axios.get(`${SERVER_API_URL}/petsitter/profile`);
         const data = response.data.data;
         setFormData({
           profile_image: data.profile_image || "",
@@ -108,12 +106,11 @@ const PetSitterProfilePage = () => {
       await PetSitterProfileSchema.validate(formData, { abortEarly: false });
       console.log("Form Submitted");
 
-
       const response = await axios.get(
         `${SERVER_API_URL}/petsitter/profile/check`
       );
       const profileExists = response.data.exists;
-      console.log(profileExists)
+      console.log(profileExists);
 
       if (profileExists) {
         console.log("Updating existing profile");
@@ -155,12 +152,12 @@ const PetSitterProfilePage = () => {
       <Sidebar />
       <div className="flex flex-col gap-[8px] min-w-[1024px] w-full">
         <Navbar formData={formData} />
-        <main className="flex flex-col gap-[24px] bg-[#F6F6F9] pb-[80px]">
-          <div className="flex items-center justify-between pl-[60px] mr-[48px] mt-[54px] w-[96%]">
+        <main className="flex flex-col gap-[24px] bg-gray-100 pb-[80px]">
+          <div className="flex items-center justify-between pl-[60px] mr-[48px] mt-[36px] w-[96%]">
             <div className="flex gap-[24px]">
-              <span className="text-[#2A2E3F] text-[24px] leading-[32px] font-bold">
+              <h3 className="flex flex-1 text-[24px] leading-[32px] font-bold">
                 Pet Sitter Profile
-              </span>
+              </h3>
               <div className="flex items-center gap-[8px]">
                 <img src={petSitterGreenCircle} className="w-[6px] h-[6px]" />
                 <span className="text-[#1CCD83] text-[16px] leading-[24px]">
@@ -188,7 +185,7 @@ const PetSitterProfilePage = () => {
                 <ProfileImageForm
                   profileImage={formData.profile_image}
                   setFormData={setFormData}
-                  petsitterId = {petsitterId}
+                  petsitterId={petsitterId}
                 />
               </div>
               <div className="grid grid-cols-3 gap-6">
@@ -260,7 +257,7 @@ const PetSitterProfilePage = () => {
               <ImageGalleryForm
                 image_gallery={formData.image_gallery}
                 setFormData={setFormData}
-                petsitterId = {petsitterId}
+                petsitterId={petsitterId}
               />
             </div>
             <div className="w-[93%] rounded-2xl bg-primarygray-100 px-20 py-10 flex flex-col gap-6">

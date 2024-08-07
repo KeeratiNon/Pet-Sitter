@@ -12,6 +12,7 @@ import "./models/chatrooms.mjs";
 import bodyParser from "body-parser";
 import { petSitterProfileRouter } from "./routes/petSitterProfile.mjs";
 import { petSitterBookingRouter } from "./routes/petSitterBooking.mjs";
+import { petSitterPayoutRouter } from "./routes/petsitterPayout.mjs";
 import { ChatRoom } from "./models/chatrooms.mjs";
 import dotenv from "dotenv";
 
@@ -21,7 +22,9 @@ import { bookingRouter } from "./routes/booking.mjs";
 import { protect } from "./middlewares/protect.mjs";
 import bookingHistoryRouter from "./routes/bookingHistory.mjs"; // นำเข้า Route สำหรับ Booking History
 import { handleImageUpload } from "./utils/image.mjs";
-import { userReview } from "./routes/review.mjs";
+import sql from "./utils/db.mjs";
+import cron from "node-cron";
+
 
 const app = express();
 const port = 4000;
@@ -42,6 +45,7 @@ app.use(express.json());
 app.use("/auth", authRouter);
 app.use("/", petSitterProfileRouter);
 app.use("/petsitter/booking", petSitterBookingRouter);
+app.use("/petsitter/payout-option", petSitterPayoutRouter)
 app.use("/booking-history", bookingHistoryRouter); // ใช้ Route สำหรับ Booking History
 
 
@@ -168,7 +172,6 @@ io.on("connection", (socket) => {
       console.error("Error joining room:", error);
     }
   });
-
   socket.on("readMessage", async({messageIndex,chatRoomId}) => {
     const updateQuery = {};
     updateQuery[`messages.${messageIndex}.isRead`] = true;
@@ -179,6 +182,53 @@ io.on("connection", (socket) => {
     );
   })
 });
+
+
+function convertToGMT7(date) {
+  const gmt7Offset = 7 * 60; // GMT+7 in minutes
+  const dateInGMT7 = new Date(date.getTime() + gmt7Offset * 60 * 1000);
+  return dateInGMT7;
+}
+
+function formatDate(date) {
+  return date.toISOString().split('T')[0];
+}
+
+function formatTime(date) {
+  return date.toTimeString().split(' ')[0];
+}
+
+function subtractHours(date, hours) {
+  return new Date(date.getTime() - hours * 60 * 60 * 1000);
+}
+
+cron.schedule('* * * * *', async () => {
+  try {
+    const currentDate = new Date();
+    const zonedDate = convertToGMT7(currentDate);
+    const targetDate = subtractHours(zonedDate, 2);
+    const formattedDate = formatDate(targetDate);
+    const formattedTime = formatTime(targetDate);
+
+    const bookings = await sql`
+      SELECT * FROM bookings
+      WHERE status = 'Waiting for confirm'
+      AND booking_date <= ${formattedDate}
+      AND booking_time_start <= ${formattedTime}
+    `;
+
+    for (const booking of bookings) {
+      await sql`
+        UPDATE bookings
+        SET status = 'Canceled'
+        WHERE id = ${booking.id}
+      `;
+    }
+  } catch (error) {
+    console.error("Error updating booking status:", error);
+  }
+});
+
 
 server.listen(port, () => {
   console.log(`Server is running at ${port}`);

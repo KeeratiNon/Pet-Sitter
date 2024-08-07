@@ -5,7 +5,7 @@ import ErrorPage from "./ErrorPage";
 import PetSitterProfilePage from "./PetSitterManagement/PetSitterProfilePage";
 import PetSitterBookingListPage from "./PetSitterManagement/PetSitterBookingListPage";
 import PetSitterBookingDetailPage from "./PetSitterManagement/PetSitterBookingDetailPage";
-import PetSitterPaymentOptionPage from "./PetSitterManagement/PetSitterPaymentOptionPage";
+import PetSitterPayoutOptionPage from "./PetSitterManagement/PetSitterPayoutOptionPage";
 import BookingConfirmationPage from "../pages/Bookings/BookingConfirmationPage";
 import BookingPage from "../pages/Bookings/BookingPage";
 import BookingHistoryPage from "./BookingHistoryPage";
@@ -49,12 +49,12 @@ const AutenticationApp = () => {
           element={<PetSitterBookingListPage />}
         />
         <Route
-          path="/petsitter/booking/detail"
+          path="/petsitter/booking/detail/:booking_id"
           element={<PetSitterBookingDetailPage />}
         />
         <Route
-          path="/petsitter/payment-option"
-          element={<PetSitterPaymentOptionPage />}
+          path="/petsitter/payout-option"
+          element={<PetSitterPayoutOptionPage />}
         />
         <Route path="/booking" element={<BookingPage />} />
         <Route

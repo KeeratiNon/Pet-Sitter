@@ -52,7 +52,6 @@ const PetTypeForm = ({
           className="min-w-[120px] focus:outline-none"
         >
           <option value="" hidden>
-            Select a pet type
           </option>
           {petOptions.map((pet, index) => (
             <option key={index} value={pet}>

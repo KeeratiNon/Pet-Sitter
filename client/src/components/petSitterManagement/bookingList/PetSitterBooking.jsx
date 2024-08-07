@@ -14,23 +14,24 @@ import petSitterPinkCircle from "../../../assets/svgs/pet-sitter-management/pet-
 import petSitterGreenCircle from "../../../assets/svgs/pet-sitter-management/pet-sitter-greenCircle.svg";
 import petSitterRedCircle from "../../../assets/svgs/pet-sitter-management/pet-sitter-redCircle.svg";
 
+
 const statusIcons = {
   "Waiting for confirm": petSitterPinkCircle,
   "Waiting for service": petSitterOrangeCircle,
   "In service": petSitterBlueCircle,
-  "Success": petSitterGreenCircle,
-  "Cancel": petSitterRedCircle,
+  Success: petSitterGreenCircle,
+  Canceled: petSitterRedCircle,
 };
 
 const statusColors = {
   "Waiting for confirm": "#FA8AC0",
   "Waiting for service": "#FF7037",
   "In service": "#76D0FC",
-  "Success": "#1CCD83",
-  "Cancel": "#EA1010",
+  Success: "#1CCD83",
+  Canceled: "#EA1010",
 };
 
-const PetSitterBooking = ({ bookingsData, setStatus, setSearchQuery, status, searchQuery }) => {
+const PetSitterBooking = ({ bookingsData, setStatus, setSearchQuery, status, searchQuery, onBookingClick }) => {
   const handleStatusChange = (event) => {
     setStatus(event.target.value);
   };
@@ -77,7 +78,7 @@ const PetSitterBooking = ({ bookingsData, setStatus, setSearchQuery, status, sea
             <option value="Waiting for confirm">Waiting for confirm</option>
             <option value="Waiting for service">Waiting for service</option>
             <option value="In service">In service</option>
-            <option value="Cancel">Cancel</option>
+            <option value="Canceled">Canceled</option>
           </select>
         </div>
       </header>
@@ -95,8 +96,16 @@ const PetSitterBooking = ({ bookingsData, setStatus, setSearchQuery, status, sea
             </TableHead>
             <TableBody>
               {bookingsData.map((booking) => (
-                <TableRow key={booking.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                <TableRow
+                  key={booking.id}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  onClick={() => onBookingClick(booking.id)} 
+                  className="cursor-pointer hover:bg-gray-100" 
+                >
                   <TableCell component="th" scope="row" className="font-medium">
+                  {booking.status === "Waiting for confirm" && (
+                      <img src={petSitterOrangeCircle} alt="Waiting for confirm" className="inline-block mr-[8px] align-middle" />
+                    )}
                     {booking.petOwnerName}
                   </TableCell>
                   <TableCell align="left" className="font-medium">{booking.petCount}</TableCell>

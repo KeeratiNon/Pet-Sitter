@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { protect } from "../middlewares/protect.mjs";
-import { createPetsitterProfile, viewPetsitterProfile, updatePetsitterProfile, checkPetsitterProfile,  searchPetsitterProfile} from "../controllers/petSitterProfile.mjs";
+import { createPetsitterProfile, viewPetsitterProfile, updatePetsitterProfile, checkPetsitterProfile,  searchPetsitterProfile, getProfilePicAndName} from "../controllers/petSitterProfile.mjs";
 
 
 
@@ -10,11 +10,12 @@ petSitterProfileRouter.post("/petsitter/profile",[protect], createPetsitterProfi
 
 petSitterProfileRouter.get("/petsitter/profile",[protect], viewPetsitterProfile);
 
-
 petSitterProfileRouter.get("/search/:id", viewPetsitterProfile);
 
-petSitterProfileRouter.get('/petsitter/profile/check', checkPetsitterProfile);
+petSitterProfileRouter.get('/petsitter/profile/check',[protect], checkPetsitterProfile);
 
 petSitterProfileRouter.put("/petsitter/profile",[protect], updatePetsitterProfile);
 
 petSitterProfileRouter.get("/search", searchPetsitterProfile);
+
+petSitterProfileRouter.get("/petsitter", [protect], getProfilePicAndName)
