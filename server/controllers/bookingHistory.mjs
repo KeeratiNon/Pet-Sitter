@@ -152,4 +152,32 @@ export const postReport = async (req, res) => {
   }
 };
 
+export const updateBookingHistory = async (req, res) => {
+  try {
+    const { bookingId, bookingDate, bookingStart, bookingEnd } = req.body;
 
+    // Ensure bookingStart and bookingEnd are just time strings
+    const startTime = bookingStart.value;
+    const endTime = bookingEnd.value;
+
+    const formattedBookingDate = bookingDate.split('T')[0]; // Format the date if necessary
+
+    // Log the values to ensure they are correct
+    console.log(formattedBookingDate, startTime, endTime);
+
+    // Update the booking information in the database
+    await sql`
+      UPDATE bookings
+      SET 
+        booking_date = ${formattedBookingDate},
+        booking_time_start = ${startTime},
+        booking_time_end = ${endTime}
+      WHERE id = ${bookingId}
+    `;
+
+    res.status(200).json({ message: 'Booking updated successfully' });
+  } catch (error) {
+    console.error("Error updating booking:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};

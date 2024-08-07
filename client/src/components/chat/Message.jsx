@@ -2,7 +2,7 @@ import React from "react";
 
 const Message = ({ isSender, message, imageSrc, images }) => {
   return (
-    <div className={`flex items-end gap-[12px] w-full ${isSender && "justify-end"}`}>
+    <div className={`flex items-end gap-[12px] w-full overflow-x-hidden ${isSender && "justify-end"}`}>
         {!isSender && <img src={imageSrc} alt="receiverImage" className="w-[40px] h-[40px] rounded-full"/>}
       <div
         className={`flex ${

@@ -51,7 +51,7 @@ const LoginPetSitterPage = () => {
                   Welcome back!
                 </h1>
                 <h3 className="text-gray-400 text-[18px] sm:text-[24px] leading-[26px] sm:leading-[32px] font-medium sm:font-bold">
-                  Find your perfect pet sitter with us
+                  Become the best Pet Sitter with us
                 </h3>
               </header>
               <main className="flex flex-col items-center justify-center gap-[32px] w-[100%]">

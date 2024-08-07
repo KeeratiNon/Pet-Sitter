@@ -215,10 +215,10 @@ const PetsitterNavbar = () => {
                           alt="icon-petsitter-payment"
                         />
                         <Link
-                          to="/petsitter/payment-option"
+                          to="/petsitter/payout-option"
                           onClick={closeMenu}
                         >
-                          Payment Option
+                          Payout Option
                         </Link>
                       </li>
                       <hr />

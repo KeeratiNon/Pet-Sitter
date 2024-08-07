@@ -50,7 +50,7 @@ const RegisterPetSitterPage = () => {
                   Join Us!
                 </h1>
                 <h3 className="text-gray-400 text-[18px] sm:text-[24px] leading-[26px] sm:leading-[32px] font-medium sm:font-bold">
-                  Find your perfect pet sitter with us
+                  Become the best Pet Sitter with us
                 </h3>
               </header>
               <main className="flex flex-col items-center justify-center gap-[32px] w-[100%]">
@@ -114,13 +114,13 @@ const RegisterPetSitterPage = () => {
                 <button type="submit" className="btn-primary">
                   Register
                 </button>
-                <div className="w-[100%] flex gap-[20px] items-center">
+                {/* <div className="w-[100%] flex gap-[20px] items-center">
                   <span className="flex flex-1 h-[1px] bg-gray-200"></span>
                   <span className="text-gray-400 text-[18px] leading-[26px] font-medium">
                     Or Continue With
                   </span>
                   <span className="flex flex-1 h-[1px] bg-gray-200"></span>
-                </div>
+                </div> */}
                 <div className="flex justify-center items-center gap-[8px]">
                   <span>
                     <p>Already have an account?</p>
