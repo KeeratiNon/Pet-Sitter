@@ -49,6 +49,7 @@ app.use("/booking-history", bookingHistoryRouter); // ใช้ Route สำห�
 
 app.use("/", userReview)
 app.use("/review", bookingHistoryRouter)
+app.use("/report", bookingHistoryRouter)
 
 
 

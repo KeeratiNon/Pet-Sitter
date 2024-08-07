@@ -1,5 +1,5 @@
 import express from 'express';
-import { getBookingHistory, postReviwes } from '../controllers/bookingHistory.mjs';
+import { getBookingHistory, postReport, postReviwes } from '../controllers/bookingHistory.mjs';
 import { protect } from '../middlewares/protect.mjs'; // สมมติว่ามี middleware สำหรับการ authenticate
 
 const router = express.Router();
@@ -11,6 +11,6 @@ router.get('/', [protect], getBookingHistory);
 
 
 router.post('/', postReviwes) //สร้าง review&rating
-
+router.post('/', postReport) //สร้าง report
 
 export default router;

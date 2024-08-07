@@ -71,14 +71,14 @@ export const getUserReview = async (req, res) => {
             allReviews.length
           ).toFixed(1)
         : 0;
-    console.log("Calculated average rating:", averageRating);
+    
     // Update pet_sitter_profiles with the new average rating
     const updateResult = await sql`
       UPDATE pet_sitter_profiles
       SET rating = ${averageRating}
       WHERE pet_sitter_id = ${pet_sitter_id}
     `;
-    console.log("Update result:", updateResult) 
+   
 
     return res.status(200).json({
       message: "User reviews have been shown",

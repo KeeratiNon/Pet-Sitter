@@ -70,3 +70,23 @@ export const postReviwes = async (req, res) => {
 };
 
 
+export const postReport = async (req, res) => {
+  const newReport = {
+    ...req.body,
+    created_at: new Date(),
+  };
+
+  try {
+    const result = await sql`INSERT INTO user_reports (issue, description, created_at) 
+      VALUES (${newReport.issue}, ${newReport.description}, ${newReport.created_at}) 
+      RETURNING *`;
+    return res.status(200).json({
+      message: `Created report successfully`,
+      data: result,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
