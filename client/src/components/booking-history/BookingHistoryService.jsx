@@ -149,7 +149,7 @@ const BookingHistoryService = ({
       {bookings.map((booking, index) => (
         <div
           key={index}
-          className="flex flex-col border-primarygray-200 border rounded-[16px] p-[16px] xs:p-[24px] gap-[16px] lg:gap-[36px] w-full"
+          className="flex flex-col border-primarygray-200 border rounded-[16px] p-[16px] 2xl:p-[40px] gap-[16px] 2xl:gap-[36px] w-full"
         >
           <div className="flex flex-col gap-[16px]">
             <div className="flex flex-col xs:flex-row border-primarygray-200 border-b pb-[16px] gap-[8px] xs:gap-[16px]">
@@ -172,7 +172,7 @@ const BookingHistoryService = ({
                   </p>
                 </div>
               </div>
-              <div className="flex flex-col xs:items-end lg:gap-[12px] xs:ml-auto">
+              <div className="flex flex-col xs:items-end 2xl:gap-[12px] xs:ml-auto whitespace-nowrap">
                 <p className="text-primarygray-300 text-[14px] leading-[24px]">
                   Transaction date: {booking.formatted_payment_created_at}
                 </p>
@@ -192,8 +192,8 @@ const BookingHistoryService = ({
                 </div>
               </div>
             </div>
-            <div className="flex flex-col lg:flex-row gap-[16px] lg:gap-[32px] lg:items-center">
-              <div className="flex flex-col lg:w-[382px]">
+            <div className="flex flex-col 2xl:flex-row gap-[16px] 2xl:gap-[32px] 2xl:items-center">
+              <div className="flex flex-col 2xl:w-[382px]">
                 <p className="text-primarygray-400 text-[14px] leading-[24px] font-medium">
                   Date & Time:
                 </p>
@@ -230,8 +230,8 @@ const BookingHistoryService = ({
                   )}
                 </div>
               </div>
-              <p className="hidden lg:block border-l border-primarygray-200 h-[36px]"></p>
-              <div className="flex flex-col lg:flex-row gap-[16px] lg:gap-[32px] lg:w-[382px] lg:items-center">
+              <p className="hidden 2xl:block border-l border-primarygray-200 h-[36px]"></p>
+              <div className="flex flex-col 2xl:flex-row gap-[16px] 2xl:gap-[32px] 2xl:w-[382px] 2xl:items-center">
                 <div className="flex flex-col w-full">
                   <p className="text-primarygray-400 text-[14px] leading-[24px] font-medium">
                     Duration
@@ -243,7 +243,7 @@ const BookingHistoryService = ({
                     )}
                   </p>
                 </div>
-                <p className="hidden lg:block border-l border-primarygray-200 h-[36px]"></p>
+                <p className="hidden 2xl:block border-l border-primarygray-200 h-[36px]"></p>
                 <div className="flex flex-col w-full">
                   <p className="text-primarygray-400 text-[14px] leading-[24px] font-medium">
                     Pet:
@@ -258,7 +258,7 @@ const BookingHistoryService = ({
           <div
             className={`${
               booking.status === "Success" ? "bg-[#E7FDF4]" : "bg-gray-100"
-            } flex flex-col xs:flex-row p-[16px] gap-[8px] xs:gap-[16px] rounded-[8px] xs:h-[80px]`}
+            } flex flex-col xs:flex-row p-[16px] gap-[8px] xs:gap-[16px] rounded-[8px] xs:h-[80px] `}
           >
             <p
               className={`${
@@ -308,7 +308,7 @@ const BookingHistoryService = ({
                 <>
                   <button
                     type="button"
-                    className="bg-primaryorange-500 flex rounded-[99px] py-[12px] px-[24px] gap-[8px]"
+                    className="bg-primaryorange-500 flex rounded-[99px] py-[12px] px-[24px] gap-[8px] whitespace-nowrap"
                     onClick={() => {
                       const chatRoomId = `${state.user.id}/${booking.pet_sitter_id}`;
                       const targetId = Number(booking.pet_sitter_id);
@@ -322,7 +322,7 @@ const BookingHistoryService = ({
                   </button>
                   <button
                     type="button"
-                    className="flex bg-primaryorange-100 rounded-[99px] py-[12px] px-[12px] gap-[8px]"
+                    className="flex bg-primaryorange-100 rounded-[99px] py-[12px] px-[12px] gap-[8px] w-[48px] h-[48px]"
                   >
                     <img src={phone} alt="phone" />
                   </button>
