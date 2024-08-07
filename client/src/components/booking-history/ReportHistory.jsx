@@ -1,13 +1,46 @@
 /* eslint-disable react/prop-types */
 import cross from "../../assets/svgs/icons/icon-cross.svg";
+import axios from "axios";
+import { SERVER_API_URL } from "../../core/config.mjs";
+import { useState } from "react";
 
 const ReportHistory = ({ showReport, setShowReport }) => {
+  const [issue, setIssue] = useState("");
+  const [description, setDescription] = useState("");
+
   if (!showReport) {
     return null;
   }
   const handleCancel = () => {
-    // ลบข้อความทั้งหมดใน textarea
-    setShowReport(false); // ปิด modal ถ้าต้องการ
+    setIssue("");
+    setDescription("");
+    setShowReport(false);
+  };
+  const handleIssueChange = (e) => {
+    setIssue(e.target.value);
+  };
+
+  const handleDescriptionChange = (e) => {
+    setDescription(e.target.value);
+  };
+
+  const handleSend = async () => {
+    try {
+      // ส่งข้อมูลรายงานไปยัง API
+      const response = await axios.post(`${SERVER_API_URL}/report`, {
+        issue,
+        description,
+      });
+
+      if (response.status === 200) {
+        console.log("Report submitted successfully:");
+        setIssue("");
+        setDescription("");
+        setShowReport(false);
+      }
+    } catch (error) {
+      console.error("Error submitting report:", error.message);
+    }
   };
 
   return (
@@ -31,16 +64,22 @@ const ReportHistory = ({ showReport, setShowReport }) => {
               <div className="flex gap-1 flex-col">
                 <p className="text-[16px] leading-6">Issue</p>
                 <input
+                  name="issue"
                   type="text"
                   placeholder="Subject"
+                  value={issue}
+                  onChange={handleIssueChange}
                   className="flex gap-2 w-full py-3 pr-[16px] pl-[12px] rounded-lg border "
                 />
               </div>
               <div className="flex gap-1 flex-col">
                 <p className="text-[16px] leading-6 ">Description</p>
                 <textarea
+                  name="description"
                   type="text"
                   placeholder="Describe detail..."
+                  value={description}
+                  onChange={handleDescriptionChange}
                   className="flex gap-2 border py-3 pr-[16px] pl-[12px] h-[140px] "
                 ></textarea>
               </div>
@@ -49,10 +88,15 @@ const ReportHistory = ({ showReport, setShowReport }) => {
               <button
                 className="w-[120px] h-[48px] rounded-[99px] py-3 px-6 flex justify-center gap-2 btn-secondary "
                 onClick={handleCancel}
+                aria-label="Cancel report"
               >
                 Cancel
-              </button>   
-              <button className="w-[207px] h-[48px] rounded-[99px] py-3 px-6 flex justify-center gap-2 btn-primary md:w-[141px] ">
+              </button>
+              <button
+                className="w-[207px] h-[48px] rounded-[99px] py-3 px-6 flex justify-center gap-2 btn-primary md:w-[141px] "
+                onClick={handleSend}
+                aria-label="Send report"
+              >
                 Send Report
               </button>
             </div>

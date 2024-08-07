@@ -37,9 +37,11 @@ const Searchtolistpage = ({
       return [value];
     });
   };
+  
+  
   const handleRatingChange = (rating) => {
     const numericRating = parseFloat(rating);
-    
+  
     setSelectedRatings((prevRatings) => {
       let newRatings = [...prevRatings];
       
@@ -56,15 +58,14 @@ const Searchtolistpage = ({
         }
       });
       
+      // อัพเดท filters พร้อมกับ selectedRatings
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        rating: newRatings,
+      }));
+  
       return newRatings;
     });
-    
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      rating: selectedRatings.includes(numericRating)
-        ? selectedRatings.filter((r) => r !== numericRating)
-        : [...selectedRatings, numericRating],
-    }));
   };
   
   
