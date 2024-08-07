@@ -10,12 +10,10 @@ import MapIcon from "@mui/icons-material/Map";
 import CardSearchList from "../components/searchs/CardSearchList";
 import Searchtolistpage from "../components/searchs/Searchtolistpage";
 import PaginationSize from "../components/searchs/Pagination";
-import MapPetSitter from "../components/MapPetSitter/MapPetSitter";
 
 const SearchListPage = () => {
   const location = useLocation();
   const [profiles, setProfiles] = useState([]);
-
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [total, setTotal] = useState(0);
@@ -29,7 +27,6 @@ const SearchListPage = () => {
     experience: "",
     searchText: "",
   });
-  const [isMapView, setIsMapView] = useState(false);
 
   useEffect(() => {
     setFilters((prevFilters) => ({
@@ -69,7 +66,8 @@ const SearchListPage = () => {
             pet_type: petTypeParam,
           },
         });
-
+        
+        
         setProfiles(response.data.data || []);
         setTotal(response.data.total || 0);
       } catch (error) {
@@ -124,54 +122,44 @@ const SearchListPage = () => {
 
   return (
     <>
-      <section className=" bg-gray-100  md:pr-[70px] md:pl-[92px] ">
+      <section className=" md:bg-gray-100  md:pr-[70px] md:pl-[92px] ">
         {/* web mode*/}
-        <div className="hidden md:block md:pb-6 md:pt-9">
-          <div className="flex justify-between w-full items-center">
+        <div className=" hidden md:block md:pb-6 md:pt-9  ">
+          <div className=" flex  justify-between w-full  items-center  ">
             <div>
-              <h4 className="text-[20px] leading-7">Search For Pet Sitter</h4>
+              <h4 className="text-[20px]  leading-7 ">Search For Pet Sitter</h4>
             </div>
 
-            <div className="flex gap-3">
-              <Button
-                onClick={() => setIsMapView(false)}
-                className={`py-3 px-2 border rounded-[8px] flex gap-2 h-10 w-[81px] ${!isMapView ? "text-orange-500 border-orange-500 active:bg-orange-200" : "text-gray-300 border-gray-300"} justify-center items-center`}
-              >
-                <FormatListBulletedIcon /> List
+            <div className=" flex gap-3  ">
+              <Button className=" py-3 px-2 border rounded-[8px] flex gap-2 h-10 w-[81px] text-orange-500 border-orange-500 justify-center items-center active:bg-orange-200  ">
+                <FormatListBulletedIcon /> List{" "}
               </Button>
-              <Button
-                onClick={() => setIsMapView(true)}
-                className={`py-3 px-2 border rounded-[8px] flex gap-2 h-10 w-[81px] ${isMapView ? "text-orange-500 border-orange-500 active:bg-orange-200" : "text-gray-300 border-gray-300"} justify-center items-center`}
-              >
-                <MapIcon /> Map
+              <Button className="py-3 px-2 border rounded-[8px] flex gap-2 h-10 w-[81px] text-gray-300 border-gray-300 justify-center items-center active:bg-orange-200  ">
+                <MapIcon />
+                Map
               </Button>
             </div>
           </div>
         </div>
         {/* web mode*/}
 
-        <main className="md:flex">
-          <article className="flex flex-col-reverse items-center justify-center md:justify-end">
+        <main className="    md:flex  ">
+          <article className=" flex flex-col-reverse items-center justify-center  md:justify-end">
             {/* mobile mode */}
-            <div className="md:hidden">
+            <div className=" md:hidden ">
               <div>
-                <h4 className="text-[20px] leading-7 text-gray-600">
+                <h4 className="text-[20px]  leading-7 text-gray-600  ">
                   Search For Pet Sitter
                 </h4>
               </div>
 
-              <div className="flex gap-3">
-                <Button
-                  onClick={() => setIsMapView(false)}
-                  className={`py-3 px-2 border rounded-[8px] flex gap-2 h-10 w-[165.5px] ${!isMapView ? "text-orange-500 border-orange-500 active:bg-orange-200" : "text-gray-300 border-gray-300"} justify-center items-center`}
-                >
-                  <FormatListBulletedIcon /> List
+              <div className=" flex  gap-3  ">
+                <Button className=" py-3 px-2 border rounded-[8px] flex gap-2 h-10 w-[165.5px] text-orange-500 border-orange-500 justify-center items-center active:bg-orange-200  ">
+                  <FormatListBulletedIcon /> List{" "}
                 </Button>
-                <Button
-                  onClick={() => setIsMapView(true)}
-                  className={`py-3 px-2 border rounded-[8px] flex gap-2 h-10 w-[165.5px] ${isMapView ? "text-orange-500 border-orange-500 active:bg-orange-200" : "text-gray-300 border-gray-300"} justify-center items-center`}
-                >
-                  <MapIcon /> Map
+                <Button className="py-3 px-2 border rounded-[8px] flex gap-2 h-10 w-[165.5px] text-gray-300 border-gray-300 justify-center items-center active:bg-orange-200  ">
+                  <MapIcon />
+                  Map
                 </Button>
               </div>
             </div>
@@ -193,25 +181,17 @@ const SearchListPage = () => {
               />
             </div>
           </article>
-
-          {isMapView ? (
-          <div className="w-full flex justify-center py-10 px-4">
-            <MapPetSitter />
-          </div>
-        ) : (
-          <div className="w-full flex flex-col py-10 px-4 gap-6">
+          <div className="w-full flex flex-col md:gap-10 md:p-4 ">
             {profiles.map((profile, index) => (
               <CardSearchList key={index} profiles={profile} />
             ))}
-
-            <PaginationSize
-              page={page}
-              count={Math.ceil(total / pageSize)}
-              onPageChange={handlePageChange}
-            />
           </div>
-        )}
-      </main>
+        </main>
+        <PaginationSize
+          page={page}
+          count={Math.ceil(total / pageSize)}
+          onPageChange={handlePageChange}
+        />
       </section>
       <Footer />
     </>
