@@ -57,7 +57,7 @@ const BookingPage = () => {
     pet_sitter_lastname: petSitterLastname || "",
     pet_id: [],
     pet_name: [],
-    status: "Waiting for comfirm",
+    status: "Waiting for confirm",
     message: "",
     card_owner: "",
   });
@@ -107,7 +107,7 @@ const BookingPage = () => {
           pet_sitter_lastname: petSitterLastname || "",
           pet_id: [],
           pet_name: [],
-          status: "Waiting for comfirm",
+          status: "Waiting for confirm",
           message: "",
           card_owner: "",
         });
@@ -132,7 +132,7 @@ const BookingPage = () => {
           pet_sitter_lastname: petSitterLastname || "",
           pet_id: [],
           pet_name: [],
-          status: "Waiting for comfirm",
+          status: "Waiting for confirm",
           message: "",
           card_owner: "",
         });

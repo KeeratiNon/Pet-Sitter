@@ -136,7 +136,6 @@ const PayMentForm = ({ onPrev, bookingData, setBookingData }) => {
         newBooking
       );
       console.log("Booking saved:", response.data);
-      navigate(`/booking/confirmation ${response.payment}`);
     } catch (error) {
       console.error("Error saving booking data:", error);
     }
@@ -152,6 +151,7 @@ const PayMentForm = ({ onPrev, bookingData, setBookingData }) => {
       const paymentIntent = await confirmPayment(clientSecret);
       if (paymentIntent) {
         await saveBookingData(paymentIntent);
+        navigate("/booking/confirmation");
       } else {
         console.error("Payment confirmation failed.");
       }

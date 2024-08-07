@@ -48,5 +48,20 @@ export const useCalculateBooking = () => {
     return totalCost.toFixed(2);
   };
 
-  return { formatDate, calculateDuration, calculateTotalCost };
+  const duration = (bookingTotalMinutes) => {
+    if (bookingTotalMinutes < 0) {
+      bookingTotalMinutes += 24 * 60;
+    }
+
+    const hours = Math.floor(bookingTotalMinutes / 60);
+    const minutes = bookingTotalMinutes % 60;
+
+    const hoursDisplay =
+      hours > 0 ? `${hours} Hour${hours > 1 ? "s" : ""}` : "";
+    const minutesDisplay =
+      minutes > 0 ? `${minutes} Minute${minutes > 1 ? "s" : ""}` : "";
+
+    return [hoursDisplay, minutesDisplay].filter(Boolean).join(" ");
+  };
+  return { formatDate, calculateDuration, calculateTotalCost, duration };
 };

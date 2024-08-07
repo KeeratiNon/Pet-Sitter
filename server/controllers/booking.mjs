@@ -43,26 +43,62 @@ export const bookingList = async (req, res) => {
   });
 };
 
-export const bookingId = async (req, res) => {
-  const bookingIdFromClient = req.params.bookingId;
-  let result;
+export const bookingInformation = async (req, res) => {
+  const userIdFromClient = req.user.id;
 
   try {
-    result =
-      await sql`select * from bookings where id = ${bookingIdFromClient}`;
-  } catch {
+    const result = await sql`
+    SELECT
+      bookings.id AS booking_id,
+      bookings.created_at AS booking_created_at,
+      to_char(booking_payments.created_at, 'Dy, DD Mon YYYY') AS payment_created_at,
+      booking_payments.transaction_number,
+      TO_CHAR(booking_payments.amount, 'FM999,999,999.00') AS amount,
+      pet_sitter_profiles.firstname,
+      pet_sitter_profiles.lastname,
+      to_char(bookings.booking_date, 'DD Mon, YYYY') AS booking_date,
+      to_char(bookings.booking_time_start, 'HH12:MI AM') AS booking_time_start,
+      to_char(bookings.booking_time_end, 'HH12:MI AM') AS booking_time_end,
+      FLOOR(SUM(EXTRACT(EPOCH FROM (bookings.booking_time_end - bookings.booking_time_start))/60)) AS total_minutes,
+      string_agg(pets.pet_name, ', ') AS pet_names
+    FROM bookings
+    JOIN pet_sitter_profiles 
+      ON bookings.pet_sitter_id = pet_sitter_profiles.pet_sitter_id
+    JOIN booking_payments 
+      ON bookings.id = booking_payments.booking_id
+    JOIN booking_pets 
+      ON bookings.id = booking_pets.booking_id
+    JOIN pets
+      ON booking_pets.pet_id = pets.id
+    WHERE bookings.user_id = ${userIdFromClient}
+    GROUP BY 
+      bookings.id,
+      booking_payments.created_at,
+      booking_payments.transaction_number,
+      booking_payments.amount,
+      pet_sitter_profiles.firstname,
+      pet_sitter_profiles.lastname,
+      bookings.booking_date,
+      bookings.booking_time_start,
+      bookings.booking_time_end
+    ORDER BY bookings.id DESC
+    LIMIT 1
+    `;
+
+    return res.status(200).json({
+      message: `Successfully retrieved the booking`,
+      data: result[0],
+    });
+  } catch (error) {
+    console.error("Error retrieving booking information:", error);
     return res.status(500).json({
-      message: `Server could not retrieves a specific bookingID by its ID because database connection`,
+      message: `Server could not retrieve booking information due to a database connection issue`,
+      error: error.message,
     });
   }
-
-  return res.status(200).json({
-    message: `successfully retrieved the booking`,
-    data: result.rows[0],
-  });
 };
 
-export const booking = async (req, res) => {
+export const saveBookingData = async (req, res) => {
   try {
     const newBooking = {
       ...req.body,

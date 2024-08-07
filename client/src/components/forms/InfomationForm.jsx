@@ -83,12 +83,10 @@ const InfomationForm = ({ onPrev, onNext, bookingData, setBookingData }) => {
         <label htmlFor="message" className="input-label mt-8">
           Additional Message (To pet sitter)
         </label>
-        <input
+        <textarea
           type="text"
           name="message"
-          as="textarea"
-          rows={4}
-          className="input-box"
+          className="input-box resize-none h-[140px]"
           value={bookingData.message || ""}
           onChange={handleInputChange}
         />
