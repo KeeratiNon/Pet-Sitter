@@ -16,6 +16,7 @@ import axios from "axios";
 import { SERVER_API_URL } from "../../core/config.mjs";
 import { useSocket } from "../../contexts/socket";
 
+
 const PetsitterNavbar = () => {
   const { logout, state } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);

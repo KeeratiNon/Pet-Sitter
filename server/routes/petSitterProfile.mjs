@@ -1,14 +1,8 @@
 import { Router } from "express";
 import { protect } from "../middlewares/protect.mjs";
-import {
-  createPetsitterProfile,
-  viewPetsitterProfile,
-  updatePetsitterProfile,
-  checkPetsitterProfile,
-  searchPetsitterProfile,
-  getProfilePicAndName,
-  viewPetsitterProfiles,
-} from "../controllers/petSitterProfile.mjs";
+import { createPetsitterProfile, viewPetsitterProfile, viewPetsitterProfiles, updatePetsitterProfile, checkPetsitterProfile,  searchPetsitterProfile, getProfilePicAndName} from "../controllers/petSitterProfile.mjs";
+
+
 
 export const petSitterProfileRouter = Router();
 
