@@ -30,11 +30,27 @@ const Search = () => {
   };
   
   const handleRatingChange = (rating) => {
-    setSelectedRatings((prevSelectedRatings) =>
-      prevSelectedRatings.includes(rating)
-        ? prevSelectedRatings.filter((r) => r !== rating)
-        : [...prevSelectedRatings, rating]
-    );
+    const numericRating = parseFloat(rating);
+    
+    setSelectedRatings((prevRatings) => {
+      let newRatings = [...prevRatings];
+      
+      const ratingsToAdd = [numericRating];
+      if (numericRating % 1 === 0) {
+        ratingsToAdd.push(numericRating + 0.5);
+      }
+      
+      ratingsToAdd.forEach(r => {
+        if (newRatings.includes(r)) {
+          newRatings = newRatings.filter(rating => rating !== r);
+        } else {
+          newRatings.push(r);
+        }
+      });
+      
+      return newRatings;
+    });
+    
   };
   //ดึงรูปเข้าไปใน array
   const renderStars = (count) => {
@@ -129,7 +145,7 @@ const Search = () => {
                 {["5", "4", "3", "2", "1"].map((rating, index) => (
                   <button
                   className={`gap-[3px] pt-[4px] pr-[8px] pb-[4px] pl-[8px] text-[16px] leading-7 flex items-center border-gray-200 rounded-[8px] border md:ml-1 ${
-                    selectedRatings.includes(rating)
+                    selectedRatings.includes(parseFloat(rating))
                       ? 'bg-orange-500 text-white'
                       : 'bg-white text-gray-800'
                   }`}
@@ -156,9 +172,9 @@ const Search = () => {
                   label="Year"
                   onChange={handleChange}
                 >
-                  <MenuItem value={"0-2 Years"}>0-2 Years</MenuItem>
-                  <MenuItem value={"3-5 Years"}>3-5 Years</MenuItem>
-                  <MenuItem value={"5+ Years"}>5+ Years</MenuItem>
+                  <MenuItem value={1}>0-2 Years</MenuItem>
+                  <MenuItem value={2}>3-5 Years</MenuItem>
+                  <MenuItem value={3}>5+ Years</MenuItem>
                 </Select>
               </FormControl>
               <Button className="btn-primary w-full md:w-fit md:ml-5  " onClick={handleSearch}>

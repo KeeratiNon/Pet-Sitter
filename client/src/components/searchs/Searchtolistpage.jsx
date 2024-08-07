@@ -37,26 +37,36 @@ const Searchtolistpage = ({
       return [value];
     });
   };
-  const handleRatingChange = (rating) => {
-    setSelectedRatings((prevRatings) => {
-      if (prevRatings.includes(rating)) {
-        // Remove rating if already active
-        return prevRatings.filter((r) => r !== rating);
-      } else {
-        // Add rating if not active
-        return [...prevRatings, rating];
-      }
-    });
-
-    // Update filters
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      rating: selectedRatings.includes(rating)
-        ? selectedRatings.filter((r) => r !== rating)
-        : [...selectedRatings, rating],
-    }));
-  };
   
+  
+  const handleRatingChange = (rating) => {
+    const numericRating = parseFloat(rating);
+  
+    setSelectedRatings((prevRatings) => {
+      let newRatings = [...prevRatings];
+      
+      const ratingsToAdd = [numericRating];
+      if (numericRating % 1 === 0) {
+        ratingsToAdd.push(numericRating + 0.5);
+      }
+      
+      ratingsToAdd.forEach(r => {
+        if (newRatings.includes(r)) {
+          newRatings = newRatings.filter(rating => rating !== r);
+        } else {
+          newRatings.push(r);
+        }
+      });
+      
+      // อัพเดท filters พร้อมกับ selectedRatings
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        rating: newRatings,
+      }));
+  
+      return newRatings;
+    });
+  };
   
   
   
@@ -67,22 +77,24 @@ const Searchtolistpage = ({
     ));
   };
   const handleSearch = () => {
-    setFilters({ ...filters, searchText: searchText });
+    setFilters({
+        ...filters,
+        searchText,
+        rating: selectedRatings,
+        pet_type: selectedPet,
+        experience: years
+    });
     
-  };
+};
 
   const handleExperienceChange = (event) => {
-    setYears(event.target.value);
-
-    setFilters({
-      ...filters,
-      experience:
-        event.target.value === 1
-          ? "0-2 Years"
-          : event.target.value === 2
-          ? "3-5 Years"
-          : "5+ Years",
-    });
+    const value = event.target.value;
+    setYears(value);
+  
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      experience: value,
+    }));
   };
 
   return (
@@ -158,10 +170,10 @@ const Searchtolistpage = ({
                 </label>
                 {/* วนรูปตามจำนวนเลข */}
                 <div className="flex flex-wrap gap-[8px]  ">
-                  {["5", "4", "3", "2", "1"].map((rating, index) => (
+                  {["5",  "4",  "3",  "2",  "1"].map((rating, index) => (
                     <button
                       className={`gap-[3px] pt-[4] pr-[8px] pb-[4px] pl-[8px] text-[16px] leading-7 flex flex-wrap items-center border-gray-200 rounded-[8px] border ${
-                        selectedRatings.includes(rating) ? 'bg-orange-500 text-white' : 'bg-white text-gray-800'
+                        selectedRatings.includes(parseFloat(rating)) ? 'bg-orange-500 text-white' : 'bg-white text-gray-800'
                       }`}
                       key={index}
                       onClick={() => handleRatingChange(rating)}

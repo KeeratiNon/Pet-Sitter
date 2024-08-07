@@ -21,6 +21,7 @@ import { bookingRouter } from "./routes/booking.mjs";
 import { protect } from "./middlewares/protect.mjs";
 import bookingHistoryRouter from "./routes/bookingHistory.mjs"; // นำเข้า Route สำหรับ Booking History
 import { handleImageUpload } from "./utils/image.mjs";
+import { userReview } from "./routes/review.mjs";
 
 const app = express();
 const port = 4000;
@@ -42,6 +43,17 @@ app.use("/auth", authRouter);
 app.use("/", petSitterProfileRouter);
 app.use("/petsitter/booking", petSitterBookingRouter);
 app.use("/booking-history", bookingHistoryRouter); // ใช้ Route สำหรับ Booking History
+
+
+
+
+app.use("/", userReview)
+app.use("/review", bookingHistoryRouter)
+app.use("/report", bookingHistoryRouter)
+
+
+
+
 
 app.use("/user", userRouter);
 

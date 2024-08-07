@@ -76,84 +76,101 @@ export const searchPetsitterProfile = async (req, res) => {
     const searchText = req.query.q || "";
     const selectedRatings = Array.isArray(req.query.rating)
       ? req.query.rating
-      : req.query.rating ? req.query.rating.split(',') : [];
+      : req.query.rating
+      ? req.query.rating.split(",")
+      : [];
     const years = req.query.experience || "";
     const selectedPet = req.query.pet_type ? req.query.pet_type.split(",") : [];
 
-    const totalResultsQuery =  sql`
-    SELECT COUNT(*) AS count
-      FROM pet_sitter_profiles
-      INNER JOIN pet_sitter_address 
-      ON pet_sitter_profiles.id = pet_sitter_address.pet_sitter_profile_id
-      WHERE (
-        pet_sitter_profiles.pet_sitter_name ILIKE ${`%${searchText}%`}
-        OR pet_sitter_profiles.firstname ILIKE ${`%${searchText}%`}
-        OR pet_sitter_profiles.lastname ILIKE ${`%${searchText}%`}
-        OR pet_sitter_address.district ILIKE ${`%${searchText}%`}
-        OR pet_sitter_address.province ILIKE ${`%${searchText}%`}
-      )
-      ${
-        selectedRatings.length > 0
-      ? sql`AND pet_sitter_profiles.rating = ANY(${sql.array(selectedRatings)})`
+    const totalResultsQuery = sql`
+  SELECT COUNT(*) AS count
+  FROM pet_sitter_profiles
+  INNER JOIN pet_sitter_address 
+  ON pet_sitter_profiles.id = pet_sitter_address.pet_sitter_profile_id
+  WHERE (
+    pet_sitter_profiles.pet_sitter_name ILIKE ${`%${searchText}%`}
+    OR pet_sitter_profiles.firstname ILIKE ${`%${searchText}%`}
+    OR pet_sitter_profiles.lastname ILIKE ${`%${searchText}%`}
+    OR pet_sitter_address.district ILIKE ${`%${searchText}%`}
+    OR pet_sitter_address.province ILIKE ${`%${searchText}%`}
+  )
+  ${
+    selectedRatings.length > 0
+      ? sql`AND pet_sitter_profiles.rating = ANY(${sql.array(
+          selectedRatings
+        )})`
       : sql``
-      }
-      ${
-        years
-          ? sql`AND pet_sitter_profiles.experience ILIKE ${`%${years}%`}`
-          : sql``
-      }
-      ${       
-        selectedPet.length > 0
-          ? sql`AND EXISTS (SELECT 1 FROM UNNEST(pet_sitter_profiles.pet_type) AS pet WHERE pet = ANY(${sql.array(selectedPet)}))`
-          : sql``
-      }
-    `;
+  }
+  ${
+    years
+      ? years === "1"
+        ? sql`AND pet_sitter_profiles.experience BETWEEN 0 AND 2`
+        : years === "2"
+        ? sql`AND pet_sitter_profiles.experience BETWEEN 3 AND 5`
+        : sql`AND pet_sitter_profiles.experience > 5`
+      : sql``
+  }
+  ${
+    selectedPet.length > 0
+      ? sql`AND EXISTS (SELECT 1 FROM UNNEST(pet_sitter_profiles.pet_type) AS pet WHERE pet = ANY(${sql.array(
+          selectedPet
+        )}))`
+      : sql``
+  }
+`;
     const totalResults = await totalResultsQuery;
     const totalCount = totalResults[0].count;
 
     const resultsQuery = sql`
   SELECT
-        pet_sitter_profiles.pet_sitter_id,
-        pet_sitter_profiles.pet_sitter_name,
-        pet_sitter_profiles.firstname,
-        pet_sitter_profiles.lastname,
-        pet_sitter_profiles.profile_image,
-        pet_sitter_profiles.image_gallery,
-        pet_sitter_profiles.pet_type,
-        pet_sitter_profiles.rating,
-        pet_sitter_profiles.experience,
-        pet_sitter_address.district,
-        pet_sitter_address.province
-      FROM
-        pet_sitter_profiles
-      INNER JOIN
-        pet_sitter_address ON pet_sitter_profiles.id = pet_sitter_address.pet_sitter_profile_id
-      WHERE (
-        pet_sitter_profiles.pet_sitter_name ILIKE ${`%${searchText}%`}
-        OR pet_sitter_profiles.firstname ILIKE ${`%${searchText}%`}
-        OR pet_sitter_profiles.lastname ILIKE ${`%${searchText}%`}
-        OR pet_sitter_address.district ILIKE ${`%${searchText}%`}
-        OR pet_sitter_address.province ILIKE ${`%${searchText}%`}
-      )
-      ${
-        selectedRatings.length > 0
-      ? sql`AND pet_sitter_profiles.rating = ANY(${sql.array(selectedRatings)})`
+    pet_sitter_profiles.pet_sitter_id,
+    pet_sitter_profiles.pet_sitter_name,
+    pet_sitter_profiles.firstname,
+    pet_sitter_profiles.lastname,
+    pet_sitter_profiles.profile_image,
+    pet_sitter_profiles.image_gallery,
+    pet_sitter_profiles.pet_type,
+    pet_sitter_profiles.rating,
+    pet_sitter_profiles.experience,
+    pet_sitter_address.district,
+    pet_sitter_address.province
+  FROM
+    pet_sitter_profiles
+  INNER JOIN
+    pet_sitter_address ON pet_sitter_profiles.id = pet_sitter_address.pet_sitter_profile_id
+  WHERE (
+    pet_sitter_profiles.pet_sitter_name ILIKE ${`%${searchText}%`}
+    OR pet_sitter_profiles.firstname ILIKE ${`%${searchText}%`}
+    OR pet_sitter_profiles.lastname ILIKE ${`%${searchText}%`}
+    OR pet_sitter_address.district ILIKE ${`%${searchText}%`}
+    OR pet_sitter_address.province ILIKE ${`%${searchText}%`}
+  )
+  ${
+    selectedRatings.length > 0
+      ? sql`AND pet_sitter_profiles.rating = ANY(${sql.array(
+          selectedRatings
+        )})`
       : sql``
-      }
-      ${
-        years
-          ? sql`AND pet_sitter_profiles.experience ILIKE ${`%${years}%`}`
-          : sql``
-      }
-      ${
-
-        selectedPet.length > 0
-          ? sql`AND EXISTS (SELECT 1 FROM UNNEST(pet_sitter_profiles.pet_type) AS pet WHERE pet = ANY(${sql.array(selectedPet)}))`
-          : sql``
-      }
-      LIMIT ${pageSize} OFFSET ${offset}
-    `;
-const results = await resultsQuery;
+  }
+  ${
+    years
+      ? years === "1"
+        ? sql`AND pet_sitter_profiles.experience BETWEEN 0 AND 2`
+        : years === "2"
+        ? sql`AND pet_sitter_profiles.experience BETWEEN 3 AND 5`
+        : sql`AND pet_sitter_profiles.experience > 5`
+      : sql``
+  }
+  ${
+    selectedPet.length > 0
+      ? sql`AND EXISTS (SELECT 1 FROM UNNEST(pet_sitter_profiles.pet_type) AS pet WHERE pet = ANY(${sql.array(
+          selectedPet
+        )}))`
+      : sql``
+  }
+  LIMIT ${pageSize} OFFSET ${offset}
+`;
+    const results = await resultsQuery;
 
     return res.status(200).json({
       message: "Pet sitter Profile has been show.",
@@ -165,7 +182,6 @@ const results = await resultsQuery;
   } catch (error) {
     console.error("Error fetching profiles:", error);
     res.status(500).json({ error: "Internal Server Error" });
-    
   }
 };
 
@@ -178,7 +194,7 @@ export const viewPetsitterProfile = async (req, res) => {
           SELECT *
           FROM pet_sitters
           INNER JOIN pet_sitter_profiles on pet_sitter_profiles.pet_sitter_id = pet_sitters.id
-          INNER JOIN pet_sitter_address on pet_sitter_address.pet_sitter_profile_id = pet_sitter_profiles.id
+          INNER JOIN pet_sitter_address on pet_sitter_address.pet_sitter_profile_id = pet_sitter_profiles.id        
           WHERE pet_sitters.id = ${param}
           `;
   } catch (error) {
@@ -279,3 +295,5 @@ export const checkPetsitterProfile = async (req, res) => {
       .json({ message: "Internal server error", error: error.message });
   }
 };
+
+

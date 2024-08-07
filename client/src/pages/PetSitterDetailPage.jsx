@@ -7,15 +7,26 @@ import ContentBottom from "../components/petsitter-detail/ContentBottom";
 import PetSitterInfoCard from "../components/petsitter-detail/PetSitterInfoCard";
 import Footer from "../components/Footer";
 import { useLocalStorage } from "../hooks/useLocalStorage";
+import PaginationSize from "../components/searchs/Pagination";
 
 const PetSitterDetailPage = () => {
   const { setItem } = useLocalStorage("petSitterId");
   const [profiles, setProfiles] = useState({});
+  const [reviews, setReview] = useState([]);
+
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
+  const [total, setTotal] = useState(0);
+  const [averageRating, setAverageRating] = useState(0);
+  const [selectedRatings, setSelectedRatings] = useState([]);
+  const [filters, setFilters] = useState({
+    rating: [],
+  });
+
   let { id } = useParams();
 
   const fetchProfiles = async (id) => {
     try {
-      console.log(id);
       const response = await axios.get(`http://localhost:4000/search/${id}`);
       setProfiles(response.data.data);
       console.log(response.data.data);
@@ -27,7 +38,61 @@ const PetSitterDetailPage = () => {
 
   useEffect(() => {
     fetchProfiles(id);
-  }, []);
+  }, [id]);
+
+  useEffect(() => {
+    const fetchReview = async (id) => {
+      try {
+        const ratingParam = Array.isArray(selectedRatings.rating)
+          ? selectedRatings.rating.join(",")
+          : "";
+        const response = await axios.get(
+          `http://localhost:4000/reviews/${id}`,
+          {
+            params: {
+              page,
+              pageSize,
+              rating: ratingParam,
+            },
+          }
+        );
+
+        setReview(response.data.data || []);
+        setTotal(response.data.total || 0);
+        setAverageRating(response.data.averageRating || 0);
+      } catch (error) {
+        console.error(
+          "Error fetching Review:",
+          error.response ? error.response.data : error.message
+        );
+        setReview([]);
+        setTotal(0);
+        setAverageRating(0);
+      }
+    };
+    fetchReview(id);
+    console.log(filters.rating)
+  }, [filters.rating, id, page, pageSize, selectedRatings]);
+
+  useEffect(() => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      rating: selectedRatings,
+    }));
+  }, [selectedRatings]);
+
+  const handlePageChange = (event, value) => {
+    if (value > 0) {
+      setPage(value);
+    }
+  };
+
+  const handleRatingChange = () => {
+    setFilters({ ...filters, rating: selectedRatings });
+    setPage(1);
+  };
+
+  const totalReviews = total; // ใช้จำนวนรวมจากรีวิวทั้งหมดที่กรองแล้ว
 
   return (
     <>
@@ -38,8 +103,23 @@ const PetSitterDetailPage = () => {
         <div className="flex flex-col max-w-[848px]">
           <ContentTop profiles={profiles} />
 
-          <div className="hidden lg:flex">
-            <ContentBottom />
+          <div className="hidden lg:flex lg:flex-col">
+            <ContentBottom
+              reviews={reviews}
+              setReview={setReview}
+              onRatingChange={handleRatingChange}
+              selectedRatings={selectedRatings}
+              setSelectedRatings={setSelectedRatings}
+              filters={filters}
+              setFilters={setFilters}
+              totalReviews={totalReviews}
+              averageRating={averageRating}
+            />
+            <PaginationSize
+              page={page}
+              count={Math.ceil(total / pageSize)}
+              onPageChange={handlePageChange}
+            />
           </div>
         </div>
         <div className="hidden lg:flex ">
@@ -48,8 +128,25 @@ const PetSitterDetailPage = () => {
       </div>
       <div className="flex flex-col lg:hidden">
         <PetSitterInfoCard profiles={profiles} />
-        <ContentBottom />
+        <ContentBottom
+              reviews={reviews}
+              setReview={setReview}
+              onRatingChange={handleRatingChange}
+              selectedRatings={selectedRatings}
+              setSelectedRatings={setSelectedRatings}
+              filters={filters}
+              setFilters={setFilters}
+              totalReviews={totalReviews}
+              averageRating={averageRating}
+            />
+
+        <PaginationSize
+          page={page}
+          count={Math.ceil(total / pageSize)}
+          onPageChange={handlePageChange}
+        />
       </div>
+
       <Footer />
     </>
   );

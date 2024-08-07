@@ -1,22 +1,37 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
+
 import { useEffect, useState } from "react";
 import axios from "axios";
 import girl from "../../assets/images/girl.png";
 import changeIcon from "../../assets/svgs/icons/icon-change.svg";
 import phone from "../../assets/svgs/icons/icon-phone.svg";
 import { SERVER_API_URL } from "../../core/config.mjs";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { useSocket } from "../../contexts/socket";
 import { useAuth } from "../../contexts/authentication";
 
-const BookingHistoryService = () => {
+const BookingHistoryService = ({
+  
+  setShowModal,
+  
+  setShowReview,
+  setReviewData,
+  
+  setShowReport,
+}) => {
+  const { setItem } = useLocalStorage();
+
   const [bookings, setBookings] = useState([]);
   const [reviewedBookings, setReviewedBookings] = useState({});
-  const {joinChatRoom,chatRoomList,setChatRoomList} = useSocket()
-  const {state} = useAuth()
+  const { joinChatRoom, chatRoomList, setChatRoomList } = useSocket();
+  const { state } = useAuth();
 
   useEffect(() => {
     const fetchBookings = async () => {
       try {
         const response = await axios.get(`${SERVER_API_URL}/booking-history`);
+
         setBookings(response.data);
       } catch (error) {
         console.error("Error fetching booking history:", error);
@@ -25,6 +40,10 @@ const BookingHistoryService = () => {
 
     fetchBookings();
   }, []);
+
+  
+
+  
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -66,9 +85,32 @@ const BookingHistoryService = () => {
     }
   };
 
+  const handleYouReviewClick = () => {
+    setShowReview(true);
+  };
+
+  const handleReportClick = () => {
+    setShowReport(true);
+  };
+
   const handleReviewClick = (bookingId) => {
     setReviewedBookings((prev) => ({ ...prev, [bookingId]: true }));
-  };
+    setItem("bookingId", bookingId);
+    setShowModal(true);
+    const selectedBooking = bookings.find((booking) => booking.booking_id === bookingId);
+    console.log(selectedBooking)
+    if (selectedBooking) {
+      setReviewData({
+        pet_sitter_id: selectedBooking.pet_sitter_id,
+        firstname: selectedBooking.firstname,
+        lastname: selectedBooking.lastname,
+        booking_date: selectedBooking.formatted_booking_date,
+        profile_image: selectedBooking.profile_image || girl
+      });
+    }}
+
+
+
 
   const clearReadCount = (chatRoomId) => {
     const newChatRoomList = [...chatRoomList];
@@ -205,15 +247,17 @@ const BookingHistoryService = () => {
                   <button
                     type="button"
                     className="flex rounded-[99px] py-[4px] px-[2px] gap-[4px]"
+                    onClick={() => handleReportClick(booking.booking_id)}
                   >
                     <p className="text-primaryorange-500 text-[16px] leading-[24px] font-bold">
                       Report
                     </p>
                   </button>
-                  {reviewedBookings[booking.id] ? (
+                  {reviewedBookings[booking.booking_id] ? (
                     <button
                       type="button"
                       className="bg-primaryorange-100 flex rounded-[99px] py-[12px] px-[24px] gap-[8px]"
+                      onClick={() => handleYouReviewClick(booking.booking_id)}
                     >
                       <p className="text-primaryorange-500 text-[16px] leading-[24px] font-bold">
                         Your Review
@@ -223,7 +267,7 @@ const BookingHistoryService = () => {
                     <button
                       type="button"
                       className="bg-primaryorange-500 flex rounded-[99px] py-[12px] px-[24px] gap-[8px]"
-                      onClick={() => handleReviewClick(booking.id)}
+                      onClick={() => handleReviewClick(booking.booking_id)}
                     >
                       <p className="text-white text-[16px] leading-[24px] font-bold">
                         Review
@@ -237,11 +281,11 @@ const BookingHistoryService = () => {
                   <button
                     type="button"
                     className="bg-primaryorange-500 flex rounded-[99px] py-[12px] px-[24px] gap-[8px]"
-                    onClick={()=>{
-                      const chatRoomId = `${state.user.id}/${booking.pet_sitter_id}`
-                      const targetId = Number(booking.pet_sitter_id)
-                      joinChatRoom({chatRoomId,targetId})
-                      clearReadCount(chatRoomId)
+                    onClick={() => {
+                      const chatRoomId = `${state.user.id}/${booking.pet_sitter_id}`;
+                      const targetId = Number(booking.pet_sitter_id);
+                      joinChatRoom({ chatRoomId, targetId });
+                      clearReadCount(chatRoomId);
                     }}
                   >
                     <p className="text-white text-[16px] leading-[24px] font-bold">
