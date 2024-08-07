@@ -21,7 +21,7 @@ const FooterPetSitter = ({
     if (selectedFiles.length > 0) {
       const newImages = [...images];
       for (let i = 0; i < selectedFiles.length; i++) {
-          newImages.push(selectedFiles[i]);
+        newImages.push(selectedFiles[i]);
       }
       setImages(newImages);
     }
@@ -54,7 +54,7 @@ const FooterPetSitter = ({
         multiple
       />
       <span className=" py-[10px] flex flex-1 gap-4">
-      {images.length > 0 &&
+        {images.length > 0 &&
           images.map((image, index) => (
             <div key={index} className="relative">
               <img
@@ -84,8 +84,8 @@ const FooterPetSitter = ({
       <button
         className="p-[12px] bg-orange-500 rounded-full"
         onClick={() => {
-          sendMessage({chatRoomId, images});
-          clearImages()
+          sendMessage({ chatRoomId, images });
+          clearImages();
         }}
       >
         <img src={PostMsg} alt="close" />

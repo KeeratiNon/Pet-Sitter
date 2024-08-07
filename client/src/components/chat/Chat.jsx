@@ -43,7 +43,7 @@ const Chat = () => {
           Messages
         </h3>
         <ul className="flex flex-col gap-[8px]">
-          {chatRoomList.map((chatRoom,index) => {
+          {chatRoomList.map((chatRoom, index) => {
             return (
               <li
                 key={index}
@@ -64,7 +64,7 @@ const Chat = () => {
             <div className="flex flex-col w-full">
               {chatRoomList
                 .filter((list) => list.targetId === selectedChatRoom.targetId)
-                .map((chatRoom,index) => {
+                .map((chatRoom, index) => {
                   return (
                     <div key={index}>
                       <HeaderPetSitter chatRoom={chatRoom} />

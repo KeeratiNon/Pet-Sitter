@@ -112,6 +112,10 @@ io.on("connection", (socket) => {
             newMessage,
             newChatRoom,
           });
+          users[String(targetId)].emit("countMessage", {
+            newMessage,
+            newChatRoom,
+          });
         } catch (error) {
           console.error("Error saving message:", error);
         }

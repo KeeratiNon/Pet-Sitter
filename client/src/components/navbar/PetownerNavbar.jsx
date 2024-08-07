@@ -13,10 +13,11 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/authentication";
 import { SERVER_API_URL } from "../../core/config.mjs";
 import axios from "axios";
+import { useSocket } from "../../contexts/socket";
 
 const Navbar = () => {
   const { logout, state } = useAuth();
-
+  const { socket, hasNewNotification, setHasNewNotification } = useSocket();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [profilePic, setProfilePic] = useState(null);
 
@@ -25,6 +26,19 @@ const Navbar = () => {
       fetchProfileData();
     }
   }, [state.user]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("newNotification", () => {
+        setHasNewNotification(true);
+      });
+    }
+    return () => {
+      if (socket) {
+        socket.off("newNotification");
+      }
+    };
+  }, [socket]);
 
   const fetchProfileData = async () => {
     try {
@@ -120,11 +134,13 @@ const Navbar = () => {
                   <Link to="/chat">
                     <button className="icon-btn relative">
                       <img src={iconMessage} alt="icon-message" />
-                      <img
-                        src={iconNotify}
-                        alt="icon-message"
-                        className="absolute top-1 right-1"
-                      />
+                      {hasNewNotification && (
+                        <img
+                          src={iconNotify}
+                          alt="icon-message"
+                          className="absolute top-1 right-1"
+                        />
+                      )}
                     </button>
                   </Link>
                 </li>
