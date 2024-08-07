@@ -62,7 +62,7 @@ const AccountMenu = () => {
           <IconUserBooking fill={"#AEB1C3"} />
           <span
             className={`text-[18px] leading-[27px] font-bold group-hover:text-[#FF7037] ${
-              location.pathname === "/user/booking"
+              location.pathname === "/user/booking-history"
                 ? "text-[#FF7037]"
                 : "text-[#5B5D6F]"
             }`}

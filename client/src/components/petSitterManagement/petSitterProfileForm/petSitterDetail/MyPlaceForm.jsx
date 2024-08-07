@@ -9,7 +9,7 @@ const MyPlaceForm = ({handleMyPlace, myPlace}) => {
             name="my_place"
             value={myPlace}
             onChange={handleMyPlace}
-            className="border border-gray-200 rounded-[8px] h-[140px] p-[12px] text-[16px] leading-[24px] font-normal"
+            className="border border-gray-200 rounded-[8px] h-[140px] p-[12px] text-[16px] leading-[24px] font-normal resize-none"
           />
         </label>
       </div>

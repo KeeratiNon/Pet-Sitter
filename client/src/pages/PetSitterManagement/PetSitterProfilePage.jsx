@@ -3,9 +3,6 @@ import { useState, useEffect } from "react";
 import { SERVER_API_URL } from "../../core/config.mjs";
 import { PetSitterProfileSchema } from "../../schemas/PetSitterProfile";
 import petSitterGreenCircle from "../../assets/svgs/pet-sitter-management/pet-sitter-greenCircle.svg";
-import supabase from "../../utils/storage";
-import { v4 as uuidv4 } from "uuid";
-
 
 import Sidebar from "../../components/petSitterManagement/petSitterProfileForm/PetProfileSidebar";
 import Navbar from "../../components/petSitterManagement/petSitterProfileForm/PetSitterNavbar";
@@ -59,21 +56,12 @@ const PetSitterProfilePage = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [petsitterId, setPetsitterId] = useState("");
 
-
-  const getIdFromUrl = () => {
-    const url = window.location.href;
-    return url.substring(url.lastIndexOf("/") + 1);
-  };
-  
-  
   useEffect(() => {
     const fetchData = async () => {
-      const id = getIdFromUrl();
       try {
-        const response = await axios.get(
-          `${SERVER_API_URL}/petsitter/profile/${id}`
-        );
+        const response = await axios.get(`${SERVER_API_URL}/petsitter/profile`);
         const data = response.data.data;
         setFormData({
           profile_image: data.profile_image || "",
@@ -96,8 +84,7 @@ const PetSitterProfilePage = () => {
           province: data.province || "",
           post_code: data.post_code || "",
         });
-
-
+        setPetsitterId(data.id);
       } catch (error) {
         console.error("Error fetching petsitter profile data:", error);
       }
@@ -113,105 +100,29 @@ const PetSitterProfilePage = () => {
     }));
   };
 
-  const handlePetTypeSelect = (event) => {
-    const selectedPet = event.target.value;
-    if (selectedPet && !formData.pet_type.includes(selectedPet)) {
-      setFormData((prev) => ({
-        ...prev,
-        pet_type: [...prev.pet_type, selectedPet],
-      }));
-    }
-  };
-
-  const handlePetTypeRemove = (pet) => {
-    setFormData((prev) => ({
-      ...prev,
-      pet_type: prev.pet_type.filter((p) => p !== pet),
-    }));
-  };
-
-  const handleImageUpload = async (event) => {
-    if (formData.image_gallery.length < 10) {
-      const file = event.target.files[0];
-      if (file) {
-        const profileId = getIdFromUrl();
-        const fileName = `${profileId}/${uuidv4()}`;
-        try {
-          const { data, error } = await supabase
-            .storage
-            .from('petsitter_image_gallery')
-            .upload(fileName, file, { upsert: true });
-  
-          if (error) {
-            throw error;
-          }
-  
-          const { data: publicUrlData, error: urlError } = supabase
-            .storage
-            .from('petsitter_image_gallery')
-            .getPublicUrl(fileName);
-            console.log(publicUrlData);
-          if (urlError) {
-            throw urlError;
-          }
-  
-          setFormData((prev) => ({
-            ...prev,
-            image_gallery: [...prev.image_gallery, publicUrlData.publicUrl],
-          }));
-        } catch (error) {
-          console.error('Error uploading or fetching image URL:', error);
-        }
-      }
-    }
-  };
-
-  const handleRemoveImage = async (index) => {
-    const imageUrl = formData.image_gallery[index];
-    const fileName = imageUrl.split('/').pop();
-  
-    try {
-      const { error } = await supabase
-        .storage
-        .from('petsitter_image_gallery')
-        .remove([fileName]);
-  
-      if (error) {
-        throw error;
-      }
-  
-      setFormData((prev) => ({
-        ...prev,
-        image_gallery: prev.image_gallery.filter((_, i) => i !== index),
-      }));
-    } catch (error) {
-      console.error('Error removing image from gallery:', error);
-    }
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       await PetSitterProfileSchema.validate(formData, { abortEarly: false });
       console.log("Form Submitted");
 
-      const id = getIdFromUrl();
-
-      const response = await axios.get(`${SERVER_API_URL}/petsitter/profile/check/${id}`);
+      const response = await axios.get(
+        `${SERVER_API_URL}/petsitter/profile/check`
+      );
       const profileExists = response.data.exists;
-      console.log(profileExists)
+      console.log(profileExists);
 
       if (profileExists) {
         console.log("Updating existing profile");
         const response = await axios.put(
-          `${SERVER_API_URL}/petsitter/profile/${id}`,
+          `${SERVER_API_URL}/petsitter/profile`,
           formData
         );
         console.log("Petsitter Profile has been updated:", response.data);
       } else {
         console.log("Creating new profile");
         const response = await axios.post(
-          `${SERVER_API_URL}/petsitter/profile/${id}`,
+          `${SERVER_API_URL}/petsitter/profile`,
           formData
         );
         console.log("Petsitter Profile has been created:", response.data);
@@ -241,12 +152,12 @@ const PetSitterProfilePage = () => {
       <Sidebar />
       <div className="flex flex-col gap-[8px] min-w-[1024px] w-full">
         <Navbar formData={formData} />
-        <main className="flex flex-col gap-[24px] bg-[#F6F6F9] pb-[80px]">
-          <div className="flex items-center justify-between pl-[60px] mr-[48px] mt-[54px] w-[96%]">
+        <main className="flex flex-col gap-[24px] bg-gray-100 pb-[80px]">
+          <div className="flex items-center justify-between pl-[60px] mr-[48px] mt-[36px] w-[96%]">
             <div className="flex gap-[24px]">
-              <span className="text-[#2A2E3F] text-[24px] leading-[32px] font-bold">
+              <h3 className="flex flex-1 text-[24px] leading-[32px] font-bold">
                 Pet Sitter Profile
-              </span>
+              </h3>
               <div className="flex items-center gap-[8px]">
                 <img src={petSitterGreenCircle} className="w-[6px] h-[6px]" />
                 <span className="text-[#1CCD83] text-[16px] leading-[24px]">
@@ -274,7 +185,7 @@ const PetSitterProfilePage = () => {
                 <ProfileImageForm
                   profileImage={formData.profile_image}
                   setFormData={setFormData}
-                  profileId={getIdFromUrl()}
+                  petsitterId={petsitterId}
                 />
               </div>
               <div className="grid grid-cols-3 gap-6">
@@ -332,8 +243,7 @@ const PetSitterProfilePage = () => {
               />
               <PetTypeForm
                 pet_type={formData.pet_type}
-                handlePetTypeSelect={handlePetTypeSelect}
-                handlePetTypeRemove={handlePetTypeRemove}
+                setFormData={setFormData}
                 petOptions={["Dog", "Cat", "Bird", "Rabbit"]}
               />
               <ServicesForm
@@ -346,8 +256,8 @@ const PetSitterProfilePage = () => {
               />
               <ImageGalleryForm
                 image_gallery={formData.image_gallery}
-                handleImageUpload={handleImageUpload}
-                handleRemoveImage={handleRemoveImage}
+                setFormData={setFormData}
+                petsitterId={petsitterId}
               />
             </div>
             <div className="w-[93%] rounded-2xl bg-primarygray-100 px-20 py-10 flex flex-col gap-6">

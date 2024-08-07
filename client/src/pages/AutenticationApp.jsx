@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import HomePage from "./Homepage";
 import ErrorPage from "./ErrorPage";
 import PetSitterProfilePage from "./PetSitterManagement/PetSitterProfilePage";
 import PetSitterBookingListPage from "./PetSitterManagement/PetSitterBookingListPage";
 import PetSitterBookingDetailPage from "./PetSitterManagement/PetSitterBookingDetailPage";
-import PetSitterPaymentOptionPage from "./PetSitterManagement/PetSitterPaymentOptionPage";
+import PetSitterPayoutOptionPage from "./PetSitterManagement/PetSitterPayoutOptionPage";
 import BookingConfirmationPage from "../pages/Bookings/BookingConfirmationPage";
 import BookingPage from "../pages/Bookings/BookingPage";
 import BookingHistoryPage from "./BookingHistoryPage";
@@ -14,40 +14,47 @@ import BookingPopup from "../components/BookingPopup";
 import SearchListPage from "./SearchListPage";
 import PetSitterDetailPage from "./PetSitterDetailPage";
 
-import Navbar from "../components/navbar/Navbar";
+import PetownerNavbar from "../components/navbar/PetownerNavbar";
+import PetsitterNavbar from "../components/navbar/PetsitterNavbar";
+
 import UserManagementPage from "./user/UserManagementPage";
 import UserPetManagementPage from "./user/UserPetManagementPage";
+import { useAuth } from "../contexts/authentication";
 
 const AutenticationApp = () => {
   const location = useLocation();
-  const hideNavbarPaths = ["/petsitter"];
+  const { state } = useAuth();
 
+  const hideNavbarPaths = ["/petsitter"];
   const shouldShowNavbar = !hideNavbarPaths.some((path) =>
     location.pathname.startsWith(path)
   );
+
   return (
     <>
-      {shouldShowNavbar && <Navbar />}
+      {shouldShowNavbar && (
+        state.user?.role === "petsitter" ? <PetsitterNavbar /> : <PetownerNavbar />
+      )}
 
       <Routes>
         <Route path="*" element={<ErrorPage />} />
         <Route path="/" element={<HomePage />} />
         <Route path="/popup" element={<BookingPopup />} />
         <Route
-          path="/petsitter/profile/:id"
+          path="/petsitter/profile"
           element={<PetSitterProfilePage />}
         />
         <Route
-          path="/petsitter/booking/:id"
+          path="/petsitter/booking"
           element={<PetSitterBookingListPage />}
         />
         <Route
-          path="/petsitter/booking/detail/:id"
+          path="/petsitter/booking/detail/:booking_id"
           element={<PetSitterBookingDetailPage />}
         />
         <Route
-          path="/petsitter/payment-option/:id"
-          element={<PetSitterPaymentOptionPage />}
+          path="/petsitter/payout-option"
+          element={<PetSitterPayoutOptionPage />}
         />
         <Route path="/booking" element={<BookingPage />} />
         <Route

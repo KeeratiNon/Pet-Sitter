@@ -14,12 +14,13 @@ import petSitterPinkCircle from "../../../assets/svgs/pet-sitter-management/pet-
 import petSitterGreenCircle from "../../../assets/svgs/pet-sitter-management/pet-sitter-greenCircle.svg";
 import petSitterRedCircle from "../../../assets/svgs/pet-sitter-management/pet-sitter-redCircle.svg";
 
+
 const statusIcons = {
   "Waiting for confirm": petSitterPinkCircle,
   "Waiting for service": petSitterOrangeCircle,
   "In service": petSitterBlueCircle,
   Success: petSitterGreenCircle,
-  Cancel: petSitterRedCircle,
+  Canceled: petSitterRedCircle,
 };
 
 const statusColors = {
@@ -27,16 +28,10 @@ const statusColors = {
   "Waiting for service": "#FF7037",
   "In service": "#76D0FC",
   Success: "#1CCD83",
-  Cancel: "#EA1010",
+  Canceled: "#EA1010",
 };
 
-const PetSitterBooking = ({
-  bookingsData,
-  setStatus,
-  setSearchQuery,
-  status,
-  searchQuery,
-}) => {
+const PetSitterBooking = ({ bookingsData, setStatus, setSearchQuery, status, searchQuery, onBookingClick }) => {
   const handleStatusChange = (event) => {
     setStatus(event.target.value);
   };
@@ -83,7 +78,7 @@ const PetSitterBooking = ({
             <option value="Waiting for confirm">Waiting for confirm</option>
             <option value="Waiting for service">Waiting for service</option>
             <option value="In service">In service</option>
-            <option value="Cancel">Cancel</option>
+            <option value="Canceled">Canceled</option>
           </select>
         </div>
       </header>
@@ -93,51 +88,33 @@ const PetSitterBooking = ({
             <TableHead>
               <TableRow className="bg-black">
                 <TableCell className="!text-white">Pet Owner Name</TableCell>
-                <TableCell className="!text-white" align="left">
-                  Pet(s)
-                </TableCell>
-                <TableCell className="!text-white" align="left">
-                  Duration
-                </TableCell>
-                <TableCell className="!text-white" align="left">
-                  Booked Date
-                </TableCell>
-                <TableCell className="!text-white" align="left">
-                  Status
-                </TableCell>
+                <TableCell className="!text-white" align="left">Pet(s)</TableCell>
+                <TableCell className="!text-white" align="left">Duration</TableCell>
+                <TableCell className="!text-white" align="left">Booked Date</TableCell>
+                <TableCell className="!text-white" align="left">Status</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {bookingsData.map((booking) => (
                 <TableRow
                   key={booking.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  onClick={() => onBookingClick(booking.id)} 
+                  className="cursor-pointer hover:bg-gray-100" 
                 >
                   <TableCell component="th" scope="row" className="font-medium">
+                  {booking.status === "Waiting for confirm" && (
+                      <img src={petSitterOrangeCircle} alt="Waiting for confirm" className="inline-block mr-[8px] align-middle" />
+                    )}
                     {booking.petOwnerName}
                   </TableCell>
-                  <TableCell align="left" className="font-medium">
-                    {booking.petCount}
-                  </TableCell>
-                  <TableCell align="left" className="font-medium">
-                    {booking.duration}
-                  </TableCell>
-                  <TableCell align="left" className="font-medium">
-                    {booking.bookedDate}
-                  </TableCell>
+                  <TableCell align="left" className="font-medium">{booking.petCount}</TableCell>
+                  <TableCell align="left" className="font-medium">{booking.duration}</TableCell>
+                  <TableCell align="left" className="font-medium">{booking.bookedDate}</TableCell>
                   <TableCell align="left" className="font-medium">
                     <div className="flex items-center gap-[8px]">
-                      <img
-                        src={statusIcons[booking.status]}
-                        alt={booking.status}
-                        className="w-[6px] h-[6px] inline-block align-middle"
-                      />
-                      <span
-                        className="align-middle"
-                        style={{ color: statusColors[booking.status] }}
-                      >
-                        {booking.status}
-                      </span>
+                      <img src={statusIcons[booking.status]} alt={booking.status} className="w-[6px] h-[6px] inline-block align-middle" />
+                      <span className="align-middle" style={{ color: statusColors[booking.status] }}>{booking.status}</span>
                     </div>
                   </TableCell>
                 </TableRow>

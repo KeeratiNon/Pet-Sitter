@@ -10,9 +10,11 @@ const ExpForm = ({ handleExp, experience, errors }) => {
           className="border border-gray-200 rounded-lg h-12 p-3 text-lg leading-6 font-normal"
         >
           <option value="" hidden></option>
-          <option value="0-2 Years">0-2 Years</option>
-          <option value="3-5 Years">3-5 Years</option>
-          <option value="5+ Years">5+ Years</option>
+          {Array.from({ length: 11 }, (_, index) => (
+            <option key={index} value={index}>
+              {index} {index <= 1 ? "Year" : "Years"}
+            </option>
+          ))}
         </select>
       </label>
       {errors.experience && <div className="error text-[16px] leading-[24px] text-red-500">{errors.experience}</div>}
