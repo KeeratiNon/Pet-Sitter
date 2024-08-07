@@ -261,6 +261,7 @@ const BookingHistoryService = ({ setReviewData, setShowReport }) => {
               } flex items-center text-[14px] leading-[24px] font-medium`}
             >
               {getStatusMessage(booking.status, booking.formatted_updated_at)}
+              {getStatusMessage(booking.status, booking.formatted_updated_at)}
             </p>
             <div className="flex gap-[16px] xs:ml-auto">
               {booking.status === "Success" ? (
@@ -345,3 +346,7 @@ const BookingHistoryService = ({ setReviewData, setShowReport }) => {
 };
 
 export default BookingHistoryService;
+
+
+
+

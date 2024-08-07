@@ -6,7 +6,7 @@ import CustomTimePicker from "./cards/CustomTimePicker";
 import { useNavigate } from "react-router-dom";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
-const BookingPopup = ({ showModal, setShowModal, text, booking, onConfirm }) => {
+const BookingPopup = ({ showModal, setShowModal, text, booking, onConfirm, text, booking }) => {
   const { setItem } = useLocalStorage("bookingData");
   const navigate = useNavigate();
 
@@ -34,6 +34,7 @@ const BookingPopup = ({ showModal, setShowModal, text, booking, onConfirm }) => 
       <div className="bg-white rounded-t-[16px] lg:rounded-[16px] w-full max-w-[560px] mx-auto flex flex-col h-[calc(100vh-24px)]  lg:h-[438px]">
         <div className="flex justify-between border-b-[1px] p-[16px] gap-[10px] lg:py-[24px] lg:px-[40px] items-center lg:max-h-[80px]">
           <h1 className="text-primarygray-600 text-[20px] leading-[28px] lg:text-[24px] lg:leading-[32px] font-bold">
+            {text}
             {text}
           </h1>
           <img
