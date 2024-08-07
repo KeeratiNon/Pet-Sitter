@@ -24,10 +24,10 @@ const Navbar = () => {
   return (
     <>
       <nav className="bg-white">
-        <div className="flex items-center justify-between py-3 px-5 md:px-20">
+        <div className="flex items-center justify-between py-3 px-5 lg:px-20">
           <img src={logoNavbar} alt="logo-navbar" />
 
-          <div className="md:hidden">
+          <div className="lg:hidden">
             <div className="flex gap-6">
               <button className="relative">
                 <img src={iconBell} alt="icon-bell" />
@@ -54,7 +54,7 @@ const Navbar = () => {
           </div>
 
           <ul
-            className={`hidden md:flex items-center ${
+            className={`hidden lg:flex items-center ${
               !state.user ? "gap-10" : "gap-6"
             }`}
           >
@@ -111,7 +111,7 @@ const Navbar = () => {
       </nav>
 
       {isMenuOpen && (
-        <ul className="flex-col py-10 px-4 md:hidden">
+        <ul className="flex-col py-10 px-4 lg:hidden">
           {!state.user ? (
             <>
               <li className="p-4">

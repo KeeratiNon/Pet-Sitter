@@ -75,7 +75,7 @@ const UserManagementPage = () => {
   }
 
   return (
-    <section className="flex flex-col bg-[#F6F6F9] md:gap-8 md:py-10 md:px-20 md:min-h-[calc(100dvh-72px)] md:min-w-[956px] md:flex-row">
+    <section className="flex flex-col bg-[#F6F6F9] lg:gap-8 lg:py-10 lg:px-20 md:min-h-[calc(100dvh-72px)] lg:min-w-[956px] lg:flex-row">
       <AccountMenu />
       {userData && (
         <ProfileForm userData={userData} handleSubmit={handleSubmit} />

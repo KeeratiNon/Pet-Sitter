@@ -74,7 +74,7 @@ const ProfileForm = ({ userData, handleSubmit }) => {
 
   return (
     <form
-      className="flex flex-col gap-4 py-10 px-4 bg-white w-full md:p-10 md:rounded-2xl md:gap-[60px]"
+      className="flex flex-col gap-4 py-10 px-4 bg-white w-full md:p-10 lg:rounded-2xl md:gap-[60px]"
       onSubmit={onSubmit}
     >
       <h1 className="text-[20px] leading-[28px] font-bold">Profile</h1>

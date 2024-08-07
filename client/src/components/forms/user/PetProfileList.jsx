@@ -6,7 +6,7 @@ const PetProfileList = ({
   handleCreatePetProfile,
 }) => {
   return (
-    <section className="flex flex-col gap-6 py-6 px-4 w-full md:bg-white md:rounded-2xl md:p-10 md:gap-[60px]">
+    <section className="flex flex-col gap-6 py-6 px-4 w-full md:bg-white lg:rounded-2xl md:p-10 md:gap-[60px]">
       <div className="flex justify-between items-center">
         <h1 className="text-[20px] leading-[28px] font-bold">Your Pet</h1>
         <button
