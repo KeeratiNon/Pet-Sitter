@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
-
 import { useEffect, useState } from "react";
 import axios from "axios";
 import changeIcon from "../../assets/svgs/icons/icon-change.svg";
@@ -12,16 +9,9 @@ import { useSocket } from "../../contexts/socket";
 import { useAuth } from "../../contexts/authentication";
 import ModalPopup from "../BookingPopup";
 import BookingHistoryDetailPopup from "../BookingHistoryDetailPopup";
+import ChangeDateSuccessPopup from "../ChangeDateSuccessPopup ";
 
-const BookingHistoryService = ({
-  
-  setShowModal,
-  
-  setShowReview,
-  setReviewData,
-  
-  setShowReport,
-}) => {
+const BookingHistoryService = ({ setReviewData, setShowReport }) => {
   const { setItem } = useLocalStorage();
 
   const [bookings, setBookings] = useState([]);
@@ -31,6 +21,7 @@ const BookingHistoryService = ({
   const [showModal, setShowModal] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
   const [selectedBookingId, setSelectedBookingId] = useState(null); // State for selected booking ID
+  const [showSuccess, setShowSuccess] = useState(false); // State สำหรับแสดง ChangeDateSuccessPopup
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -45,10 +36,6 @@ const BookingHistoryService = ({
 
     fetchBookings();
   }, []);
-
-  
-
-  
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -117,20 +104,20 @@ const BookingHistoryService = ({
     setReviewedBookings((prev) => ({ ...prev, [bookingId]: true }));
     setItem("bookingId", bookingId);
     setShowModal(true);
-    const selectedBooking = bookings.find((booking) => booking.booking_id === bookingId);
-    console.log(selectedBooking)
+    const selectedBooking = bookings.find(
+      (booking) => booking.booking_id === bookingId
+    );
+    console.log(selectedBooking);
     if (selectedBooking) {
       setReviewData({
         pet_sitter_id: selectedBooking.pet_sitter_id,
         firstname: selectedBooking.firstname,
         lastname: selectedBooking.lastname,
         booking_date: selectedBooking.formatted_booking_date,
-        profile_image: selectedBooking.profile_image || girl
+        profile_image: selectedBooking.profile_image || girl,
       });
-    }}
-
-
-
+    }
+  };
 
   const clearReadCount = (chatRoomId) => {
     const newChatRoomList = [...chatRoomList];
@@ -144,6 +131,12 @@ const BookingHistoryService = ({
     setChatRoomList(newChatRoomList);
   };
 
+  const handleConfirm = () => {
+    setShowModal(false);
+    setShowSuccess(true);
+    setTimeout(() => setShowSuccess(false), 3000); // ซ่อน ChangeDateSuccessPopup หลังจาก 3 วินาที
+  };
+
   return (
     <div className="flex flex-col gap-[24px]">
       {bookings.map((booking, index) => (
@@ -153,11 +146,11 @@ const BookingHistoryService = ({
         >
           <div className="flex flex-col gap-[16px]">
             <div className="flex flex-col xs:flex-row border-primarygray-200 border-b pb-[16px] gap-[8px] xs:gap-[16px]">
-              <div className="flex gap-[16px]" >
+              <div className="flex gap-[16px]">
                 <img
                   src={booking.profile_image}
                   alt="Profile"
-                  className="w-[36px] h-[36px] xs:w-[64px] xs:h-[64px] rounded-full"
+                  className="w-[36px] h-[36px] xs:w-[64px] xs:h-[64px] rounded-full flex-shrink-0"
                   onClick={() => {
                     setSelectedBookingId(booking.booking_id); // Set selected booking ID
                     setShowDetail(true); // Show detail popup
@@ -167,7 +160,7 @@ const BookingHistoryService = ({
                   <p className="text-black text-[24px] leading-[32px] font-bold">
                     {booking.pet_sitter_name}
                   </p>
-                  <p className="text-black text-18px leading-[26px] font-medium">
+                  <p className="text-black text-18px leading-[26px] font-medium whitespace-nowrap "> 
                     By {booking.firstname} {booking.lastname}
                   </p>
                 </div>
@@ -336,18 +329,19 @@ const BookingHistoryService = ({
         showModal={showModal}
         setShowModal={setShowModal}
         text={"Change date"}
+        booking={"Confirm"}
+        onConfirm={handleConfirm}
       />
       <BookingHistoryDetailPopup
         showDetail={showDetail}
         setShowDetail={setShowDetail}
         bookingId={selectedBookingId} // Pass selected booking ID to popup
       />
+      {showSuccess && (
+        <ChangeDateSuccessPopup showModal={showSuccess} setShowModal={setShowSuccess} />
+      )}
     </div>
   );
 };
 
 export default BookingHistoryService;
-
-
-
-

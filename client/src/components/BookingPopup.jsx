@@ -6,8 +6,8 @@ import CustomTimePicker from "./cards/CustomTimePicker";
 import { useNavigate } from "react-router-dom";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
-const BookingPopup = ({ showModal, setShowModal, text, booking }) => {
-  const { setItem } = useLocalStorage();
+const BookingPopup = ({ showModal, setShowModal, text, booking, onConfirm }) => {
+  const { setItem } = useLocalStorage("bookingData");
   const navigate = useNavigate();
 
   const [selectedDate, setSelectedDate] = useState(null);
@@ -18,7 +18,11 @@ const BookingPopup = ({ showModal, setShowModal, text, booking }) => {
     setItem("bookingDate", selectedDate);
     setItem("bookingStart", startTime);
     setItem("bookingEnd", endTime);
-    navigate("/booking");
+    if (onConfirm) {
+      onConfirm();
+    } else {
+      navigate("/booking");
+    }
   };
 
   if (!showModal) {
@@ -47,8 +51,7 @@ const BookingPopup = ({ showModal, setShowModal, text, booking }) => {
             <CustomDatePicker
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}
-            />{" "}
-            {/* ส่ง selectedDate และ setSelectedDate เป็น props */}
+            />
             <div className="flex gap-[12px] lg:gap-[16px] items-center">
               <img src={clock} alt="Clock" />
               <div className="flex gap-[8px] items-center w-full">

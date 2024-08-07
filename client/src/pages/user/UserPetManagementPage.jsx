@@ -88,7 +88,7 @@ const UserPetManagementPage = () => {
   }
 
   return (
-    <section className="bg-gray-100  lg:flex lg:justify-center lg:pt-[40px] lg:pb-[80px] lg:px-[80px] lg:gap-[40px]">
+    <section className="flex flex-col bg-[#F6F6F9] lg:gap-8 lg:py-10 lg:px-20 md:min-h-[calc(100dvh-72px)] lg:min-w-[956px] lg:flex-row">
       <AccountMenu />
       {petData ? (
         showForm ? (

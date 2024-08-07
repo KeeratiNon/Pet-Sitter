@@ -13,14 +13,9 @@ const BookingHistory = () => {
   const [reviewData, setReviewData] = useState(false);
 
   
-
-
-
-
-
   return (
-    <div className="relative">
-      <div className="bg-white flex flex-col lg:rounded-[16px] py-[24px] px-[16px]  md:p-[40px] gap-[24px] md:gap-[60px] w-full ">
+    <div className="relative w-full">
+      <div className="bg-white flex flex-col flex-1 lg:rounded-[16px] py-[24px] px-[16px]  md:p-[40px] gap-[24px] md:gap-[60px]">
         <div className="flex 2xl:gap-[10px] ">
           <p className="text-black text-[20px] 2xl:text-[24px] leading-[28px] 2xl:leading-[32px] font-bold ">
             Booking History
@@ -35,7 +30,7 @@ const BookingHistory = () => {
           showReport={showReport}
           setShowReport={setShowReport}
         />
-        {/* pop up */}
+        
         <RatingHistory
           showModal={showModal}
           setShowModal={setShowModal}
@@ -52,7 +47,7 @@ const BookingHistory = () => {
         <ReportHistory 
         showReport={showReport} 
         setShowReport={setShowReport} />
-        {/* pop up */}
+        
       </div>
     </div>
   );

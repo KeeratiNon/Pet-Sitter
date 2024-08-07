@@ -6,7 +6,7 @@ const BookingHistoryPage = () => {
 
   return (
     <>
-      <div className="bg-gray-100  lg:flex lg:justify-center lg:pt-[40px] lg:pb-[80px] lg:px-[80px] lg:gap-[40px]">
+      <div className="bg-gray-100  flex flex-col lg:flex-row  lg:pt-[40px] lg:pb-[80px] lg:px-[80px] lg:gap-[40px] ">
         <AccountMenu />
         {/* <AccountMenu2 /> */}
         <BookingHistory />
