@@ -52,10 +52,12 @@ export const viewAllPetsitterBookingList = async (req, res) => {
     `;
 
     if (searchQuery) {
-      query = sql`${query} AND (LOWER(firstname) LIKE ${'%' + searchQuery.toLowerCase() + '%'} OR LOWER(lastname) LIKE ${'%' + searchQuery.toLowerCase() + '%'})`;
+      query = sql`${query} AND (LOWER(firstname) LIKE ${
+        "%" + searchQuery.toLowerCase() + "%"
+      } OR LOWER(lastname) LIKE ${"%" + searchQuery.toLowerCase() + "%"})`;
     }
 
-    if (status !== 'All status') {
+    if (status !== "All status") {
       query = sql`${query} AND status = ${status}`;
     }
 
@@ -74,10 +76,19 @@ export const viewAllPetsitterBookingList = async (req, res) => {
       GROUP BY booking_id
     `;
 
-    const bookingsData = bookings.map(booking => {
-      const petCount = bookingPets.find(pet => pet.booking_id === booking.id)?.pet_count || 0;
-      const duration = calculateDuration(booking.booking_time_start, booking.booking_time_end);
-      const bookedDate = formatBookedDate(booking.booking_date, booking.booking_time_start, booking.booking_time_end);
+    const bookingsData = bookings.map((booking) => {
+      const petCount =
+        bookingPets.find((pet) => pet.booking_id === booking.id)?.pet_count ||
+        0;
+      const duration = calculateDuration(
+        booking.booking_time_start,
+        booking.booking_time_end
+      );
+      const bookedDate = formatBookedDate(
+        booking.booking_date,
+        booking.booking_time_start,
+        booking.booking_time_end
+      );
 
       return {
         id: booking.id,
@@ -91,8 +102,8 @@ export const viewAllPetsitterBookingList = async (req, res) => {
 
     res.json({ data: bookingsData });
   } catch (error) {
-    console.error('Error fetching bookings data:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error fetching bookings data:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 

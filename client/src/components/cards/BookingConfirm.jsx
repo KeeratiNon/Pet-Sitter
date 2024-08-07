@@ -1,12 +1,6 @@
 import iconX from "../../assets/svgs/icons/icon-x.svg";
 
-const BookingConfirm = ({
-  open,
-  cancelAndClose,
-  paymentIntentId,
-  handleConfirm,
-  cancelPayment,
-}) => {
+const BookingConfirm = ({ open, onClose, onSubmit }) => {
   return (
     <div
       className={`fixed inset-0 flex justify-center items-center transition-colors ${
@@ -22,12 +16,7 @@ const BookingConfirm = ({
           <h1 className="font-medium text-[18px] leading-[26px]">
             Booking Confirmation
           </h1>
-          <button
-            onClick={() => {
-              cancelPayment(paymentIntentId);
-              cancelAndClose();
-            }}
-          >
+          <button onClick={onClose}>
             <img src={iconX} alt="icon-x-mark" />
           </button>
         </div>
@@ -37,19 +26,10 @@ const BookingConfirm = ({
             Are you sure to booking this pet sitter?
           </p>
           <div className="flex gap-4">
-            <button
-              onClick={() => {
-                cancelPayment(paymentIntentId);
-                cancelAndClose();
-              }}
-              className="btn-secondary"
-            >
+            <button onClick={onClose} className="btn-secondary">
               Cancel
             </button>
-            <button
-              onClick={() => handleConfirm(paymentIntentId)}
-              className="btn-primary"
-            >
+            <button onClick={onSubmit} className="btn-primary">
               Yes, I'm sure
             </button>
           </div>

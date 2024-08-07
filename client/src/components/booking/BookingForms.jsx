@@ -4,42 +4,39 @@ import PayMentForm from "../forms/PayMentForm";
 
 const BookingForms = ({
   page,
-  data,
-  setData,
+  petData,
+  bookingData,
+  setBookingData,
   handlePrev,
   handleNext,
   setIsModalOpen,
-  width,
 }) => {
   switch (page) {
     case 0:
       return (
         <PetForm
-          width={width}
           onPrev={handlePrev}
           onNext={handleNext}
-          data={data}
-          setData={setData}
+          petData={petData}
+          bookingData={bookingData}
+          setBookingData={setBookingData}
         />
       );
     case 1:
       return (
         <InfomationForm
-          width={width}
           onPrev={handlePrev}
           onNext={handleNext}
-          data={data}
-          setData={setData}
+          bookingData={bookingData}
+          setBookingData={setBookingData}
         />
       );
     case 2:
       return (
         <PayMentForm
-          width={width}
           onPrev={handlePrev}
-          onConfirm={setIsModalOpen}
-          data={data}
-          setData={setData}
+          bookingData={bookingData}
+          setBookingData={setBookingData}
         />
       );
     default:

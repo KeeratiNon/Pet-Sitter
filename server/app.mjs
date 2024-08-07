@@ -6,26 +6,23 @@ import { Server } from "socket.io";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import { chatRouter } from "./routes/chatroom.mjs";
-mongoose.connect(process.env.MONGODB_URL);
 import "./models/chatrooms.mjs";
-
 import bodyParser from "body-parser";
 import { petSitterProfileRouter } from "./routes/petSitterProfile.mjs";
 import { petSitterBookingRouter } from "./routes/petSitterBooking.mjs";
 import { petSitterPayoutRouter } from "./routes/petsitterPayout.mjs";
 import { ChatRoom } from "./models/chatrooms.mjs";
 import dotenv from "dotenv";
-
-dotenv.config();
 import { userRouter } from "./routes/user.mjs";
 import { bookingRouter } from "./routes/booking.mjs";
-import { protect } from "./middlewares/protect.mjs";
 import bookingHistoryRouter from "./routes/bookingHistory.mjs"; // นำเข้า Route สำหรับ Booking History
 import { handleImageUpload } from "./utils/image.mjs";
 import sql from "./utils/db.mjs";
 import cron from "node-cron";
 import { userReview } from "./routes/review.mjs";
 
+mongoose.connect(process.env.MONGODB_URL);
+dotenv.config();
 
 const app = express();
 const port = 4000;
@@ -46,31 +43,14 @@ app.use(express.json());
 app.use("/auth", authRouter);
 app.use("/", petSitterProfileRouter);
 app.use("/petsitter/booking", petSitterBookingRouter);
-app.use("/petsitter/payout-option", petSitterPayoutRouter)
+app.use("/petsitter/payout-option", petSitterPayoutRouter);
 app.use("/booking-history", bookingHistoryRouter); // ใช้ Route สำหรับ Booking History
-
-
-
-
-app.use("/", userReview)
-app.use("/review", bookingHistoryRouter)
-app.use("/report", bookingHistoryRouter)
-
-
-
-
-
+app.use("/bookings", bookingRouter);
 app.use("/user", userRouter);
 
-app.get("/profiles", (req, res) => {
-  res.json(profiles);
-});
-
-app.use("/bookings", bookingRouter);
-
-app.get("/profile", [protect], (req, res) => {
-  res.send(profiles);
-});
+app.use("/", userReview);
+app.use("/review", bookingHistoryRouter);
+app.use("/report", bookingHistoryRouter);
 
 app.get("/test", (req, res) => {
   return res.json("Server API is working");
@@ -89,11 +69,11 @@ io.use((socket, next) => {
   }
 });
 
-const users = {}
+const users = {};
 
 io.on("connection", (socket) => {
   // console.log("a user connected:", socket.userId);
-  users[socket.userId] = socket
+  users[socket.userId] = socket;
 
   socket.on("disconnect", () => {
     // console.log("user disconnected:", socket.userId);
@@ -118,10 +98,7 @@ io.on("connection", (socket) => {
             // console.log(imageSrc)
             newMessage.images = imageSrc;
           }
-          const reverseChatRoomId = chatRoomId
-            .split("/")
-            .reverse()
-            .join("/");
+          const reverseChatRoomId = chatRoomId.split("/").reverse().join("/");
           const chatRoom = await ChatRoom.findOneAndUpdate(
             {
               $or: [
@@ -132,8 +109,11 @@ io.on("connection", (socket) => {
             { $push: { messages: newMessage } },
             { new: true, upsert: true }
           );
-          const newChatRoom = chatRoom.chatRoomId
-          users[String(targetId)].emit("newMessage", {newMessage, newChatRoom})
+          const newChatRoom = chatRoom.chatRoomId;
+          io.to(chatRoom.chatRoomId).emit("newMessage", {
+            newMessage,
+            newChatRoom,
+          });
         } catch (error) {
           console.error("Error saving message:", error);
         }
@@ -173,17 +153,16 @@ io.on("connection", (socket) => {
       console.error("Error joining room:", error);
     }
   });
-  socket.on("readMessage", async({messageIndex,chatRoomId}) => {
+  socket.on("readMessage", async ({ messageIndex, chatRoomId }) => {
     const updateQuery = {};
     updateQuery[`messages.${messageIndex}.isRead`] = true;
 
     await ChatRoom.findOneAndUpdate(
-        { "chatRoomId": chatRoomId },
-        { $set: updateQuery },
+      { chatRoomId: chatRoomId },
+      { $set: updateQuery }
     );
-  })
+  });
 });
-
 
 function convertToGMT7(date) {
   const gmt7Offset = 7 * 60; // GMT+7 in minutes
@@ -192,18 +171,18 @@ function convertToGMT7(date) {
 }
 
 function formatDate(date) {
-  return date.toISOString().split('T')[0];
+  return date.toISOString().split("T")[0];
 }
 
 function formatTime(date) {
-  return date.toTimeString().split(' ')[0];
+  return date.toTimeString().split(" ")[0];
 }
 
 function subtractHours(date, hours) {
   return new Date(date.getTime() - hours * 60 * 60 * 1000);
 }
 
-cron.schedule('* * * * *', async () => {
+cron.schedule("* * * * *", async () => {
   try {
     const currentDate = new Date();
     const zonedDate = convertToGMT7(currentDate);
@@ -229,7 +208,6 @@ cron.schedule('* * * * *', async () => {
     console.error("Error updating booking status:", error);
   }
 });
-
 
 server.listen(port, () => {
   console.log(`Server is running at ${port}`);

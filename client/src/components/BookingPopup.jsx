@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
 const BookingPopup = ({ showModal, setShowModal }) => {
-  const { setItem } = useLocalStorage("bookingData");
+  const { setItem } = useLocalStorage();
   const navigate = useNavigate();
 
   const [selectedDate, setSelectedDate] = useState(null);
@@ -15,7 +15,9 @@ const BookingPopup = ({ showModal, setShowModal }) => {
   const [endTime, setEndTime] = useState(null);
 
   const handleContinue = () => {
-    setItem({ selectedDate, startTime, endTime }); // บันทึก selectedDate ด้วย
+    setItem("bookingDate", selectedDate);
+    setItem("bookingStart", startTime);
+    setItem("bookingEnd", endTime);
     navigate("/booking");
   };
 

@@ -1,5 +1,9 @@
-const BookingSummary = ({ data, width }) => {
-  if (width <= 768) return null;
+import { useCalculateBooking } from "../../hooks/useCalculateBooking";
+
+const BookingSummary = ({ bookingData }) => {
+  const { formatDate, calculateDuration, calculateTotalCost } =
+    useCalculateBooking();
+
   return (
     <div className="z-0 w-[396px] rounded-2xl overflow-hidden h-fit min-w-[396px]">
       <section className="w-full bg-white">
@@ -13,7 +17,7 @@ const BookingSummary = ({ data, width }) => {
               Pet Sitter:
             </span>
             <span className="text-[#3A3B46] text-[16px] leading-[28px] font-medium">
-              Happy House! By Jane Maison
+              {`${bookingData.pet_sitter_firstname} ${bookingData.pet_sitter_lastname}`}
             </span>
           </li>
           <li className="list-detail">
@@ -21,7 +25,9 @@ const BookingSummary = ({ data, width }) => {
               Date & Time:
             </span>
             <span className="text-[#3A3B46] text-[16px] leading-[28px] font-medium">
-              25 Aug, 2023 | 7 AM - 10 AM
+              {`${formatDate(bookingData.booking_date)} | ${
+                bookingData.booking_time_start[1]
+              } ${bookingData.booking_time_end[1]}`}
             </span>
           </li>
           <li className="list-detail">
@@ -29,7 +35,10 @@ const BookingSummary = ({ data, width }) => {
               Duration:
             </span>
             <span className="text-[#3A3B46] text-[16px] leading-[28px] font-medium">
-              3 hours
+              {calculateDuration(
+                bookingData.booking_time_start[0],
+                bookingData.booking_time_end[0]
+              )}
             </span>
           </li>
           <li className="list-detail">
@@ -37,7 +46,9 @@ const BookingSummary = ({ data, width }) => {
               Pet:
             </span>
             <span className="text-[#3A3B46] text-[16px] leading-[28px] font-medium">
-              {data.pet_name.map((name) => `${name}, `)}
+              {bookingData.pet_name.length > 0
+                ? bookingData.pet_name.join(", ")
+                : "-"}
             </span>
           </li>
         </ul>
@@ -48,7 +59,11 @@ const BookingSummary = ({ data, width }) => {
               Total
             </span>
             <span className="text-white text-[16px] leading-[28px] font-medium">
-              0.00 THB
+              {`${calculateTotalCost(
+                bookingData.pet_name,
+                bookingData.booking_time_start,
+                bookingData.booking_time_end
+              )} THB`}
             </span>
           </li>
         </ul>

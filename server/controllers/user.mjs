@@ -9,10 +9,10 @@ export const viewUserProfile = async (req, res) => {
     result = await sql`
       SELECT
 	        users.phone_number,
+          users.email,
           user_profiles.firstname,
           user_profiles.lastname,
           user_profiles.id_number,
-          user_profiles.email,
           user_profiles.date_of_birth,
           user_profiles.image
       FROM users

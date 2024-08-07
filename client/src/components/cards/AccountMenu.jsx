@@ -26,7 +26,7 @@ const AccountMenu = () => {
               location.pathname === "/user/profile"
                 ? "text-[#FF7037]"
                 : "text-[#5B5D6F]"
-            }`}
+            } md:block`}
           >
             Profile
           </span>
@@ -47,7 +47,7 @@ const AccountMenu = () => {
               location.pathname === "/user/pet"
                 ? "text-[#FF7037]"
                 : "text-[#5B5D6F]"
-            }`}
+            } md:block`}
           >
             Your Pet
           </span>
@@ -55,8 +55,9 @@ const AccountMenu = () => {
       </li>
       <li>
         <Link
+          to="/user/booking-history"
           className={`group w-full flex items-center gap-3 py-3 px-6 ${
-            location.pathname === "/user/booking" ? "bg-[#FFF1EC]" : ""
+            location.pathname === "/user/booking-history" ? "bg-[#FFF1EC]" : ""
           } md:py-5 md:px-6`}
         >
           <IconUserBooking fill={"#AEB1C3"} />
@@ -65,7 +66,7 @@ const AccountMenu = () => {
               location.pathname === "/user/booking-history"
                 ? "text-[#FF7037]"
                 : "text-[#5B5D6F]"
-            }`}
+            } md:block`}
           >
             Booking History
           </span>

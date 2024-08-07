@@ -2,31 +2,31 @@ import React, { useEffect, useState } from "react";
 import Select from "react-select";
 
 const allTimeOptions = [
-  { value: "08:00", label: "8:00 AM" },
-  { value: "08:30", label: "8:30 AM" },
-  { value: "09:00", label: "9:00 AM" },
-  { value: "09:30", label: "9:30 AM" },
+  { value: "08:00", label: "08:00 AM" },
+  { value: "08:30", label: "08:30 AM" },
+  { value: "09:00", label: "09:00 AM" },
+  { value: "09:30", label: "09:30 AM" },
   { value: "10:00", label: "10:00 AM" },
   { value: "10:30", label: "10:30 AM" },
   { value: "11:00", label: "11:00 AM" },
   { value: "11:30", label: "11:30 AM" },
   { value: "12:00", label: "12:00 PM" },
   { value: "12:30", label: "12:30 PM" },
-  { value: "13:00", label: "1:00 PM" },
-  { value: "13:30", label: "1:30 PM" },
-  { value: "14:00", label: "2:00 PM" },
-  { value: "14:30", label: "2:30 PM" },
-  { value: "15:00", label: "3:00 PM" },
-  { value: "15:30", label: "3:30 PM" },
-  { value: "16:00", label: "4:00 PM" },
-  { value: "16:30", label: "4:30 PM" },
-  { value: "17:00", label: "5:00 PM" },
-  { value: "17:30", label: "5:30 PM" },
-  { value: "18:00", label: "6:00 PM" },
-  { value: "18:30", label: "6:30 PM" },
-  { value: "19:00", label: "7:00 PM" },
-  { value: "19:30", label: "7:30 PM" },
-  { value: "20:00", label: "8:00 PM" },
+  { value: "13:00", label: "01:00 PM" },
+  { value: "13:30", label: "01:30 PM" },
+  { value: "14:00", label: "02:00 PM" },
+  { value: "14:30", label: "02:30 PM" },
+  { value: "15:00", label: "03:00 PM" },
+  { value: "15:30", label: "03:30 PM" },
+  { value: "16:00", label: "04:00 PM" },
+  { value: "16:30", label: "04:30 PM" },
+  { value: "17:00", label: "05:00 PM" },
+  { value: "17:30", label: "05:30 PM" },
+  { value: "18:00", label: "06:00 PM" },
+  { value: "18:30", label: "06:30 PM" },
+  { value: "19:00", label: "07:00 PM" },
+  { value: "19:30", label: "07:30 PM" },
+  { value: "20:00", label: "08:00 PM" },
 ];
 
 const customStyles = {
@@ -54,7 +54,7 @@ const customStyles = {
   }),
   indicatorsContainer: (base) => ({
     ...base,
-    display: 'none'
+    display: "none",
   }),
   placeholder: (base) => ({
     ...base,
@@ -62,8 +62,14 @@ const customStyles = {
   }),
 };
 
-const CustomTimePicker = ({ selectedDate, selectedTime, setSelectedTime, minTime }) => {
-  const [filteredTimeOptions, setFilteredTimeOptions] = useState(allTimeOptions);
+const CustomTimePicker = ({
+  selectedDate,
+  selectedTime,
+  setSelectedTime,
+  minTime,
+}) => {
+  const [filteredTimeOptions, setFilteredTimeOptions] =
+    useState(allTimeOptions);
 
   useEffect(() => {
     if (selectedDate) {
@@ -73,10 +79,14 @@ const CustomTimePicker = ({ selectedDate, selectedTime, setSelectedTime, minTime
         now.setHours(now.getHours() + 2);
         now.setMinutes(now.getMinutes() + 30); // เพิ่ม 2 ชั่วโมง 30 นาที
         const currentTimeString = now.toTimeString().substring(0, 5);
-        let filteredOptions = allTimeOptions.filter(option => option.value >= currentTimeString);
+        let filteredOptions = allTimeOptions.filter(
+          (option) => option.value >= currentTimeString
+        );
 
         if (minTime) {
-          filteredOptions = filteredOptions.filter(option => option.value > minTime);
+          filteredOptions = filteredOptions.filter(
+            (option) => option.value > minTime
+          );
         }
 
         setFilteredTimeOptions(filteredOptions); // กรองเวลาที่น้อยกว่า 2 ชั่วโมง 30 นาทีจากเวลาปัจจุบัน
@@ -84,7 +94,9 @@ const CustomTimePicker = ({ selectedDate, selectedTime, setSelectedTime, minTime
         let filteredOptions = allTimeOptions;
 
         if (minTime) {
-          filteredOptions = filteredOptions.filter(option => option.value > minTime);
+          filteredOptions = filteredOptions.filter(
+            (option) => option.value > minTime
+          );
         }
 
         setFilteredTimeOptions(filteredOptions); // ใช้ทุกเวลาในกรณีที่ไม่ใช่วันนี้
@@ -105,5 +117,3 @@ const CustomTimePicker = ({ selectedDate, selectedTime, setSelectedTime, minTime
 };
 
 export default CustomTimePicker;
-
-

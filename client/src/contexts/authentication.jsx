@@ -13,14 +13,13 @@ const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
   const getAllToken = () => {
-    const checkToken = Boolean(getToken())
+    const checkToken = Boolean(getToken());
     if (checkToken) {
-      return jwtDecode(getToken())
+      return jwtDecode(getToken());
+    } else {
+      return null;
     }
-    else {
-      return null
-    }
-  }
+  };
   const [state, setState] = useState({
     loading: false,
     error: null,
