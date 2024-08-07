@@ -27,7 +27,7 @@ const markers = [
 
 const MapPetSitter = () => {
   return (
-    <LoadScript >
+    <LoadScript googleMapsApiKey={import.meta.env.VITE_REACT_APP_GOOGLE_MAPS_API_KEY}>
         
       <GoogleMap
         mapContainerClassName="w-full h-[812px]  rounded-[16px] lg:w-[850px] lg:h-[840px] "
