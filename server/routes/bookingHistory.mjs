@@ -10,7 +10,7 @@ router.get('/:bookingId', [protect], getBookingHistoryDetail); // เส้น�
 
 
 
-router.post('/', postReviwes) //สร้าง review&rating
-router.post('/', postReport) //สร้าง report
+router.post('/review', postReviwes) //สร้าง review&rating
+router.post('/report', postReport) //สร้าง report
 
 export default router;

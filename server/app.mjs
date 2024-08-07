@@ -47,10 +47,8 @@ app.use("/petsitter/payout-option", petSitterPayoutRouter);
 app.use("/booking-history", bookingHistoryRouter); // ใช้ Route สำหรับ Booking History
 app.use("/bookings", bookingRouter);
 app.use("/user", userRouter);
+app.use("/review", userReview);
 
-app.use("/", userReview);
-app.use("/review", bookingHistoryRouter);
-app.use("/report", bookingHistoryRouter);
 
 app.get("/test", (req, res) => {
   return res.json("Server API is working");
