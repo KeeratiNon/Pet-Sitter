@@ -134,7 +134,15 @@ const BookingHistoryService = ({ setReviewData, setShowReport }) => {
   const handleConfirm = () => {
     setShowModal(false);
     setShowSuccess(true);
-    setTimeout(() => setShowSuccess(false), 3000); // ซ่อน ChangeDateSuccessPopup หลังจาก 3 วินาที
+    setTimeout(() => {
+      setShowSuccess(false);
+      window.location.reload(); // Refresh the page after 3 seconds
+    }, 1500);
+  };
+
+  const openModal = (bookingId) => {
+    setSelectedBookingId(bookingId); // Set selected booking ID
+    setShowModal(true);
   };
 
   return (
@@ -208,7 +216,7 @@ const BookingHistoryService = ({ setReviewData, setShowReport }) => {
                       <button
                         type="button"
                         className="inline-flex  items-center rounded-[99px] py-[4px] pl-0 xs:pl-[8px]"
-                        onClick={() => setShowModal(true)}
+                        onClick={() => openModal(booking.booking_id)}
                       >
                         <img
                           src={changeIcon}
@@ -260,7 +268,6 @@ const BookingHistoryService = ({ setReviewData, setShowReport }) => {
                   : "text-primarygray-400"
               } flex items-center text-[14px] leading-[24px] font-medium`}
             >
-              {getStatusMessage(booking.status, booking.formatted_updated_at)}
               {getStatusMessage(booking.status, booking.formatted_updated_at)}
             </p>
             <div className="flex gap-[16px] xs:ml-auto">
@@ -332,6 +339,7 @@ const BookingHistoryService = ({ setReviewData, setShowReport }) => {
         text={"Change date"}
         booking={"Confirm"}
         onConfirm={handleConfirm}
+        selectedBookingId={selectedBookingId} // Pass selected booking ID to popup
       />
       <BookingHistoryDetailPopup
         showDetail={showDetail}

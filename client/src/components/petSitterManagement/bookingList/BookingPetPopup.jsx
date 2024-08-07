@@ -72,7 +72,7 @@ const BookingPetPopup = ({ showModal, setShowModal, petDetail }) => {
                   Age
                 </p>
                 <p className="text-black text-[16px] leading-[24px] font-normal">
-                  {petDetail.age}
+                  {petDetail.age} {petDetail.age === 1 ? 'Month' : 'Months'}
                 </p>
               </div>
               </div>
@@ -90,7 +90,7 @@ const BookingPetPopup = ({ showModal, setShowModal, petDetail }) => {
                   Weight
                 </p>
                 <p className="text-black text-[16px] leading-[24px] font-normal">
-                  {petDetail.weight}
+                  {petDetail.weight} {petDetail.weight === 1 ? 'Kilogram' : 'Kilograms'}
                 </p>
               </div>
               </div>

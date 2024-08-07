@@ -16,6 +16,7 @@ import axios from "axios";
 import { SERVER_API_URL } from "../../core/config.mjs";
 import { useSocket } from "../../contexts/socket";
 
+
 const PetsitterNavbar = () => {
   const { logout, state } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -214,10 +215,10 @@ const PetsitterNavbar = () => {
                           alt="icon-petsitter-payment"
                         />
                         <Link
-                          to="/petsitter/payment-option"
+                          to="/petsitter/payout-option"
                           onClick={closeMenu}
                         >
-                          Payment Option
+                          Payout Option
                         </Link>
                       </li>
                       <hr />
