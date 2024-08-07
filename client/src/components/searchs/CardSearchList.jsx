@@ -7,8 +7,8 @@ import { Link } from "react-router-dom";
 
 const CardSearchList = ({ profiles }) => {
   return (
-    
-      <div className=" w-full   rounded-[16px] p-4 gap-4 flex flex-col  xl:flex-row md:gap-6  md:bg-white  ">
+    <Link  to={`/search/${profiles.pet_sitter_id}` }  >
+      <div className=" w-full   rounded-[16px] p-4 gap-4 flex flex-col  xl:flex-row md:gap-6  bg-white  md:hover:shadow-xl md:transition-shadow md:duration-300 ">
         <div className="  md:w-[245px] md:h-[184px]  ">
           <img
             src={profiles.image_gallery[0]}
@@ -33,9 +33,9 @@ const CardSearchList = ({ profiles }) => {
               </div>
 
               <div >
-                <Link  to={`/search/${profiles.pet_sitter_id}` } className="text-nowrap" >
+                
                   <p className="text-nowrap">{profiles.pet_sitter_name}</p>
-                </Link>
+               
 
                 <p className="text-nowrap">
                   {profiles.firstname} {profiles.lastname}{" "}
@@ -59,7 +59,7 @@ const CardSearchList = ({ profiles }) => {
         </div>
         <BackToTop />
       </div>
-   
+      </Link>
   );
 };
 

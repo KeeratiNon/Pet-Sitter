@@ -67,7 +67,6 @@ const SearchListPage = () => {
           },
         });
 
-        console.log(response.data.data);
         setProfiles(response.data.data || []);
         setTotal(response.data.total || 0);
       } catch (error) {
@@ -122,7 +121,7 @@ const SearchListPage = () => {
 
   return (
     <>
-      <section className=" md:bg-gray-100  md:pr-[70px] md:pl-[92px] ">
+      <section className=" bg-gray-100  md:pr-[70px] md:pl-[92px] ">
         {/* web mode*/}
         <div className=" hidden md:block md:pb-6 md:pt-9  ">
           <div className=" flex  justify-between w-full  items-center  ">
@@ -181,9 +180,10 @@ const SearchListPage = () => {
               />
             </div>
           </article>
-          <div className="w-full flex flex-col md:gap-10 md:p-4 ">
+
+          <div className=" w-full flex flex-col py-10 px-4 gap-6">
             {profiles.map((profile, index) => (
-              <CardSearchList key={index} profiles={profile} />
+              <CardSearchList key={index} profiles={profile}  />
             ))}
           </div>
         </main>

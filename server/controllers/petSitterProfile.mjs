@@ -96,9 +96,7 @@ export const searchPetsitterProfile = async (req, res) => {
   )
   ${
     selectedRatings.length > 0
-      ? sql`AND pet_sitter_profiles.rating = ANY(${sql.array(
-          selectedRatings
-        )})`
+      ? sql`AND pet_sitter_profiles.rating = ANY(${sql.array(selectedRatings)})`
       : sql``
   }
   ${
@@ -147,9 +145,7 @@ export const searchPetsitterProfile = async (req, res) => {
   )
   ${
     selectedRatings.length > 0
-      ? sql`AND pet_sitter_profiles.rating = ANY(${sql.array(
-          selectedRatings
-        )})`
+      ? sql`AND pet_sitter_profiles.rating = ANY(${sql.array(selectedRatings)})`
       : sql``
   }
   ${
@@ -310,6 +306,38 @@ export const getProfilePicAndName = async (req, res) => {
 
     res.status(200).json({ message: "Data retrieved successfully", result });
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+};
+
+export const viewPetsitterProfiles = async (req, res) => {
+  const petsitterId = req.params.id;
+
+  let results;
+  try {
+    results = await sql`
+      SELECT pet_sitters.*, pet_sitter_profiles.profile_image, pet_sitter_profiles.*, pet_sitter_address.*
+      FROM pet_sitters
+      INNER JOIN pet_sitter_profiles ON pet_sitter_profiles.pet_sitter_id = pet_sitters.id
+      INNER JOIN pet_sitter_address ON pet_sitter_address.pet_sitter_profile_id = pet_sitter_profiles.id
+      WHERE pet_sitters.id = ${petsitterId}
+    `;
+  } catch (error) {
+    return res.status(500).json({
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+  if (results.length > 0) {
+    return res.status(200).json({
+      message: "Petsitter Profile found",
+      data: results[0],
+    });
+  } else {
+    return res.status(404).json({
+      message: "Petsitter Profile not found",
+    });
   }
 };
