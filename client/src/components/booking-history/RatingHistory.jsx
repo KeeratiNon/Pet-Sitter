@@ -50,7 +50,7 @@ const RatingHistory = ({
   const handleSend = async () => {
     try {
       // ส่งข้อมูลรีวิวไปยัง API
-      const response = await axios.post(`${SERVER_API_URL}/review`, {
+      const response = await axios.post(`${SERVER_API_URL}/booking-history/review`, {
         booking_id: userReview.booking_id,
         rating: rating,
         review: userReview.review,
