@@ -5,9 +5,11 @@ const BookingInfo = ({ bookingInformation }) => {
   const { duration } = useCalculateBooking();
   const navigate = useNavigate();
 
+  const durationTime = parseInt(bookingInformation.total_minutes || 0);
+
   return (
     <>
-      <div>
+      <div className="z-10">
         <div className="bg-black p-6 flex flex-col justify-center items-center gap-2 md:min-w-[632px] md:rounded-t-2xl">
           <h1 className="text-[20px] leading-[28px] text-white font-bold md:text-[36px] md:leading-[44px]">
             Thank You For Booking
@@ -47,7 +49,7 @@ const BookingInfo = ({ bookingInformation }) => {
                 Duration:
               </span>
               <span className="text-[#3A3B46] text-[16px] leading-[28px] font-medium">
-                {duration(bookingInformation.total_minutes)}
+                {duration(durationTime)}
               </span>
             </div>
           </li>
@@ -70,7 +72,7 @@ const BookingInfo = ({ bookingInformation }) => {
         </ul>
       </div>
 
-      <div className="flex justify-center items-center gap-4 py-6 px-4 md:py-0 md:px-0">
+      <div className="z-10 flex justify-center items-center gap-4 py-6 px-4 md:py-0 md:px-0">
         <button
           onClick={() => navigate("/user/booking-history")}
           className="bg-[#FFF1EC] text-[#FF7037] text-base font-bold py-3 px-6 rounded-full"

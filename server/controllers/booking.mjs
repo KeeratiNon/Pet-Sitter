@@ -59,7 +59,7 @@ export const bookingInformation = async (req, res) => {
       to_char(bookings.booking_date, 'DD Mon, YYYY') AS booking_date,
       to_char(bookings.booking_time_start, 'HH12:MI AM') AS booking_time_start,
       to_char(bookings.booking_time_end, 'HH12:MI AM') AS booking_time_end,
-      FLOOR(SUM(EXTRACT(EPOCH FROM (bookings.booking_time_end - bookings.booking_time_start))/60)) AS total_minutes,
+      FLOOR(SUM(EXTRACT(EPOCH FROM (bookings.booking_time_end - bookings.booking_time_start))/60/2)) AS total_minutes,
       string_agg(pets.pet_name, ', ') AS pet_names
     FROM bookings
     JOIN pet_sitter_profiles 
@@ -70,7 +70,7 @@ export const bookingInformation = async (req, res) => {
       ON bookings.id = booking_pets.booking_id
     JOIN pets
       ON booking_pets.pet_id = pets.id
-    WHERE bookings.user_id = ${userIdFromClient}
+    WHERE bookings.user_id = 33
     GROUP BY 
       bookings.id,
       booking_payments.created_at,

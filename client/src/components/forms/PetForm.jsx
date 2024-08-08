@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
-import iconPet from "../../assets/svgs/icons/icon-your-pet.svg";
+import petProfile from "../../assets/svgs/icons/icon-your-pet-white.svg";
 import iconPlus from "../../assets/svgs/icons/icon-plus-circle.svg";
 import TypeList from "../searchs/TypeList";
 import BookingSummary from "../booking/BookingSummary";
@@ -61,15 +61,20 @@ const PetForm = ({ onNext, petData, bookingData, setBookingData }) => {
 
       <div className="flex flex-wrap items-center gap-4 mt-2 md:flex-row">
         {petData?.map((pet) => (
-          <div
+          <button
             key={pet.id}
-            className="w-full bg-white border border-primarygray-200 rounded-2xl p-6 flex flex-col justify-center items-center gap-4 relative md:size-60"
+            type="button"
+            className={`w-full bg-white border ${
+              bookingData.pet_name.includes(pet.pet_name)
+                ? "border-orange-500"
+                : "border-primarygray-200"
+            } rounded-2xl p-6 flex flex-col justify-center items-center gap-4 relative md:size-60`}
           >
             <input
               type="checkbox"
-              className="size-6 absolute top-4 right-4 accent-[#FF7037]"
+              className="checkbox-primary"
               value={pet.pet_name}
-              onChange={(event) =>
+              onClick={(event) =>
                 handlePetSelection(pet.id, pet.pet_name, event.target.checked)
               }
               checked={bookingData.pet_name.includes(pet.pet_name)}
@@ -77,7 +82,7 @@ const PetForm = ({ onNext, petData, bookingData, setBookingData }) => {
 
             <figure>
               <img
-                src={pet.image || iconPet}
+                src={pet.image || petProfile}
                 alt="image-user"
                 className="size-[104px] rounded-full"
               />
@@ -87,7 +92,7 @@ const PetForm = ({ onNext, petData, bookingData, setBookingData }) => {
               <span>{pet.pet_name}</span>
               <TypeList types={[pet.pet_type]} />
             </figcaption>
-          </div>
+          </button>
         ))}
 
         <button

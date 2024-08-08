@@ -9,12 +9,13 @@ import { useNavigate } from "react-router-dom";
 
 const UserPetManagementPage = () => {
   const { state } = useAuth();
-  const navigate = useNavigate();
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [petData, setPetData] = useState();
   const [petFormData, setPetFormData] = useState();
+
+  console.log("petData: ", petData);
 
   const getPetProfileData = async () => {
     const userId = state.user.id;
@@ -80,7 +81,7 @@ const UserPetManagementPage = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <span className="loading loading-dots loading-lg"></span>;
   }
 
   if (error) {
@@ -88,17 +89,19 @@ const UserPetManagementPage = () => {
   }
 
   return (
-    <section className="flex flex-col bg-[#F6F6F9] lg:gap-8 lg:py-10 lg:px-20 md:min-h-[calc(100dvh-72px)] lg:min-w-[956px] lg:flex-row">
+    <section className="flex flex-col bg-[#F6F6F9] min-h-[calc(100dvh-72px)] lg:gap-8 lg:py-10 lg:px-20 lg:min-w-[956px] lg:flex-row">
       <AccountMenu />
       {petData ? (
         showForm ? (
           <PetProfileForm
             setShowForm={setShowForm}
             showForm={showForm}
+            setPetData={setPetData}
             petData={petData}
             setPetFormData={setPetFormData}
             petFormData={petFormData}
             handleSubmit={handleSubmit}
+            getPetProfileData={getPetProfileData}
           />
         ) : (
           <PetProfileList
