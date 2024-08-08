@@ -9,8 +9,7 @@ import { useAuth } from "../contexts/authentication";
 import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 import LinearProgress from "@mui/material/LinearProgress";
-import LoginFacebook from "../components/login-facebook";
-import LoginGoogle from "../components/login-google";
+
 
 
 const initialValues = {

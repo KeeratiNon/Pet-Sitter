@@ -3,8 +3,6 @@ import DogFoot from "../assets/svgs/dog-foot.svg";
 import DogFootLg from "../assets/svgs/dog-foot-lg.svg";
 import StarGreen from "../assets/svgs/star-green.svg";
 import CurveBlue from "../assets/svgs/curve-blue.svg";
-import Google from "../assets/svgs/logo-google.svg";
-import Facebook from "../assets/svgs/logo-facebook.svg";
 import { Formik, Form, Field } from "formik";
 import { signupSchema } from "../schemas/SignUpAndSignIn";
 import { Link } from "react-router-dom";
