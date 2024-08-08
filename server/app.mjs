@@ -31,7 +31,7 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:5173",
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "DELETE", "PUT"],
   },
 });
 
@@ -47,10 +47,7 @@ app.use("/petsitter/payout-option", petSitterPayoutRouter);
 app.use("/booking-history", bookingHistoryRouter); // ใช้ Route สำหรับ Booking History
 app.use("/bookings", bookingRouter);
 app.use("/user", userRouter);
-
-app.use("/", userReview);
-app.use("/review", bookingHistoryRouter);
-app.use("/report", bookingHistoryRouter);
+app.use("/review", userReview);
 
 app.get("/test", (req, res) => {
   return res.json("Server API is working");
@@ -114,6 +111,10 @@ io.on("connection", (socket) => {
             newMessage,
             newChatRoom,
           });
+          users[String(targetId)].emit("countMessage", {
+            newMessage,
+            newChatRoom,
+          });
         } catch (error) {
           console.error("Error saving message:", error);
         }
@@ -165,8 +166,7 @@ io.on("connection", (socket) => {
 });
 
 function convertToGMT7(date) {
-  const gmt7Offset = 7 * 60; // GMT+7 in minutes
-  const dateInGMT7 = new Date(date.getTime() + gmt7Offset * 60 * 1000);
+  const dateInGMT7 = new Date(date.getTime());
   return dateInGMT7;
 }
 
@@ -178,23 +178,23 @@ function formatTime(date) {
   return date.toTimeString().split(" ")[0];
 }
 
-function subtractHours(date, hours) {
-  return new Date(date.getTime() - hours * 60 * 60 * 1000);
+function addHours(date, hours) {
+  return new Date(date.getTime() + hours * 60 * 60 * 1000);
 }
 
 cron.schedule("* * * * *", async () => {
   try {
     const currentDate = new Date();
     const zonedDate = convertToGMT7(currentDate);
-    const targetDate = subtractHours(zonedDate, 2);
+    const targetDate = addHours(zonedDate, 2);
     const formattedDate = formatDate(targetDate);
     const formattedTime = formatTime(targetDate);
 
     const bookings = await sql`
       SELECT * FROM bookings
       WHERE status = 'Waiting for confirm'
-      AND booking_date <= ${formattedDate}
-      AND booking_time_start <= ${formattedTime}
+      AND booking_date = ${formattedDate}
+      AND booking_time_start < ${formattedTime}
     `;
 
     for (const booking of bookings) {

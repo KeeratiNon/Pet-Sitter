@@ -5,14 +5,13 @@ import { useState } from "react";
 import ReviewHistory from "./ReviewHistory";
 import ReportHistory from "./ReportHistory";
 
-
 const BookingHistory = () => {
+  const [showRating, setShowRating] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showReview, setShowReview] = useState(false);
   const [showReport, setShowReport] = useState(false);
   const [reviewData, setReviewData] = useState(false);
 
-  
   return (
     <div className="relative w-full">
       <div className="bg-white flex flex-col flex-1 lg:rounded-[16px] py-[24px] px-[16px]  md:p-[40px] gap-[24px] md:gap-[60px]">
@@ -22,6 +21,8 @@ const BookingHistory = () => {
           </p>
         </div>
         <BookingHistoryService
+          showRating={showRating}
+          setShowRating={setShowRating}
           showModal={showModal}
           setShowModal={setShowModal}
           showReview={showReview}
@@ -30,8 +31,10 @@ const BookingHistory = () => {
           showReport={showReport}
           setShowReport={setShowReport}
         />
-        
+
         <RatingHistory
+          showRating={showRating}
+          setShowRating={setShowRating}
           showModal={showModal}
           setShowModal={setShowModal}
           showReview={showReview}
@@ -44,10 +47,7 @@ const BookingHistory = () => {
           reviewData={reviewData}
         />
 
-        <ReportHistory 
-        showReport={showReport} 
-        setShowReport={setShowReport} />
-        
+        <ReportHistory showReport={showReport} setShowReport={setShowReport} />
       </div>
     </div>
   );

@@ -31,7 +31,7 @@ const ContentTop = ({ profiles }) => {
         <p className="text-primarygray-500 text-[14px] leading-[24px] font-medium lg:text-[16px] lg:leading-[28px] ">
           {profiles.my_place}
         </p>
-        <img src={map} className="rounded-[8px]"></img>
+        {/* <img src={map} className="rounded-[8px]"></img> */}
       </div>
     </div>
     

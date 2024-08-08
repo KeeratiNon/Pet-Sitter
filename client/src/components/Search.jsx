@@ -146,7 +146,7 @@ const Search = () => {
                   <button
                   className={`gap-[3px] pt-[4px] pr-[8px] pb-[4px] pl-[8px] text-[16px] leading-7 flex items-center border-gray-200 rounded-[8px] border md:ml-1 ${
                     selectedRatings.includes(parseFloat(rating))
-                      ? 'bg-orange-500 text-white'
+                      ? ' border-1 border-orange-500 text-orange-500'
                       : 'bg-white text-gray-800'
                   }`}
                     key={index}
@@ -163,7 +163,7 @@ const Search = () => {
               <p className="font-bold ">Experience:</p>
 
               <FormControl size="small">
-                <InputLabel id="demo-simple-select-label">Year</InputLabel>
+                <InputLabel id="demo-simple-select-label">Years</InputLabel>
                 <Select
                   className="border border-gray-200 h-[48px] rounded-[8px] min-w-[144px]   "
                   labelId="demo-simple-select-label"

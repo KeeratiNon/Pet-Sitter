@@ -66,10 +66,14 @@ export const getUserReview = async (req, res) => {
     // Calculate average rating from all reviews
     const averageRating =
       allReviews.length > 0
-        ? (
-            allReviews.reduce((sum, review) => sum + Number(review.rating), 0) /
-            allReviews.length
-          ).toFixed(1)
+        ? Math.round(
+            (allReviews.reduce(
+              (sum, review) => sum + Number(review.rating),
+              0
+            ) /
+              allReviews.length) *
+              2
+          ) / 2
         : 0;
     
     // Update pet_sitter_profiles with the new average rating

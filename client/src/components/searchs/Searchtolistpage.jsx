@@ -25,7 +25,6 @@ const Searchtolistpage = ({
   setSearchText,
   searchText,
 }) => {
-  
   const handlePetChange = (event) => {
     const value = event.target.value;
     setSelectedPet((prevSelectedPets) => {
@@ -37,39 +36,35 @@ const Searchtolistpage = ({
       return [value];
     });
   };
-  
-  
+
   const handleRatingChange = (rating) => {
     const numericRating = parseFloat(rating);
-  
     setSelectedRatings((prevRatings) => {
       let newRatings = [...prevRatings];
-      
+
       const ratingsToAdd = [numericRating];
       if (numericRating % 1 === 0) {
         ratingsToAdd.push(numericRating + 0.5);
       }
-      
-      ratingsToAdd.forEach(r => {
+
+      ratingsToAdd.forEach((r) => {
         if (newRatings.includes(r)) {
-          newRatings = newRatings.filter(rating => rating !== r);
+          newRatings = newRatings.filter((rating) => rating !== r);
         } else {
           newRatings.push(r);
         }
       });
-      
+
       // อัพเดท filters พร้อมกับ selectedRatings
       setFilters((prevFilters) => ({
         ...prevFilters,
         rating: newRatings,
       }));
-  
+
       return newRatings;
     });
   };
-  
-  
-  
+
   //ดึงรูปเข้าไปใน array
   const renderStars = (count) => {
     return Array.from({ length: count }, (_, index) => (
@@ -78,19 +73,18 @@ const Searchtolistpage = ({
   };
   const handleSearch = () => {
     setFilters({
-        ...filters,
-        searchText,
-        rating: selectedRatings,
-        pet_type: selectedPet,
-        experience: years
+      ...filters,
+      searchText,
+      rating: selectedRatings,
+      pet_type: selectedPet,
+      experience: years,
     });
-    
-};
+  };
 
   const handleExperienceChange = (event) => {
     const value = event.target.value;
     setYears(value);
-  
+
     setFilters((prevFilters) => ({
       ...prevFilters,
       experience: value,
@@ -104,7 +98,7 @@ const Searchtolistpage = ({
           className="  md:bg-white  md:rounded-2xl   "
           style={{ boxShadow: "4px 4px 24px 0px rgba(0, 0, 0, 0.04)" }}
         >
-          <div className="hidden md:block md:pr-[24px] md:pl-[24px] md:pt-[24px] md:pb-[40px] ">
+          <div className="hidden md:block  md:pr-[24px] md:pl-[24px] md:pt-[24px] md:pb-[40px] ">
             <label className=" text-[16px] leading-[24px] ">Search</label>
             <div className="pt-[12px] pr-[16x] pb-[12px] pl-[16px]  flex  rounded-[8px] border border-gray-200    ">
               <input
@@ -170,10 +164,12 @@ const Searchtolistpage = ({
                 </label>
                 {/* วนรูปตามจำนวนเลข */}
                 <div className="flex flex-wrap gap-[8px]  ">
-                  {["5",  "4",  "3",  "2",  "1"].map((rating, index) => (
+                  {["5", "4", "3", "2", "1"].map((rating, index) => (
                     <button
                       className={`gap-[3px] pt-[4] pr-[8px] pb-[4px] pl-[8px] text-[16px] leading-7 flex flex-wrap items-center border-gray-200 rounded-[8px] border ${
-                        selectedRatings.includes(parseFloat(rating)) ? 'bg-orange-500 text-white' : 'bg-white text-gray-800'
+                        selectedRatings.includes(parseFloat(rating))
+                          ? "border-1 border-orange-500 text-orange-500"
+                          : "bg-white text-gray-800"
                       }`}
                       key={index}
                       onClick={() => handleRatingChange(rating)}
@@ -189,7 +185,7 @@ const Searchtolistpage = ({
                 <p className="font-bold ">Experience:</p>
 
                 <FormControl size="small">
-                  <InputLabel id="demo-simple-select-label">Year</InputLabel>
+                  <InputLabel id="demo-simple-select-label">Years</InputLabel>
                   <Select
                     className="border border-gray-200 h-[48px] rounded-[8px] min-w-[144px]  "
                     labelId="demo-simple-select-label"

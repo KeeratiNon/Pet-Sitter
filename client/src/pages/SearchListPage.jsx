@@ -66,8 +66,8 @@ const SearchListPage = () => {
             pet_type: petTypeParam,
           },
         });
-
-        console.log(response.data.data);
+        
+        
         setProfiles(response.data.data || []);
         setTotal(response.data.total || 0);
       } catch (error) {

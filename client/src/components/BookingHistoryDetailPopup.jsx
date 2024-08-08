@@ -5,8 +5,8 @@ import cross from "../assets/svgs/icons/icon-cross.svg";
 import changeIcon from "../assets/svgs/icons/icon-change.svg";
 import BookingPopup from "./BookingPopup";
 import Map from "../assets/svgs/icons/icon-map.svg";
+import ChangeDateSuccessPopup from "./ChangeDateSuccessPopup ";
 
-// ฟังก์ชันเพื่อกำหนดสีตามสถานะ
 const getStatusColor = (status) => {
   switch (status) {
     case "Waiting for service":
@@ -24,7 +24,6 @@ const getStatusColor = (status) => {
   }
 };
 
-// ฟังก์ชันคำนวณ Duration
 const calculateDuration = (start, end) => {
   const parseTime = (time) => {
     let [hours, minutes] = time.split(/[: ]/).map(Number);
@@ -47,6 +46,7 @@ const BookingHistoryDetailPopup = ({
 }) => {
   const [bookingDetail, setBookingDetail] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
     if (bookingId) {
@@ -64,6 +64,15 @@ const BookingHistoryDetailPopup = ({
       fetchBookingDetail();
     }
   }, [bookingId]);
+
+  const handleConfirm = () => {
+    setShowModal(false);
+    setShowSuccess(true);
+    setTimeout(() => {
+      setShowSuccess(false);
+      window.location.reload(); // Refresh the page after 3 seconds
+    }, 1500);
+  };
 
   if (!showDetail || !bookingDetail) {
     return null;
@@ -188,7 +197,13 @@ const BookingHistoryDetailPopup = ({
         showModal={showModal}
         setShowModal={setShowModal}
         text="Change date"
+        booking="Confirm"
+        selectedBookingId={bookingId} // Pass selected booking ID to BookingPopup
+        onConfirm={handleConfirm} // Pass handleConfirm to BookingPopup
       />
+      {showSuccess && (
+        <ChangeDateSuccessPopup showModal={showSuccess} setShowModal={setShowSuccess} />
+      )}
     </div>
   );
 };

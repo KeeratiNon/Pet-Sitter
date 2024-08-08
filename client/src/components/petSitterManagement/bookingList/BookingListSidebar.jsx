@@ -16,8 +16,6 @@ const Sidebar = () => {
   const { logout } = useAuth();
 
   const [hasWaitingForConfirm, setHasWaitingForConfirm] = useState(false);
-  const [hoverProfile, setHoverProfile] = useState(false);
-  const [hoverPayout, setHoverPayout] = useState(false);
 
   useEffect(() => {
     const fetchBookingStatuses = async () => {
@@ -45,15 +43,14 @@ const Sidebar = () => {
         </Link>
       </div>
 
-      <Link
-        to="/petsitter/profile"
-        className="flex gap-[16px] px-[24px] py-[16px] hover:text-primaryorange-500"
-        onMouseEnter={() => setHoverProfile(true)}
-        onMouseLeave={() => setHoverProfile(false)}
-      >
+      <Link to="/petsitter/profile" className="flex gap-[16px] px-[24px] py-[16px] hover:text-primaryorange-500">
         <img
-          src={hoverProfile ? petSitterOrangeProfile : petSitterGrayProfile}
-          className="w-[24px] h-[24px]"
+          src={petSitterGrayProfile}
+          className="w-[24px] h-[24px] hover:hidden"
+        />
+        <img
+          src={petSitterOrangeProfile}
+          className="w-[24px] h-[24px] hidden hover:inline"
         />
         <span>Pet Sitter Profile</span>
       </Link>
@@ -73,19 +70,17 @@ const Sidebar = () => {
         )}
       </div>
 
-      <Link
-        to="/petsitter/payout-option"
-        className="flex gap-[16px] px-[24px] py-[16px] hover:text-primaryorange-500"
-        onMouseEnter={() => setHoverPayout(true)}
-        onMouseLeave={() => setHoverPayout(false)}
-      >
+      <Link to="/petsitter/payout-option" className="flex gap-[16px] px-[24px] py-[16px] hover:text-primaryorange-500">
         <img
-          src={hoverPayout ? petSitterOrangePayment : petSitterGrayPayment}
-          className="w-[24px] h-[24px]"
+          src={petSitterGrayPayment}
+          className="w-[24px] h-[24px] hover:hidden"
+        />
+        <img
+          src={petSitterOrangePayment}
+          className="w-[24px] h-[24px] hidden hover:inline"
         />
         <span>Payout Option</span>
       </Link>
-
       <div
         onClick={logout}
         className="flex gap-[16px] mt-[664px] pl-[24px] pt-[16px] border-t-[1px] border-primarygray-200 cursor-pointer"

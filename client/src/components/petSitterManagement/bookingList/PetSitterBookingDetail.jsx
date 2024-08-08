@@ -63,7 +63,7 @@ const PetsitterBookingDetail = () => {
     });
     setChatRoomList(newChatRoomList);
   };
-
+ console.log(bookingDetail)
   useEffect(() => {
     if (booking_id) {
       const fetchBookingDetail = async () => {
@@ -71,6 +71,7 @@ const PetsitterBookingDetail = () => {
           const response = await axios.get(
             `${SERVER_API_URL}/petsitter/booking/detail/${booking_id}`
           );
+          
           setBookingDetail(response.data);
         } catch (error) {
           setError(error.message);
@@ -245,9 +246,9 @@ const PetsitterBookingDetail = () => {
                   onClick={() => setSelectedPet(pet)}
                 >
                   <div className="w-[104px] h-[104px] rounded-full bg-[#DCDFED] flex items-center justify-center">
-                    {pet.image ? (
+                    {pet.pet_image ? (
                       <img
-                        src={pet.image}
+                        src={pet.pet_image}
                         className="w-[104px] h-[104px] rounded-full"
                         alt={pet.pet_name}
                       />
@@ -366,7 +367,7 @@ const PetsitterBookingDetail = () => {
           setShowCancelConfirm(false);
         }}
       />
-      ;
+      
     </div>
   );
 };

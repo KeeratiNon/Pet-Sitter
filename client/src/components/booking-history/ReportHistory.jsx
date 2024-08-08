@@ -27,7 +27,7 @@ const ReportHistory = ({ showReport, setShowReport }) => {
   const handleSend = async () => {
     try {
       // ส่งข้อมูลรายงานไปยัง API
-      const response = await axios.post(`${SERVER_API_URL}/report`, {
+      const response = await axios.post(`${SERVER_API_URL}/booking-history/report`, {
         issue,
         description,
       });

@@ -5,4 +5,4 @@ import { getUserReview } from "../controllers/review.mjs";
 
 export const userReview = Router();
 
-userReview.get("/reviews/:pet_sitter_id", getUserReview);
+userReview.get("/:pet_sitter_id", getUserReview);

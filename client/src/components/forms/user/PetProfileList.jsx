@@ -1,4 +1,5 @@
 import TypeList from "../../searchs/TypeList";
+import petProfile from "../../../assets/svgs/icons/icon-your-pet-white.svg";
 
 const PetProfileList = ({
   petData,
@@ -20,15 +21,23 @@ const PetProfileList = ({
         {petData?.map((pet) => (
           <button
             onClick={() => handlePetOnClick(pet.id)}
-            className="w-full bg-white border border-primarygray-200 rounded-2xl p-6 flex flex-col justify-center items-center gap-4 relative md:size-60"
+            className="w-full bg-white border border-primarygray-200 hover:border-[#FF7037] rounded-2xl p-6 flex flex-col justify-center items-center gap-4 relative md:size-60"
             key={pet.id}
           >
             <figure>
-              <img
-                src={pet.image}
-                alt="image-user"
-                className="w-[104px] h-[104px] rounded-full object-cover"
-              />
+              {pet.image ? (
+                <img
+                  src={pet.image}
+                  alt="image-pet"
+                  className="w-[104px] h-[104px] rounded-full object-cover"
+                />
+              ) : (
+                <img
+                  src={petProfile}
+                  alt="default-pet-profile"
+                  className="w-[104px] h-[104px] rounded-full"
+                />
+              )}
             </figure>
 
             <figcaption className="flex flex-col justify-center items-center gap-2">

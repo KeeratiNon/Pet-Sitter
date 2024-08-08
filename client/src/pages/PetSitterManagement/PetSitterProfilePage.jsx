@@ -84,6 +84,7 @@ const PetSitterProfilePage = () => {
           province: data.province || "",
           post_code: data.post_code || "",
         });
+        console.log(response)
         setPetsitterId(data.id);
       } catch (error) {
         console.error("Error fetching petsitter profile data:", error);

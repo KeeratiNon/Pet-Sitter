@@ -5,6 +5,8 @@ import CustomDatePicker from "./cards/CustomDatePicker ";
 import CustomTimePicker from "./cards/CustomTimePicker";
 import { useNavigate } from "react-router-dom";
 import { useLocalStorage } from "../hooks/useLocalStorage";
+import axios from "axios";
+import { SERVER_API_URL } from "../core/config.mjs";
 
 const BookingPopup = ({
   showModal,
@@ -12,24 +14,48 @@ const BookingPopup = ({
   text,
   booking,
   onConfirm,
+  selectedBookingId, // receive selectedBookingId as a prop
 }) => {
   const { setItem } = useLocalStorage();
   const navigate = useNavigate();
 
   const [selectedDate, setSelectedDate] = useState(null);
-  const [startTime, setStartTime] = useState(null);
-  const [endTime, setEndTime] = useState(null);
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
 
-  const handleContinue = () => {
-    setItem("bookingDate", selectedDate);
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  const handleContinue = async () => {
+    const formattedDate = formatDate(selectedDate);
+    setItem("bookingDate", formattedDate);
     setItem("bookingStart", startTime);
     setItem("bookingEnd", endTime);
-    if (onConfirm) {
-      onConfirm();
-    } else {
-      navigate("/booking");
+
+    const bookingData = {
+      bookingId: selectedBookingId, // use selectedBookingId here
+      bookingDate: formattedDate, // Send date as ISO string
+      bookingStart: startTime,
+      bookingEnd: endTime
+    };
+    console.log(bookingData);
+
+    try {
+      if (onConfirm) {
+        await axios.put(`${SERVER_API_URL}/booking-history/update-booking`, bookingData);
+        onConfirm();
+      } else {
+        navigate("/booking");
+      }
+    } catch (error) {
+      console.error("Error updating booking:", error);
     }
   };
+
 
   if (!showModal) {
     return null;

@@ -67,7 +67,7 @@ export const createUserProfile = async (req, res) => {
 
     await sql`
       UPDATE users
-      SET phone_number = ${newUserProfile.phone_number}, updated_at = ${newUserProfile.updated_at}
+      SET email = ${newUserProfile.email}, phone_number = ${newUserProfile.phone_number}, updated_at = ${newUserProfile.updated_at}
       WHERE id = ${newUserProfile.user_id}
     `;
 
@@ -88,7 +88,32 @@ export const viewPetProfile = async (req, res) => {
   let result;
 
   try {
-    result = await sql`SELECT * FROM pets WHERE user_id = ${userIdFromClient}`;
+    result = await sql`
+    SELECT
+      DISTINCT ON (pets.id)
+      pets.id,
+      pets.user_id,
+      pets.pet_name,
+      pets.pet_type,
+      pets.breed,
+      pets.sex,
+      pets.age,
+      pets.color,
+      pets.weight,
+      pets.about,
+      pets.image,
+      bookings.status
+    FROM 
+      pets
+    LEFT JOIN 
+      booking_pets ON pets.id = booking_pets.pet_id
+    LEFT JOIN
+      bookings ON booking_pets.booking_id = bookings.id
+    WHERE 
+      pets.user_id = ${userIdFromClient}
+    ORDER BY 
+      pets.id, booking_pets.booking_id DESC;
+`;
   } catch {
     return res.status(500).json({
       message: `Server could not bacause database connection`,
@@ -166,20 +191,24 @@ export const deletePetProfile = async (req, res) => {
   const petId = req.params.petId;
 
   try {
-    await sql`
-    DELETE FROM pets
-        WHERE id = ${petId}`;
-  } catch {
+    const result = await sql`
+      DELETE FROM pets
+      WHERE id = ${petId}
+      RETURNING *;
+    `;
+
+    console.log(result);
+
+    return res.status(201).json({
+      message: `Pet profile successfully deleted`,
+    });
+  } catch (error) {
+    console.log("error", error);
     return res.status(500).json({
       message: `Server could not bacause database connection`,
     });
   }
-
-  return res.status(200).json({
-    message: `Pet delete successfully`,
-  });
 };
-
 
 export const getProfilePicAndName = async (req, res) => {
   const UserId = req.user.id;
@@ -195,6 +224,8 @@ export const getProfilePicAndName = async (req, res) => {
 
     res.status(200).json({ message: "Data retrieved successfully", result });
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
   }
 };
