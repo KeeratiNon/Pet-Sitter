@@ -88,7 +88,32 @@ export const viewPetProfile = async (req, res) => {
   let result;
 
   try {
-    result = await sql`SELECT * FROM pets WHERE user_id = ${userIdFromClient}`;
+    result = await sql`
+    SELECT
+      DISTINCT ON (pets.id)
+      pets.id,
+      pets.user_id,
+      pets.pet_name,
+      pets.pet_type,
+      pets.breed,
+      pets.sex,
+      pets.age,
+      pets.color,
+      pets.weight,
+      pets.about,
+      pets.image,
+      bookings.status
+    FROM 
+      pets
+    LEFT JOIN 
+      booking_pets ON pets.id = booking_pets.pet_id
+    LEFT JOIN
+      bookings ON booking_pets.booking_id = bookings.id
+    WHERE 
+      pets.user_id = ${userIdFromClient}
+    ORDER BY 
+      pets.id, booking_pets.booking_id DESC;
+`;
   } catch {
     return res.status(500).json({
       message: `Server could not bacause database connection`,
@@ -163,22 +188,26 @@ export const updatePetProfile = async (req, res) => {
 };
 
 export const deletePetProfile = async (req, res) => {
-  const userIdFromClient = req.user.id;
   const petId = req.params.petId;
 
   try {
-    await sql`
-    DELETE FROM pets
-        WHERE id = ${petId} AND user_id = ${userIdFromClient}`;
-  } catch {
+    const result = await sql`
+      DELETE FROM pets
+      WHERE id = ${petId}
+      RETURNING *;
+    `;
+
+    console.log(result);
+
+    return res.status(201).json({
+      message: `Pet profile successfully deleted`,
+    });
+  } catch (error) {
+    console.log("error", error);
     return res.status(500).json({
       message: `Server could not bacause database connection`,
     });
   }
-
-  return res.status(201).json({
-    message: `Pet delete successfully`,
-  });
 };
 
 export const getProfilePicAndName = async (req, res) => {

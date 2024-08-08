@@ -31,7 +31,7 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:5173",
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "DELETE", "PUT"],
   },
 });
 
@@ -48,7 +48,6 @@ app.use("/booking-history", bookingHistoryRouter); // ใช้ Route สำห�
 app.use("/bookings", bookingRouter);
 app.use("/user", userRouter);
 app.use("/review", userReview);
-
 
 app.get("/test", (req, res) => {
   return res.json("Server API is working");

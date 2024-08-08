@@ -64,11 +64,15 @@ const PetForm = ({ onNext, petData, bookingData, setBookingData }) => {
           <button
             key={pet.id}
             type="button"
-            className="w-full bg-white border border-primarygray-200 rounded-2xl p-6 flex flex-col justify-center items-center gap-4 relative md:size-60"
+            className={`w-full bg-white border ${
+              bookingData.pet_name.includes(pet.pet_name)
+                ? "border-orange-500"
+                : "border-primarygray-200"
+            } rounded-2xl p-6 flex flex-col justify-center items-center gap-4 relative md:size-60`}
           >
             <input
               type="checkbox"
-              className="size-6 absolute top-4 right-4 accent-[#FF7037]"
+              className="checkbox-primary"
               value={pet.pet_name}
               onClick={(event) =>
                 handlePetSelection(pet.id, pet.pet_name, event.target.checked)

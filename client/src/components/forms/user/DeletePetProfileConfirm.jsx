@@ -1,8 +1,11 @@
-
 import iconX from "../../../assets/svgs/icons/icon-x.svg";
 
-const DeletePetProfileConfirm = ({ open, close, handleDeletePetProfile }) => {
-
+const DeletePetProfileConfirm = ({
+  open,
+  close,
+  handleDeletePetProfile,
+  petId,
+}) => {
   return (
     <div
       className={`fixed inset-0 flex justify-center items-center transition-colors ${
@@ -31,7 +34,10 @@ const DeletePetProfileConfirm = ({ open, close, handleDeletePetProfile }) => {
             <button onClick={close} className="btn-secondary">
               Cancel
             </button>
-            <button onClick={handleDeletePetProfile} className="btn-primary">
+            <button
+              onClick={() => handleDeletePetProfile(petId)}
+              className="btn-primary"
+            >
               Delete
             </button>
           </div>

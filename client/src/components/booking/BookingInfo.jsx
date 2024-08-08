@@ -5,6 +5,8 @@ const BookingInfo = ({ bookingInformation }) => {
   const { duration } = useCalculateBooking();
   const navigate = useNavigate();
 
+  const durationTime = parseInt(bookingInformation.total_minutes || 0);
+
   return (
     <>
       <div className="z-10">
@@ -47,7 +49,7 @@ const BookingInfo = ({ bookingInformation }) => {
                 Duration:
               </span>
               <span className="text-[#3A3B46] text-[16px] leading-[28px] font-medium">
-                {duration(bookingInformation.total_minutes)}
+                {duration(durationTime)}
               </span>
             </div>
           </li>

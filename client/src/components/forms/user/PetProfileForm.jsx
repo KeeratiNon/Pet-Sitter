@@ -6,17 +6,20 @@ import { v4 as uuidv4 } from "uuid";
 import { useState } from "react";
 import DeletePetProfileConfirm from "./DeletePetProfileConfirm";
 import { IconDelete } from "../../../assets/svgs/icons/IconDelete";
+import axios from "axios";
+import { SERVER_API_URL } from "../../../core/config.mjs";
 
 const PetProfileForm = ({
   setShowForm,
   showForm,
   setPetFormData,
   petFormData,
+  petData,
   handleSubmit,
-  handleDeletePetProfile,
 }) => {
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  console.log("petFormData.status: ", petFormData);
 
   const handleImageChange = async (event) => {
     const file = event.target.files[0];
@@ -82,6 +85,24 @@ const PetProfileForm = ({
       ...prevData,
       [name]: value,
     }));
+  };
+
+  const handleDeletePetProfile = async (petId) => {
+    console.log("PetProfileForm petId", petId);
+
+    try {
+      const response = await axios.delete(
+        `${SERVER_API_URL}/user/pet/${petId}`
+      );
+
+      if (response.status === 200) {
+        console.log("Pet profile successfully deleted");
+      } else {
+        console.error("Failed to delete pet profile");
+      }
+    } catch (error) {
+      console.error("Error deleting pet profile:", error);
+    }
   };
 
   const onSubmit = (event) => {
@@ -159,7 +180,9 @@ const PetProfileForm = ({
             </label>
             <select
               name="pet_type"
-              className="input-box text-[#9AA1B9]"
+              className={`input-box ${
+                petFormData.pet_type ? "text-black" : "text-[#9AA1B9]"
+              }`}
               value={petFormData.pet_type || ""}
               onChange={handleInputChange}
             >
@@ -194,7 +217,9 @@ const PetProfileForm = ({
             </label>
             <select
               name="sex"
-              className="input-box text-[#9AA1B9]"
+              className={`input-box ${
+                petFormData.sex ? "text-black" : "text-[#9AA1B9]"
+              }`}
               value={petFormData.sex || ""}
               onChange={handleInputChange}
             >
@@ -269,6 +294,7 @@ const PetProfileForm = ({
       {!petFormData.id ? (
         <div className="flex justify-between gap-4 py-6 px-4 bg-white md:rounded-b-2xl">
           <button
+            type="button"
             className="btn-secondary md:w-[120px]"
             onClick={() => setShowForm(false)}
           >
@@ -281,21 +307,25 @@ const PetProfileForm = ({
         </div>
       ) : (
         <div className="flex flex-col justify-between gap-14 py-6 px-4 bg-white md:rounded-b-2xl">
-          <button
-            type="button"
-            className="text-[#FF7037] text-base font-bold flex gap-1"
-            onClick={() => setIsModalOpen(true)}
-          >
-            <IconDelete />
-            Delete Pet
-          </button>
+          {(petFormData.status === null ||
+            petFormData.status === "Waiting for confirm" ||
+            petFormData.status === "Success" ||
+            petFormData.status === "Canceled") && (
+            <button
+              type="button"
+              className="text-[#FF7037] text-base font-bold flex gap-1"
+              onClick={() => setIsModalOpen(true)}
+            >
+              <IconDelete />
+              Delete Pet
+            </button>
+          )}
 
           <DeletePetProfileConfirm
             open={isModalOpen}
             close={() => setIsModalOpen(false)}
-            handleDeletePetProfile={() =>
-              handleDeletePetProfile(petFormData.id)
-            }
+            handleDeletePetProfile={handleDeletePetProfile}
+            petId={Number(petFormData.id)}
           />
 
           <div className="flex justify-between gap-4 bg-white md:rounded-b-2xl">
