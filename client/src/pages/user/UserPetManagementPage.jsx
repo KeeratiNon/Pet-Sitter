@@ -60,6 +60,14 @@ const UserPetManagementPage = () => {
     setShowForm(true);
   };
 
+  const handleDeletePetProfile = async (petFormData) => {
+    try {
+      await axios.delete(`${SERVER_API_URL}/user/pet/${petFormData.id}`);
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
+
   const handleSubmit = async (petFormData) => {
     try {
       if (petFormData.id) {
@@ -80,7 +88,7 @@ const UserPetManagementPage = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <span className="loading loading-dots loading-lg"></span>;
   }
 
   if (error) {
@@ -99,6 +107,7 @@ const UserPetManagementPage = () => {
             setPetFormData={setPetFormData}
             petFormData={petFormData}
             handleSubmit={handleSubmit}
+            handleDeletePetProfile={handleDeletePetProfile}
           />
         ) : (
           <PetProfileList

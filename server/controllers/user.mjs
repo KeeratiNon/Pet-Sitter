@@ -67,7 +67,7 @@ export const createUserProfile = async (req, res) => {
 
     await sql`
       UPDATE users
-      SET phone_number = ${newUserProfile.phone_number}, updated_at = ${newUserProfile.updated_at}
+      SET email = ${newUserProfile.email}, phone_number = ${newUserProfile.phone_number}, updated_at = ${newUserProfile.updated_at}
       WHERE id = ${newUserProfile.user_id}
     `;
 
@@ -163,23 +163,23 @@ export const updatePetProfile = async (req, res) => {
 };
 
 export const deletePetProfile = async (req, res) => {
+  const userIdFromClient = req.user.id;
   const petId = req.params.petId;
 
   try {
     await sql`
     DELETE FROM pets
-        WHERE id = ${petId}`;
+        WHERE id = ${petId} AND user_id = ${userIdFromClient}`;
   } catch {
     return res.status(500).json({
       message: `Server could not bacause database connection`,
     });
   }
 
-  return res.status(200).json({
+  return res.status(201).json({
     message: `Pet delete successfully`,
   });
 };
-
 
 export const getProfilePicAndName = async (req, res) => {
   const UserId = req.user.id;
@@ -195,6 +195,8 @@ export const getProfilePicAndName = async (req, res) => {
 
     res.status(200).json({ message: "Data retrieved successfully", result });
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
   }
 };

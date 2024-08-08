@@ -1,4 +1,5 @@
 import TypeList from "../../searchs/TypeList";
+import petProfile from "../../../assets/svgs/icons/icon-your-pet-white.svg";
 
 const PetProfileList = ({
   petData,
@@ -25,7 +26,7 @@ const PetProfileList = ({
           >
             <figure>
               <img
-                src={pet.image}
+                src={pet.image || petProfile}
                 alt="image-user"
                 className="w-[104px] h-[104px] rounded-full object-cover"
               />
