@@ -1,5 +1,5 @@
 import cross from "../../../assets/svgs/icons/icon-cross.svg";
-import whiteProfile from "../../../assets/svgs/pet-sitter-management/pet-sitter-whiteProfile.svg"
+import whiteProfile from "../../../assets/svgs/pet-sitter-management/pet-sitter-whiteProfile.svg";
 
 const BookingDetailPopup = ({ showModal, setShowModal, bookingDetail }) => {
   if (!showModal) {
@@ -22,61 +22,72 @@ const BookingDetailPopup = ({ showModal, setShowModal, bookingDetail }) => {
         </div>
         <div className="flex flex-grow p-[40px] gap-4">
           <div className="flex justify-between items-start w-[100%]">
-          <div className="w-[240px] h-[240px] rounded-full bg-[#DCDFED] flex items-center justify-center">
-          {bookingDetail.image ? (
-            <img
-              src={bookingDetail.image}
-              alt="User Profile Image"
-              className="w-[240px] h-[240px] rounded-full object-cover"
-            />
-          ) : (
-            <img
-              src={whiteProfile}
-              alt="Default Profile"
-              className="w-[104px] h-[104px]"
-            />
-          )}
-          </div>
-          <div className="flex flex-col w-[60%] ml-[20px] p-[24px] bg-[#FAFAFB] gap-10 rounded-lg">
-            
-            <div classname = "flex flex-col gap-1">
-            <p className="text-primarygray-300 text-[20px] leading-[28px] font-medium">
-              Pet Owner Name
-            </p>
-            <p className="text-black text-[16px] leading-[24px] font-normal">{bookingDetail.petOwnerName}</p>
+            <div className="w-[240px] h-[240px] rounded-full bg-[#DCDFED] flex items-center justify-center">
+              {bookingDetail.petOwnerImage
+ ? (
+                <img
+                  src={bookingDetail.petOwnerImage
+                  }
+                  alt="User Profile Image"
+                  className="w-[240px] h-[240px] rounded-full object-cover"
+                />
+              ) : (
+                <img
+                  src={whiteProfile}
+                  alt="Default Profile"
+                  className="w-[104px] h-[104px]"
+                />
+              )}
             </div>
+            <div className="flex flex-col w-[60%] ml-[20px] p-[24px] bg-[#FAFAFB] gap-10 rounded-lg">
+              <div className="flex flex-col gap-1">
+                <p className="text-primarygray-300 text-[20px] leading-[28px] font-medium">
+                  Pet Owner Name
+                </p>
+                <p className="text-black text-[16px] leading-[24px] font-normal">
+                  {bookingDetail.petOwnerName}
+                </p>
+              </div>
 
-            <div classname = "flex flex-col gap-1">
-            <p className="text-primarygray-300 text-[20px] leading-[28px] font-medium">
-              Email
-            </p>
-            <p className="text-black text-[16px] leading-[24px] font-normal">{bookingDetail.email}</p>
-            </div>
-            
-            <div classname = "flex flex-col gap-1">
-            <p className="text-primarygray-300 text-[20px] leading-[28px] font-medium">
-              Phone
-            </p>
-            <p className="text-black text-[16px] leading-[24px] font-normal">{bookingDetail.phone_number}</p>
-            </div>
+              <div className="flex flex-col gap-1">
+                <p className="text-primarygray-300 text-[20px] leading-[28px] font-medium">
+                  Email
+                </p>
+                <p className="text-black text-[16px] leading-[24px] font-normal">
+                  {bookingDetail.email}
+                </p>
+              </div>
 
-            <div classname = "flex flex-col gap-1">
-            <p className="text-primarygray-300 text-[20px] leading-[28px] font-medium">
-              ID Number
-            </p>
-            <p className="text-black text-[16px] leading-[24px] font-normal">{bookingDetail.id_number}</p>
-            </div>
+              <div className="flex flex-col gap-1">
+                <p className="text-primarygray-300 text-[20px] leading-[28px] font-medium">
+                  Phone
+                </p>
+                <p className="text-black text-[16px] leading-[24px] font-normal">
+                  {bookingDetail.phone_number}
+                </p>
+              </div>
 
-            <div classname = "flex flex-col gap-1">
-            <p className="text-primarygray-300 text-[20px] leading-[28px] font-medium">
-              Date of Birth
-            </p>
-            <p className="text-black text-[16px] leading-[24px] font-normal">{bookingDetail.date_of_birth}</p>
+              <div className="flex flex-col gap-1">
+                <p className="text-primarygray-300 text-[20px] leading-[28px] font-medium">
+                  ID Number
+                </p>
+                <p className="text-black text-[16px] leading-[24px] font-normal">
+                  {bookingDetail.id_number}
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <p className="text-primarygray-300 text-[20px] leading-[28px] font-medium">
+                  Date of Birth
+                </p>
+                <p className="text-black text-[16px] leading-[24px] font-normal">
+                  {bookingDetail.date_of_birth}
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
     </div>
   );
 };
