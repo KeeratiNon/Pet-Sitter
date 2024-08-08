@@ -25,9 +25,9 @@ const BookingPetPopup = ({ showModal, setShowModal, petDetail }) => {
         <div className="flex flex-grow p-[40px] gap-4">
           <div className="flex justify-between items-start w-[100%]">
             <div className="w-[240px] h-[240px] rounded-full bg-[#DCDFED] flex items-center justify-center">
-              {petDetail.image ? (
+              {petDetail.pet_image ? (
                 <img
-                  src={petDetail.image}
+                  src={petDetail.pet_image}
                   alt="User Profile Image"
                   className="w-[240px] h-[240px] rounded-full object-cover"
                 />

@@ -367,7 +367,7 @@ const PetsitterBookingDetail = () => {
           setShowCancelConfirm(false);
         }}
       />
-      ;
+      
     </div>
   );
 };
