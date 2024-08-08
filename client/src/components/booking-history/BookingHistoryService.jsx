@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import axios from "axios";
 import changeIcon from "../../assets/svgs/icons/icon-change.svg";
@@ -11,7 +12,12 @@ import ModalPopup from "../BookingPopup";
 import BookingHistoryDetailPopup from "../BookingHistoryDetailPopup";
 import ChangeDateSuccessPopup from "../ChangeDateSuccessPopup ";
 
-const BookingHistoryService = ({ setReviewData, setShowReport }) => {
+const BookingHistoryService = ({
+  setShowRating,
+  setShowReview,
+  setReviewData,
+  setShowReport,
+}) => {
   const { setItem } = useLocalStorage();
 
   const [bookings, setBookings] = useState([]);
@@ -103,7 +109,7 @@ const BookingHistoryService = ({ setReviewData, setShowReport }) => {
   const handleReviewClick = (bookingId) => {
     setReviewedBookings((prev) => ({ ...prev, [bookingId]: true }));
     setItem("bookingId", bookingId);
-    setShowModal(true);
+    setShowRating(true);
     const selectedBooking = bookings.find(
       (booking) => booking.booking_id === bookingId
     );
@@ -168,7 +174,7 @@ const BookingHistoryService = ({ setReviewData, setShowReport }) => {
                   <p className="text-black text-[24px] leading-[32px] font-bold">
                     {booking.pet_sitter_name}
                   </p>
-                  <p className="text-black text-18px leading-[26px] font-medium whitespace-nowrap "> 
+                  <p className="text-black text-18px leading-[26px] font-medium whitespace-nowrap ">
                     By {booking.firstname} {booking.lastname}
                   </p>
                 </div>
@@ -347,14 +353,13 @@ const BookingHistoryService = ({ setReviewData, setShowReport }) => {
         bookingId={selectedBookingId} // Pass selected booking ID to popup
       />
       {showSuccess && (
-        <ChangeDateSuccessPopup showModal={showSuccess} setShowModal={setShowSuccess} />
+        <ChangeDateSuccessPopup
+          showModal={showSuccess}
+          setShowModal={setShowSuccess}
+        />
       )}
     </div>
   );
 };
 
 export default BookingHistoryService;
-
-
-
-

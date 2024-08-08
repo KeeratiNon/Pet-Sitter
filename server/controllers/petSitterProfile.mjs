@@ -182,7 +182,7 @@ export const searchPetsitterProfile = async (req, res) => {
 };
 
 export const viewPetsitterProfile = async (req, res) => {
-  const petsitterId = req.params.id;
+  const petsitterId = req.user.id;
 
   let results;
   try {

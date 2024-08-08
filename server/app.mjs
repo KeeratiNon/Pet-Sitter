@@ -166,8 +166,7 @@ io.on("connection", (socket) => {
 });
 
 function convertToGMT7(date) {
-  const gmt7Offset = 7 * 60; // GMT+7 in minutes
-  const dateInGMT7 = new Date(date.getTime() + gmt7Offset * 60 * 1000);
+  const dateInGMT7 = new Date(date.getTime());
   return dateInGMT7;
 }
 
@@ -179,23 +178,23 @@ function formatTime(date) {
   return date.toTimeString().split(" ")[0];
 }
 
-function subtractHours(date, hours) {
-  return new Date(date.getTime() - hours * 60 * 60 * 1000);
+function addHours(date, hours) {
+  return new Date(date.getTime() + hours * 60 * 60 * 1000);
 }
 
 cron.schedule("* * * * *", async () => {
   try {
     const currentDate = new Date();
     const zonedDate = convertToGMT7(currentDate);
-    const targetDate = subtractHours(zonedDate, 2);
+    const targetDate = addHours(zonedDate, 2);
     const formattedDate = formatDate(targetDate);
     const formattedTime = formatTime(targetDate);
 
     const bookings = await sql`
       SELECT * FROM bookings
       WHERE status = 'Waiting for confirm'
-      AND booking_date <= ${formattedDate}
-      AND booking_time_start <= ${formattedTime}
+      AND booking_date = ${formattedDate}
+      AND booking_time_start < ${formattedTime}
     `;
 
     for (const booking of bookings) {
