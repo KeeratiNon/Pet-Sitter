@@ -7,8 +7,8 @@ import { SERVER_API_URL } from "../../core/config.mjs";
 import axios from "axios";
 
 const RatingHistory = ({
-  showModal,
-  setShowModal,
+  showRating,
+  setShowRating,
 
   setShowReview,
   setReviewData,
@@ -23,8 +23,8 @@ const RatingHistory = ({
     review: "",
   });
   
-  if (!showModal) {
-    return null;
+  if (!showRating) {
+    return null; // ถ้าไม่ควรแสดง modal ให้ return null
   }
 
   const handleInputChange = (event) => {
@@ -68,7 +68,7 @@ const RatingHistory = ({
         }));
 
         // ปิด modal และแสดงรีวิว
-        setShowModal(false);
+        setShowRating(false);
         setShowReview(true);
       }
     } catch (error) {
@@ -79,7 +79,7 @@ const RatingHistory = ({
 
   const handleCancel = () => {
     setUserReview((prevData) => ({ ...prevData, review: "" }));
-    setShowModal(false);
+    setShowRating(false);
   };
 
   const stars = Array.from({ length: 5 }, (_, i) => {
@@ -110,7 +110,7 @@ const RatingHistory = ({
             <img
               src={cross}
               className="w-[24px] h-[24px] cursor-pointer"
-              onClick={() => setShowModal(false)}
+              onClick={() => setShowRating(false)}
               alt="Close"
             />
           </div>
