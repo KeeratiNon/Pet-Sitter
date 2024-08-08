@@ -23,7 +23,7 @@ const PetSitterInfoCard = ({ profiles }) => {
               {profiles.firstname} {profiles.lastname}
               </p>
               <p className="text-secondarygreen-200  text-[16px] leading-[28px] font-medium">
-              {profiles.experience}
+              {profiles.experience}  {profiles.experience <= 2 ? 'Year Exp.' : 'Years Exp.'} 
               </p>
             </div>
             <div className="flex text-[16px] lg:text-[20px]">
