@@ -131,11 +131,7 @@ const PayMentForm = ({ onPrev, bookingData, setBookingData }) => {
     };
 
     try {
-      const response = await axios.post(
-        `${SERVER_API_URL}/bookings`,
-        newBooking
-      );
-      console.log("Booking saved:", response.data);
+      await axios.post(`${SERVER_API_URL}/bookings`, newBooking);
     } catch (error) {
       console.error("Error saving booking data:", error);
     }
@@ -222,7 +218,6 @@ const PayMentForm = ({ onPrev, bookingData, setBookingData }) => {
         </button>
       </div>
 
-      {loading && <p className="text-blue-500">Loading ...</p>}
       {error && <p className="text-red-500">{error}</p>}
 
       <BookingConfirm

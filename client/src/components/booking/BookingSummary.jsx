@@ -1,11 +1,17 @@
 import { useCalculateBooking } from "../../hooks/useCalculateBooking";
 
 const BookingSummary = ({ bookingData }) => {
-  const { formatDate, calculateDuration, calculateTotalCost } =
+  const { formatDate, calculateDuration, calculateTotalCostForBookingDetail } =
     useCalculateBooking();
 
+  let totalCost = calculateTotalCostForBookingDetail(
+    bookingData.pet_name,
+    bookingData.booking_time_start,
+    bookingData.booking_time_end
+  );
+
   return (
-    <div className="z-0 w-[396px] rounded-2xl overflow-hidden h-fit min-w-[396px]">
+    <div className="z-10 overflow-hidden h-fit w-full md:min-w-[396px] md:rounded-2xl">
       <section className="w-full bg-white">
         <h1 className="text-[20px] leading-[28px] font-bold p-4 border-b md:text-2xl">
           Booking Detail
@@ -59,11 +65,7 @@ const BookingSummary = ({ bookingData }) => {
               Total
             </span>
             <span className="text-white text-[16px] leading-[28px] font-medium">
-              {`${calculateTotalCost(
-                bookingData.pet_name,
-                bookingData.booking_time_start,
-                bookingData.booking_time_end
-              )} THB`}
+              {`${totalCost} THB`}
             </span>
           </li>
         </ul>

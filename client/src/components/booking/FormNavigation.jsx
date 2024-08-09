@@ -4,7 +4,7 @@ const FormNavigation = ({ formList, page }) => {
       {formList.map((form, index) => (
         <li key={index} className="flex justify-center items-center gap-3">
           <div
-            className={`size-7 rounded-full bg-[#F6F6F9] text-[#7B7E8F] font-bold text-[24px] leading-[32px] flex items-center justify-center md:size-12 ${
+            className={`size-7 rounded-full bg-[#F6F6F9] text-[#7B7E8F] font-bold flex items-center justify-center md:size-12 md:text-[24px] md:leading-[32px] ${
               page === index
                 ? "bg-[#FF7037] text-white"
                 : index < page

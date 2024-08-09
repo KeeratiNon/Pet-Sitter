@@ -5,7 +5,13 @@ const BookingInfo = ({ bookingInformation }) => {
   const { duration } = useCalculateBooking();
   const navigate = useNavigate();
 
-  const durationTime = parseInt(bookingInformation.total_minutes || 0);
+  console.log("bookingInformation", bookingInformation);
+
+  const bookingTimeStart = parseInt(
+    bookingInformation.booking_time_start_minutes
+  );
+  const bookingTimeEnd = parseInt(bookingInformation.booking_time_end_minutes);
+  const durationTime = duration(bookingTimeStart, bookingTimeEnd);
 
   return (
     <>
@@ -49,7 +55,7 @@ const BookingInfo = ({ bookingInformation }) => {
                 Duration:
               </span>
               <span className="text-[#3A3B46] text-[16px] leading-[28px] font-medium">
-                {duration(durationTime)}
+                {durationTime}
               </span>
             </div>
           </li>

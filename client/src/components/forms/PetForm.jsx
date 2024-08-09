@@ -57,7 +57,9 @@ const PetForm = ({ onNext, petData, bookingData, setBookingData }) => {
       className="flex flex-col px-4 py-10 md:gap-4 md:p-10 md:rounded-2xl md:bg-white"
       onSubmit={onSubmit}
     >
-      <h1 className="text-[18px] leading-[26px]">Choose your pet</h1>
+      <h1 className="text-[18px] leading-[26px] font-medium">
+        Choose your pet
+      </h1>
 
       <div className="flex flex-wrap items-center gap-4 mt-2 md:flex-row">
         {petData?.map((pet) => (
