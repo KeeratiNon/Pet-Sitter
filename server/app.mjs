@@ -30,7 +30,7 @@ const port = 4000;
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "https://pet-sitter-htv0.onrender.com",
+    origin: "http://localhost:5173",
     methods: ["GET", "POST", "DELETE", "PUT"],
   },
 });
@@ -95,11 +95,11 @@ io.on("connection", (socket) => {
             // console.log(imageSrc)
             newMessage.images = imageSrc;
           }
-          const reverseChatRoomId = chatRoomId.split("/").reverse().join("/");
+          const reverseChatRoomId = chatRoomId.chatRoomId.split("/").reverse().join("/");
           const chatRoom = await ChatRoom.findOneAndUpdate(
             {
               $or: [
-                { chatRoomId: chatRoomId },
+                { chatRoomId: chatRoomId.chatRoomId },
                 { chatRoomId: reverseChatRoomId },
               ],
             },
