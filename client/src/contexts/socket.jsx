@@ -56,7 +56,7 @@ const SocketProvider = ({ children }) => {
   const setupSocket = () => {
     const token = getToken();
     if (token) {
-      const newSocket = io("http://localhost:4000", {
+      const newSocket = io(`${SERVER_API_URL}`, {
         query: {
           token,
         },

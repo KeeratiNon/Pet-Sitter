@@ -10,6 +10,7 @@ import MapIcon from "@mui/icons-material/Map";
 import CardSearchList from "../components/searchs/CardSearchList";
 import Searchtolistpage from "../components/searchs/Searchtolistpage";
 import PaginationSize from "../components/searchs/Pagination";
+import { SERVER_API_URL } from "../core/config.mjs";
 
 const SearchListPage = () => {
   const location = useLocation();
@@ -56,7 +57,7 @@ const SearchListPage = () => {
           ? filters.rating.join(",")
           : "";
 
-        const response = await axios.get("http://localhost:4000/search", {
+        const response = await axios.get(`${SERVER_API_URL}/search`, {
           params: {
             page,
             pageSize,

@@ -8,6 +8,7 @@ import PetSitterInfoCard from "../components/petsitter-detail/PetSitterInfoCard"
 import Footer from "../components/Footer";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import PaginationSize from "../components/searchs/Pagination";
+import { SERVER_API_URL } from "../core/config.mjs";
 
 const PetSitterDetailPage = () => {
   const { setItem } = useLocalStorage();
@@ -27,7 +28,7 @@ const PetSitterDetailPage = () => {
 
   const fetchProfiles = async (id) => {
     try {
-      const response = await axios.get(`http://localhost:4000/search/${id}`);
+      const response = await axios.get(`${SERVER_API_URL}/search/${id}`);
       setProfiles(response.data.data);
       console.log(response.data.data);
       setItem("petSitterId", id);
@@ -49,7 +50,7 @@ const PetSitterDetailPage = () => {
           ? selectedRatings.rating.join(",")
           : "";
         const response = await axios.get(
-          `http://localhost:4000/review/${id}`,
+          `${SERVER_API_URL}/review/${id}`,
           {
             params: {
               page,
