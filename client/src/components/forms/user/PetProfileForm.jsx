@@ -19,7 +19,6 @@ const PetProfileForm = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  console.log("petFormData.status: ", petFormData);
 
   const handleImageChange = async (event) => {
     const file = event.target.files[0];
@@ -88,8 +87,6 @@ const PetProfileForm = ({
   };
 
   const handleDeletePetProfile = async (petId) => {
-    console.log("PetProfileForm petId", petId);
-
     try {
       const response = await axios.delete(
         `${SERVER_API_URL}/user/pet/${petId}`
@@ -192,6 +189,7 @@ const PetProfileForm = ({
               <option value="Dog">Dog</option>
               <option value="Cat">Cat</option>
               <option value="Bird">Bird</option>
+              <option value="Rabbit">Rabbit</option>
             </select>
           </div>
 

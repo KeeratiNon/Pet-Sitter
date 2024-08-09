@@ -5,7 +5,6 @@ import PetProfileList from "../../components/forms/user/PetProfileList";
 import { useAuth } from "../../contexts/authentication";
 import axios from "axios";
 import { SERVER_API_URL } from "../../core/config.mjs";
-import { useNavigate } from "react-router-dom";
 
 const UserPetManagementPage = () => {
   const { state } = useAuth();
