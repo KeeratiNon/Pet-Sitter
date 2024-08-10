@@ -109,6 +109,7 @@ const SocketProvider = ({ children }) => {
   };
 
   const joinChatRoom = ({ chatRoomId, targetId, isReadCount }) => {
+    console.log(chatRoomId.targetId)
     let image = null;
     {
       chatRoomList

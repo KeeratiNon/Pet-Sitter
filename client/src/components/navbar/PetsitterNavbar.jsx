@@ -15,14 +15,22 @@ import useBookingStatus from "../../hooks/useBookingStatus"; // Import the share
 import axios from "axios";
 import { SERVER_API_URL } from "../../core/config.mjs";
 import { useSocket } from "../../contexts/socket";
-
+import ChatManuNavbar from "./ChatMenuNavbar";
 
 const PetsitterNavbar = () => {
   const { logout, state } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [profilePic, setProfilePic] = useState(null);
   const hasWaitingForConfirm = useBookingStatus(); // Use the shared hook
-  const { socket, hasNewNotification, setHasNewNotification } = useSocket();
+  const {
+    socket,
+    chatRoomList,
+    joinChatRoom,
+    getChatRoomList,
+    hasNewNotification,
+    setHasNewNotification,
+  } = useSocket();
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   useEffect(() => {
     if (state.user) {
@@ -34,6 +42,7 @@ const PetsitterNavbar = () => {
     if (socket) {
       socket.on("newNotification", () => {
         setHasNewNotification(true);
+        getChatRoomList()
       });
     }
     return () => {
@@ -42,6 +51,12 @@ const PetsitterNavbar = () => {
       }
     };
   }, [socket]);
+
+  useEffect(()=>{
+    if(socket){
+      getChatRoomList()
+    }
+  },[socket])
 
   const fetchProfileData = async () => {
     try {
@@ -73,7 +88,7 @@ const PetsitterNavbar = () => {
     <>
       <nav className="bg-white z-50 fixed w-full top-0 left-0">
         <div className="flex items-center justify-between py-3 px-5 md:px-20">
-          <Link to="/">
+          <Link to="/" onClick={()=>setHasNewNotification(false)}>
             <img src={logoNavbar} alt="logo-navbar" />
           </Link>
           <div className="md:hidden">
@@ -127,7 +142,7 @@ const PetsitterNavbar = () => {
             {!state.user ? (
               <>
                 <li>
-                  <Link to="/auth/register/petsitter">Become a Pet Sitter</Link>
+                  <Link to="/auth/login/petsitter">Become a Pet Sitter</Link>
                 </li>
                 <li>
                   <Link to="/auth/login/user">Login</Link>
@@ -166,18 +181,39 @@ const PetsitterNavbar = () => {
                   </button>
                 </li>
                 <li>
-                  <Link to="/chat">
-                    <button className="icon-btn relative">
-                      <img src={iconMessage} alt="icon-message" />
-                      {hasNewNotification && (
-                        <img
-                          src={iconNotify}
-                          alt="icon-message"
-                          className="absolute top-1 right-1"
-                        />
-                      )}
-                    </button>
-                  </Link>
+                  <button
+                    className="icon-btn relative"
+                    onClick={() => {
+                      setIsChatOpen(!isChatOpen);
+                    }}
+                  >
+                    <img src={iconMessage} alt="icon-message" />
+                    {hasNewNotification && (
+                      <img
+                        src={iconNotify}
+                        alt="icon-message"
+                        className="absolute top-1 right-1"
+                      />
+                    )}
+                  </button>
+                  {isChatOpen && (
+                    <ul className="absolute right-0 w-[400px] mt-2 bg-white shadow-lg rounded-md overflow-hidden z-50">
+                      {chatRoomList.map((chatRoom, index) => {
+                        return (
+                          <li
+                            className="flex gap-3"
+                            key={index}
+                            onClick={() => {
+                              joinChatRoom(chatRoom);
+                              setIsChatOpen(false);
+                            }}
+                          >
+                            <ChatManuNavbar chatRoom={chatRoom} />
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
                 </li>
                 <li className="relative">
                   <button
@@ -214,10 +250,7 @@ const PetsitterNavbar = () => {
                           src={iconPetsitterPayment}
                           alt="icon-petsitter-payment"
                         />
-                        <Link
-                          to="/petsitter/payout-option"
-                          onClick={closeMenu}
-                        >
+                        <Link to="/petsitter/payout-option" onClick={closeMenu}>
                           Payout Option
                         </Link>
                       </li>

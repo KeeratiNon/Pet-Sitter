@@ -134,7 +134,7 @@ const PetsitterBookingDetail = () => {
                 const chatRoomId = `${state.user.id}/${bookingDetail.user_id}`;
                 const targetId = Number(bookingDetail.user_id);
                 joinChatRoom({ chatRoomId, targetId });
-                clearReadCount(chatRoomId);
+                clearReadCount(chatRoomId)
               }}
             >
               Send Message

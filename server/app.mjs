@@ -95,11 +95,12 @@ io.on("connection", (socket) => {
             // console.log(imageSrc)
             newMessage.images = imageSrc;
           }
-          const reverseChatRoomId = chatRoomId.chatRoomId.split("/").reverse().join("/");
+          const useChatRoomId = chatRoomId || chatRoomId.chatRoomId || chatRoomId.newChatRoomId
+          const reverseChatRoomId = useChatRoomId.split("/").reverse().join("/");
           const chatRoom = await ChatRoom.findOneAndUpdate(
             {
               $or: [
-                { chatRoomId: chatRoomId.chatRoomId },
+                { chatRoomId: useChatRoomId },
                 { chatRoomId: reverseChatRoomId },
               ],
             },
@@ -131,7 +132,7 @@ io.on("connection", (socket) => {
       if (chatRoom) {
         if (isReadCount) {
           await ChatRoom.updateMany(
-            {},
+            {$or: [{ chatRoomId: chatRoomId }, { chatRoomId: reverseChatRoomId }]},
             {
               $set: { "messages.$[].isRead": true },
             }
