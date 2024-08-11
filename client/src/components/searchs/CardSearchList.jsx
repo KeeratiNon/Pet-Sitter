@@ -13,12 +13,12 @@ const CardSearchList = ({ profiles }) => {
           <img
             src={profiles.image_gallery[0]}
             alt="profild-web"
-            className="hidden  rounded-lg md:w-[245px] md:h-[184px] md:block   "
+            className="hidden  rounded-lg md:w-[245px] md:h-[184px] md:block object-cover"
           />
           <img
             src={profiles.image_gallery[0]}
             alt="card-img"
-            className=" w-full  md:min-w-full md:min-h-[184px] rounded-[8px] md:hidden "
+            className=" w-full  md:min-w-full md:min-h-[184px] rounded-[8px] md:hidden"
           />
         </div>
         <div className="  flex-1   flex flex-col justify-between  gap-6  ">
@@ -28,7 +28,7 @@ const CardSearchList = ({ profiles }) => {
                 <img
                   src={profiles.profile_image}
                   alt="image_gallery"
-                  className="rounded-full size-[36px] md:size-[64px] bg-fixed   "
+                  className="rounded-full size-[36px] md:size-[64px] bg-fixed object-cover"
                 />
               </div>
 

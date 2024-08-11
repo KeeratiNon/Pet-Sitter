@@ -39,7 +39,7 @@ const Navbar = () => {
         : "Anonymous";
 
     return (
-        <nav className="flex justify-between items-center h-[72px] text-primarygray-600 text-[16px] leading-[28px] bg-primarygray-100">
+        <nav className="flex justify-between items-center h-[72px] text-primarygray-600 text-[16px] leading-[28px] bg-primarygray-100 mt-1 ">
           <div className="flex items-center ml-[60px] gap-[8px]">
             <div className="relative w-[40px] h-[40px] rounded-full bg-primarygray-200 flex items-center justify-center">
               <img

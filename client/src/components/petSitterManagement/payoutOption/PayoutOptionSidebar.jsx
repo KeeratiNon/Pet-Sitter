@@ -6,9 +6,9 @@ import petSitterGrayBookingList from "../../../assets/svgs/pet-sitter-management
 import petSitterOrangeBookingList from "../../../assets/svgs/pet-sitter-management/pet-sitter-orangeBooking-list.svg";
 import petSitterGrayProfile from "../../../assets/svgs/pet-sitter-management/pet-sitter-grayProfile.svg";
 import petSitterOrangeProfile from "../../../assets/svgs/pet-sitter-management/pet-sitter-orangeProfile.svg";
-import petSitterGrayPayment from "../../../assets/svgs/pet-sitter-management/pet-sitter-grayPayment.svg";
 import petSitterOrangePayment from "../../../assets/svgs/pet-sitter-management/pet-sitter-orangePayment.svg";
 import petSitterLogout from "../../../assets/svgs/pet-sitter-management/pet-sitter-logout.svg";
+import petSitterOrangeLogout from "../../../assets/svgs/pet-sitter-management/pet-sitter-orangeLogout.svg"
 import petSitterOrangeCircle from "../../../assets/svgs/pet-sitter-management/pet-sitter-orangeCircle.svg";
 import { SERVER_API_URL } from "../../../core/config.mjs";
 import { useAuth } from "../../../contexts/authentication";
@@ -18,6 +18,7 @@ const Sidebar = () => {
   const [hasWaitingForConfirm, setHasWaitingForConfirm] = useState(false);
   const [hoverProfile, setHoverProfile] = useState(false);
   const [hoverBooking, setHoverBooking] = useState(false);
+  const [hoverLogout, setHoverLogout] = useState(false);
 
   useEffect(() => {
     const fetchBookingStatuses = async () => {
@@ -85,9 +86,15 @@ const Sidebar = () => {
 
       <div
         onClick={logout}
-        className="flex gap-[16px] mt-[664px] pl-[24px] pt-[16px] border-t-[1px] border-primarygray-200 cursor-pointer"
+        className="flex gap-[16px] mt-[664px] pl-[24px] pt-[16px] border-t-[1px] border-primarygray-200 cursor-pointer hover:text-primaryorange-500"
+        onMouseEnter={() => setHoverLogout(true)}
+        onMouseLeave={() => setHoverLogout(false)}
       >
-        <img src={petSitterLogout} className="w-[24px] h-[24px]" alt="Logout" />
+        <img
+          src={hoverLogout ? petSitterOrangeLogout : petSitterLogout}
+          className="w-[24px] h-[24px]"
+          alt="Logout"
+        />
         <span>Logout</span>
       </div>
     </section>

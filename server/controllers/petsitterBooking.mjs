@@ -170,6 +170,7 @@ export const viewPetsitterBookingDetail = async (req, res) => {
       additional_message: bookingDetails.additional_message,
       status: bookingDetails.status,
       user_id: bookingDetails.user_id,
+      booking_time_start: bookingDetails.booking_time_start,
       booking_time_end: bookingDetails.booking_time_end,
       booking_date: bookingDetails.booking_date,
 

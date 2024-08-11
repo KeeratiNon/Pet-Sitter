@@ -11,7 +11,7 @@ import iconLogout from "../../assets/svgs/icons/icon-logout.svg";
 import iconPetsitterPayment from "../../assets/svgs/pet-sitter-management/pet-sitter-payment.svg";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/authentication";
-import useBookingStatus from "../../hooks/useBookingStatus"; // Import the shared hook
+import useBookingStatus from "../../hooks/useBookingStatus";
 import axios from "axios";
 import { SERVER_API_URL } from "../../core/config.mjs";
 import { useSocket } from "../../contexts/socket";
@@ -21,7 +21,7 @@ const PetsitterNavbar = () => {
   const { logout, state } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [profilePic, setProfilePic] = useState(null);
-  const hasWaitingForConfirm = useBookingStatus(); // Use the shared hook
+  const hasWaitingForConfirm = useBookingStatus();
   const {
     socket,
     chatRoomList,
@@ -42,7 +42,7 @@ const PetsitterNavbar = () => {
     if (socket) {
       socket.on("newNotification", () => {
         setHasNewNotification(true);
-        getChatRoomList()
+        getChatRoomList();
       });
     }
     return () => {
@@ -52,11 +52,11 @@ const PetsitterNavbar = () => {
     };
   }, [socket]);
 
-  useEffect(()=>{
-    if(socket){
-      getChatRoomList()
+  useEffect(() => {
+    if (socket) {
+      getChatRoomList();
     }
-  },[socket])
+  }, [socket]);
 
   const fetchProfileData = async () => {
     try {
@@ -88,7 +88,7 @@ const PetsitterNavbar = () => {
     <>
       <nav className="bg-white z-50 fixed w-full top-0 left-0">
         <div className="flex items-center justify-between py-3 px-5 md:px-20">
-          <Link to="/" onClick={()=>setHasNewNotification(false)}>
+          <Link to="/" onClick={() => setHasNewNotification(false)}>
             <img src={logoNavbar} alt="logo-navbar" />
           </Link>
           <div className="md:hidden">
@@ -141,17 +141,17 @@ const PetsitterNavbar = () => {
           >
             {!state.user ? (
               <>
-                <li>
-                  <Link to="/auth/login/petsitter">Become a Pet Sitter</Link>
-                </li>
-                <li>
-                  <Link to="/auth/login/user">Login</Link>
-                </li>
-                <li>
-                  <button className="btn-primary">
-                    <Link to="/search">Find A Pet Sitter</Link>
-                  </button>
-                </li>
+                <Link to="/auth/login/petsitter">
+                  <li>Become a Pet Sitter</li>
+                </Link>
+                <Link to="/auth/login/user">
+                  <li>Login</li>
+                </Link>
+                <Link to="/search">
+                  <li>
+                    <button className="btn-primary">Find A Pet Sitter</button>
+                  </li>
+                </Link>
               </>
             ) : (
               <>
@@ -217,14 +217,14 @@ const PetsitterNavbar = () => {
                 </li>
                 <li className="relative">
                   <button
-                    className="w-12 h-12 rounded-full bg-[#DCDFED] flex items-center justify-center object-cover"
+                    className="w-12 h-12 rounded-full bg-[#DCDFED] flex items-center justify-center"
                     onClick={toggleMenu}
                   >
                     {profilePic ? (
                       <img
                         src={profilePic}
                         alt="icon-user"
-                        className="rounded-full w-12 h-12"
+                        className="rounded-full w-12 h-12 object-cover"
                       />
                     ) : (
                       <img src={iconUser} alt="icon-user" className="w-5 h-5" />
@@ -233,47 +233,48 @@ const PetsitterNavbar = () => {
 
                   {isMenuOpen && (
                     <ul className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md overflow-hidden z-50">
-                      <li className="flex gap-3 p-4 hover:bg-gray-100">
-                        <img src={iconProfile} alt="icon-profile" />
-                        <Link to="/petsitter/profile" onClick={closeMenu}>
+                      <Link to="/petsitter/profile" onClick={closeMenu}>
+                        <li className="flex gap-3 p-4 hover:bg-gray-100">
+                          <img src={iconProfile} alt="icon-profile" />
                           Profile
-                        </Link>
-                      </li>
-                      <li className="flex gap-3 p-4 hover:bg-gray-100">
-                        <img src={iconBooking} alt="icon-petsitter-booking" />
-                        <Link to="/petsitter/booking" onClick={closeMenu}>
+                        </li>
+                      </Link>
+                      <Link to="/petsitter/booking" onClick={closeMenu}>
+                        <li className="flex gap-3 p-4 hover:bg-gray-100">
+                          <img src={iconBooking} alt="icon-petsitter-booking" />
                           Booking List
-                        </Link>
-                      </li>
-                      <li className="flex gap-3 p-4 hover:bg-gray-100">
-                        <img
-                          src={iconPetsitterPayment}
-                          alt="icon-petsitter-payment"
-                        />
-                        <Link to="/petsitter/payout-option" onClick={closeMenu}>
+                        </li>
+                      </Link>
+                      <Link to="/petsitter/payout-option" onClick={closeMenu}>
+                        <li className="flex gap-3 p-4 hover:bg-gray-100">
+                          <img
+                            src={iconPetsitterPayment}
+                            alt="icon-petsitter-payment"
+                          />
                           Payout Option
-                        </Link>
-                      </li>
+                        </li>
+                      </Link>
                       <hr />
-                      <li className="flex gap-3 p-4 hover:bg-gray-100">
-                        <img src={iconLogout} alt="icon-logout" />
+                      <li className=" hover:bg-gray-100 ">
                         <button
+                          className="flex gap-3 p-4 w-full"
                           onClick={() => {
                             logout();
                             closeMenu();
                           }}
                         >
+                          <img src={iconLogout} alt="icon-logout" />
                           Log out
                         </button>
                       </li>
                     </ul>
                   )}
                 </li>
-                <li>
-                  <button className="btn-primary">
-                    <Link to="/search">Find A Pet Sitter</Link>
-                  </button>
-                </li>
+                <Link to="/search">
+                  <li>
+                    <button className="btn-primary">Find A Pet Sitter</button>
+                  </li>
+                </Link>
               </>
             )}
           </ul>
@@ -285,60 +286,65 @@ const PetsitterNavbar = () => {
           <ul className="flex-col py-10 px-4 md:hidden bg-white w-full shadow-md absolute top-0 left-0 z-40">
             {!state.user ? (
               <>
-                <li className="p-4 pt-10">
-                  <Link to="/auth/register/petsitter">Become a Pet Sitter</Link>
-                </li>
-                <li className="p-4">
-                  <Link to="/auth/login/user">Login</Link>
-                </li>
-                <li className="p-4">
-                  <button className="btn-primary w-full">
-                    <Link to="/search">Find A Pet Sitter</Link>
-                  </button>
-                </li>
+                <Link to="/auth/register/petsitter">
+                  <li className="p-4 pt-8 hover:bg-gray-100">
+                    Become a Pet Sitter
+                  </li>
+                </Link>
+                <Link to="/auth/login/user">
+                  <li className="p-4">Login</li>
+                </Link>
+                <Link to="/search">
+                  <li className="p-4 hover:bg-gray-100">
+                    <button className="btn-primary w-full">
+                      Find A Pet Sitter
+                    </button>
+                  </li>
+                </Link>
               </>
             ) : (
               <>
-                <li className="flex gap-3 p-4 pt-10">
-                  <img src={iconProfile} alt="icon-profile" />
-                  <Link to="/petsitter/profile" onClick={closeMenu}>
+                <Link to="/petsitter/profile" onClick={closeMenu}>
+                  <li className="flex gap-3 p-4 pt-8 hover:bg-gray-100">
+                    <img src={iconProfile} alt="icon-profile" />
                     Profile
-                  </Link>
-                </li>
-                <li className="flex gap-3 p-4">
-                  <img src={iconBooking} alt="icon-petsitter-booking" />
-                  <Link to="/petsitter/booking" onClick={closeMenu}>
+                  </li>
+                </Link>
+                <Link to="/petsitter/booking" onClick={closeMenu}>
+                  <li className="flex gap-3 p-4 hover:bg-gray-100">
+                    <img src={iconBooking} alt="icon-petsitter-booking" />
                     Booking List
-                  </Link>
-                </li>
-                <li className="flex gap-3 p-4">
-                  <img
-                    src={iconPetsitterPayment}
-                    alt="icon-petsitter-payment"
-                  />
-                  <Link to="/petsitter/payment-option" onClick={closeMenu}>
-                    Payment Option
-                  </Link>
-                </li>
+                  </li>
+                </Link>
+                <Link to="/petsitter/payout-option" onClick={closeMenu}>
+                  <li className="flex gap-3 p-4 hover:bg-gray-100">
+                    <img
+                      src={iconPetsitterPayment}
+                      alt="icon-petsitter-payment"
+                    />
+                    Payout Option
+                  </li>
+                </Link>
                 <hr />
-                <li className="flex gap-3 p-4">
-                  <img src={iconLogout} alt="icon-logout" />
+                <li className="hover:bg-gray-100">
                   <button
+                    className="flex gap-3 p-4 w-full"
                     onClick={() => {
                       logout();
                       closeMenu();
                     }}
                   >
+                    <img src={iconLogout} alt="icon-logout" />
                     Log out
                   </button>
                 </li>
-                <li className="p-4">
-                  <button className="btn-primary w-full">
-                    <Link to="/search" onClick={closeMenu}>
+                <Link to="/search" onClick={closeMenu}>
+                  <li className="p-4">
+                    <button className="btn-primary w-full">
                       Find A Pet Sitter
-                    </Link>
-                  </button>
-                </li>
+                    </button>
+                  </li>
+                </Link>
               </>
             )}
           </ul>

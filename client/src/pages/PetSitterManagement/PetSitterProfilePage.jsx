@@ -63,6 +63,7 @@ const PetSitterProfilePage = () => {
       try {
         const response = await axios.get(`${SERVER_API_URL}/petsitter/profile`);
         const data = response.data.data;
+
         setFormData({
           profile_image: data.profile_image || "",
           first_name: data.firstname || "",
@@ -84,15 +85,25 @@ const PetSitterProfilePage = () => {
           province: data.province || "",
           post_code: data.post_code || "",
         });
-        console.log(response)
+
         setPetsitterId(data.id);
+        console.log(data);
       } catch (error) {
-        console.error("Error fetching petsitter profile data:", error);
+        if (error.response && error.response.status === 404) {
+          setFormData((prevData) => ({
+            ...prevData,
+            phone_number: prevData.phone_number || "",
+            email: prevData.email || "",
+          }));
+        } else {
+          console.error("Error fetching profile data:", error);
+        }
       }
     };
 
     fetchData();
   }, []);
+
 
   const handleChange = (field) => (event) => {
     setFormData((prev) => ({

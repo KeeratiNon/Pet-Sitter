@@ -19,7 +19,7 @@ const PetSitterInfoCard = ({ profiles }) => {
           <img
             src={profiles.profile_image}
             alt="Girl"
-            className="w-[120px] h-[120px] rounded-full  lg:w-[160px] lg:h-[160px]"
+            className="w-[120px] h-[120px] rounded-full  lg:w-[160px] lg:h-[160px] object-cover"
           ></img>
           <div className="flex flex-col gap-[16px] items-center">
             <h1 className="text-black text-[24px] leading-[32px] lg:text-[36px] lg:leading-[44px]  font-bold ]">

@@ -18,7 +18,7 @@ export const viewAllPayoutRecord = async (req, res) => {
       FROM bookings
       LEFT JOIN booking_payments ON bookings.id = booking_payments.booking_id
       LEFT JOIN pet_sitter_profiles ON bookings.pet_sitter_id = pet_sitter_profiles.pet_sitter_id
-      WHERE bookings.pet_sitter_id = ${userId}
+      WHERE bookings.pet_sitter_id = ${userId} AND bookings.status = 'Success'
       ORDER BY booking_payments.created_at DESC
     `;
 
@@ -32,7 +32,7 @@ export const viewAllPayoutRecord = async (req, res) => {
       SELECT SUM(booking_payments.amount) as total_amount
       FROM bookings
       LEFT JOIN booking_payments ON bookings.id = booking_payments.booking_id
-      WHERE bookings.pet_sitter_id = ${userId}
+      WHERE bookings.pet_sitter_id = ${userId} AND bookings.status = 'Success'
     `;
 
     console.log("Total Amount Result:", totalAmountResult);
