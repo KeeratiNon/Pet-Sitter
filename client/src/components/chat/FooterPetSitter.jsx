@@ -12,7 +12,7 @@ const FooterPetSitter = ({
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
-      sendMessage(chatRoomId);
+      sendMessage({ chatRoomId, inputMessage, images });
     }
   };
 
@@ -84,7 +84,7 @@ const FooterPetSitter = ({
       <button
         className="p-[12px] bg-orange-500 rounded-full"
         onClick={() => {
-          sendMessage({ chatRoomId, images });
+          sendMessage({ chatRoomId,inputMessage, images });
           clearImages();
         }}
       >

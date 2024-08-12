@@ -92,15 +92,14 @@ io.on("connection", (socket) => {
             for (const img of images) {
               imageSrc.push(await handleImageUpload(img));
             }
-            // console.log(imageSrc)
+            console.log(imageSrc)
             newMessage.images = imageSrc;
           }
-          const useChatRoomId = chatRoomId || chatRoomId.chatRoomId || chatRoomId.newChatRoomId
-          const reverseChatRoomId = useChatRoomId.split("/").reverse().join("/");
+          const reverseChatRoomId = chatRoomId.chatRoomId.split("/").reverse().join("/")
           const chatRoom = await ChatRoom.findOneAndUpdate(
             {
               $or: [
-                { chatRoomId: useChatRoomId },
+                { chatRoomId: chatRoomId.chatRoomId },
                 { chatRoomId: reverseChatRoomId },
               ],
             },
