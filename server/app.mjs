@@ -30,14 +30,11 @@ const port = 4000;
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "pet-sitter-web.vercel.app",
     methods: ["GET", "POST", "DELETE", "PUT"],
   },
 });
 
 app.use(cors());
-app.use(bodyParser.json({ limit: "50mb" }));
-app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
 app.use(express.json());
 app.use("/auth", authRouter);
