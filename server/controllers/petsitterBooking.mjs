@@ -1,8 +1,8 @@
-import sql from '../utils/db.mjs';
-import { format } from 'date-fns';
+import sql from "../utils/db.mjs";
+import { format } from "date-fns";
 
 const formatDate = (date) => {
-  return format(new Date(date), 'dd MMM yyyy');
+  return format(new Date(date), "dd MMM yyyy");
 };
 
 const calculateDuration = (startTime, endTime) => {
@@ -17,32 +17,54 @@ const calculateDuration = (startTime, endTime) => {
   const hours = Math.floor(durationInMinutes / 60);
   const minutes = durationInMinutes % 60;
 
-  return `${hours > 0 ? `${hours} Hour${hours > 1 ? 's' : ''}` : ''} ${minutes > 0 ? `${minutes} Minute${minutes > 1 ? 's' : ''}` : ''}`.trim();
+  return `${hours > 0 ? `${hours} Hour${hours > 1 ? "s" : ""}` : ""} ${
+    minutes > 0 ? `${minutes} Minute${minutes > 1 ? "s" : ""}` : ""
+  }`.trim();
 };
 
 const formatBookedDate = (date, startTime, endTime) => {
-  const options = { day: '2-digit', month: 'short', year: 'numeric' };
-  const formattedDate = new Intl.DateTimeFormat('en-US', options).format(new Date(date));
+  const options = { day: "2-digit", month: "short", year: "numeric" };
+  const formattedDate = new Intl.DateTimeFormat("en-US", options).format(
+    new Date(date)
+  );
 
-  const timeOptions = { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'UTC' };
-  const formattedStartTime = new Date(`1970-01-01T${startTime}Z`).toLocaleTimeString('en-US', timeOptions);
-  const formattedEndTime = new Date(`1970-01-01T${endTime}Z`).toLocaleTimeString('en-US', timeOptions);
+  const timeOptions = {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+    timeZone: "UTC",
+  };
+  const formattedStartTime = new Date(
+    `1970-01-01T${startTime}Z`
+  ).toLocaleTimeString("en-US", timeOptions);
+  const formattedEndTime = new Date(
+    `1970-01-01T${endTime}Z`
+  ).toLocaleTimeString("en-US", timeOptions);
 
   return `${formattedDate} | ${formattedStartTime} - ${formattedEndTime}`;
 };
 
 const formatBookedDateDetail = (date, startTime, endTime) => {
-  const formattedDate = format(new Date(date), 'dd MMM yyyy');
-  const timeOptions = { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'UTC' };
-  const formattedStartTime = new Date(`1970-01-01T${startTime}Z`).toLocaleTimeString('en-US', timeOptions);
-  const formattedEndTime = new Date(`1970-01-01T${endTime}Z`).toLocaleTimeString('en-US', timeOptions);
+  const formattedDate = format(new Date(date), "dd MMM yyyy");
+  const timeOptions = {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+    timeZone: "UTC",
+  };
+  const formattedStartTime = new Date(
+    `1970-01-01T${startTime}Z`
+  ).toLocaleTimeString("en-US", timeOptions);
+  const formattedEndTime = new Date(
+    `1970-01-01T${endTime}Z`
+  ).toLocaleTimeString("en-US", timeOptions);
 
   return `${formattedDate} | ${formattedStartTime} - ${formattedEndTime}`;
 };
 
 export const viewAllPetsitterBookingList = async (req, res) => {
   const userId = req.user.id;
-  const { searchQuery = '', status = 'All status' } = req.query;
+  const { searchQuery = "", status = "All status" } = req.query;
 
   try {
     let query = sql`
@@ -145,12 +167,19 @@ export const viewPetsitterBookingDetail = async (req, res) => {
 
     if (!booking.length) {
       console.log(`No booking found for ID: ${bookingId}`);
-      return res.status(404).json({ error: 'Booking not found' });
+      return res.status(404).json({ error: "Booking not found" });
     }
 
     const bookingDetails = booking[0];
-    const duration = calculateDuration(bookingDetails.booking_time_start, bookingDetails.booking_time_end);
-    const bookedDate = formatBookedDateDetail(bookingDetails.booking_date, bookingDetails.booking_time_start, bookingDetails.booking_time_end);
+    const duration = calculateDuration(
+      bookingDetails.booking_time_start,
+      bookingDetails.booking_time_end
+    );
+    const bookedDate = formatBookedDateDetail(
+      bookingDetails.booking_date,
+      bookingDetails.booking_time_start,
+      bookingDetails.booking_time_end
+    );
 
     const response = {
       id: bookingDetails.id,
@@ -170,23 +199,22 @@ export const viewPetsitterBookingDetail = async (req, res) => {
       additional_message: bookingDetails.additional_message,
       status: bookingDetails.status,
       user_id: bookingDetails.user_id,
+      booking_time_start: bookingDetails.booking_time_start,
       booking_time_end: bookingDetails.booking_time_end,
       booking_date: bookingDetails.booking_date,
-
     };
 
     res.json(response);
   } catch (error) {
-    console.error('Error fetching booking details:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error fetching booking details:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
-
 export const updateBookingStatus = async (req, res) => {
   const userId = req.user.id;
-  const { booking_id } = req.params; 
-  const { status } = req.body; 
+  const { booking_id } = req.params;
+  const { status } = req.body;
 
   try {
     const result = await sql`
@@ -197,13 +225,15 @@ export const updateBookingStatus = async (req, res) => {
     `;
 
     if (!result.length) {
-      return res.status(404).json({ error: 'Booking not found or not authorized' });
+      return res
+        .status(404)
+        .json({ error: "Booking not found or not authorized" });
     }
 
     res.json({ data: result[0] });
   } catch (error) {
-    console.error('Error updating booking status:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error updating booking status:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -213,10 +243,10 @@ export const getBookingStatus = async (req, res) => {
     const result = await sql`
     SELECT status
     FROM bookings
-    WHERE pet_sitter_id = ${userId} AND status = 'Waiting for confirm'`
+    WHERE pet_sitter_id = ${userId} AND status = 'Waiting for confirm'`;
     res.json({ data: result });
   } catch (error) {
-    console.error('Error get booking status:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error get booking status:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
-}
+};
