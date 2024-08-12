@@ -20,6 +20,8 @@ import { handleImageUpload } from "./utils/image.mjs";
 import sql from "./utils/db.mjs";
 import cron from "node-cron";
 import { userReview } from "./routes/review.mjs";
+import swaggerUi from "swagger-ui-express";
+import { loadSwaggerDocument } from "./utils/swagger.mjs";
 
 mongoose.connect(process.env.MONGODB_URL);
 dotenv.config();
@@ -35,177 +37,204 @@ const io = new Server(server, {
 });
 
 app.use(cors());
-
 app.use(express.json());
-app.use("/auth", authRouter);
-app.use("/", petSitterProfileRouter);
-app.use("/petsitter/booking", petSitterBookingRouter);
-app.use("/petsitter/payout-option", petSitterPayoutRouter);
-app.use("/booking-history", bookingHistoryRouter); // ใช้ Route สำหรับ Booking History
-app.use("/bookings", bookingRouter);
-app.use("/user", userRouter);
-app.use("/review", userReview);
-
-app.get("/test", (req, res) => {
-  return res.json("Server API is working");
-});
-
-app.use("/chatrooms", chatRouter);
-
-io.use((socket, next) => {
+async function startServer() {
   try {
-    const token = socket.handshake.query.token;
-    const payload = jwt.verify(token, process.env.JWT_SECRET);
-    socket.userId = payload.id;
-    next();
-  } catch (err) {
-    console.log("token invalid");
-  }
-});
-
-const users = {};
-
-io.on("connection", (socket) => {
-  // console.log("a user connected:", socket.userId);
-  users[socket.userId] = socket;
-
-  socket.on("disconnect", () => {
-    // console.log("user disconnected:", socket.userId);
-  });
-
-  socket.on(
-    "sendMessage",
-    async ({ chatRoomId, targetId, message, images }) => {
-      if (message || images) {
-        try {
-          const newMessage = {
-            message,
-            senderId: Number(socket.userId),
-            receiverId: targetId,
-            isRead: false,
-          };
-          if (images) {
-            const imageSrc = [];
-            for (const img of images) {
-              imageSrc.push(await handleImageUpload(img));
-            }
-            console.log(imageSrc)
-            newMessage.images = imageSrc;
-          }
-          const reverseChatRoomId = chatRoomId.chatRoomId.split("/").reverse().join("/")
-          const chatRoom = await ChatRoom.findOneAndUpdate(
-            {
-              $or: [
-                { chatRoomId: chatRoomId.chatRoomId },
-                { chatRoomId: reverseChatRoomId },
-              ],
-            },
-            { $push: { messages: newMessage } },
-            { new: true, upsert: true }
-          );
-          const newChatRoom = chatRoom.chatRoomId;
-          io.to(chatRoom.chatRoomId).emit("newMessage", {
-            newMessage,
-            newChatRoom,
-          });
-          users[String(targetId)].emit("countMessage", {
-            newMessage,
-            newChatRoom,
-          });
-        } catch (error) {
-          console.error("Error saving message:", error);
-        }
-      }
-    }
-  );
-
-  socket.on("joinRoom", async ({ chatRoomId, targetId, isReadCount }) => {
-    try {
-      const reverseChatRoomId = chatRoomId.split("/").reverse().join("/");
-      const chatRoom = await ChatRoom.findOne({
-        $or: [{ chatRoomId: chatRoomId }, { chatRoomId: reverseChatRoomId }],
-      });
-      if (chatRoom) {
-        if (isReadCount) {
-          await ChatRoom.updateMany(
-            {$or: [{ chatRoomId: chatRoomId }, { chatRoomId: reverseChatRoomId }]},
-            {
-              $set: { "messages.$[].isRead": true },
-            }
-          );
-        }
-        socket.join(chatRoom.chatRoomId);
-        io.to(socket.id).emit("joinOneRoom");
-      } else {
-        const newChatRoomId = `${socket.userId}/${targetId}`;
-        const newChatRoom = new ChatRoom({
-          chatRoomId: newChatRoomId,
-          messages: [],
-          users: [Number(socket.userId), Number(targetId)],
-        });
-        await newChatRoom.save();
-        socket.join(newChatRoomId);
-        io.to(socket.id).emit("roomCreated", { newChatRoomId, targetId });
-      }
-    } catch (error) {
-      console.error("Error joining room:", error);
-    }
-  });
-  socket.on("readMessage", async ({ messageIndex, chatRoomId }) => {
-    const updateQuery = {};
-    updateQuery[`messages.${messageIndex}.isRead`] = true;
-
-    await ChatRoom.findOneAndUpdate(
-      { chatRoomId: chatRoomId },
-      { $set: updateQuery }
+    const swaggerDocument = await loadSwaggerDocument();
+    app.use(
+      "/api-docs",
+      swaggerUi.serve,
+      swaggerUi.setup(swaggerDocument)
     );
-  });
-});
+    app.use("/auth", authRouter);
+    app.use("/", petSitterProfileRouter);
+    app.use("/petsitter/booking", petSitterBookingRouter);
+    app.use("/petsitter/payout-option", petSitterPayoutRouter);
+    app.use("/booking-history", bookingHistoryRouter); // ใช้ Route สำหรับ Booking History
+    app.use("/bookings", bookingRouter);
+    app.use("/user", userRouter);
+    app.use("/review", userReview);
 
-function convertToGMT7(date) {
-  const dateInGMT7 = new Date(date.getTime());
-  return dateInGMT7;
-}
+    app.get("/test", (req, res) => {
+      return res.json("Server API is working");
+    });
 
-function formatDate(date) {
-  return date.toISOString().split("T")[0];
-}
+    app.use("/chatrooms", chatRouter);
 
-function formatTime(date) {
-  return date.toTimeString().split(" ")[0];
-}
+    io.use((socket, next) => {
+      try {
+        const token = socket.handshake.query.token;
+        const payload = jwt.verify(token, process.env.JWT_SECRET);
+        socket.userId = payload.id;
+        next();
+      } catch (err) {
+        console.log("token invalid");
+      }
+    });
 
-function addHours(date, hours) {
-  return new Date(date.getTime() + hours * 60 * 60 * 1000);
-}
+    const users = {};
 
-cron.schedule("* * * * *", async () => {
-  try {
-    const currentDate = new Date();
-    const zonedDate = convertToGMT7(currentDate);
-    const targetDate = addHours(zonedDate, 2);
-    const formattedDate = formatDate(targetDate);
-    const formattedTime = formatTime(targetDate);
+    io.on("connection", (socket) => {
+      // console.log("a user connected:", socket.userId);
+      users[socket.userId] = socket;
 
-    const bookings = await sql`
+      socket.on("disconnect", () => {
+        // console.log("user disconnected:", socket.userId);
+      });
+
+      socket.on(
+        "sendMessage",
+        async ({ chatRoomId, targetId, message, images }) => {
+          if (message || images) {
+            try {
+              const newMessage = {
+                message,
+                senderId: Number(socket.userId),
+                receiverId: targetId,
+                isRead: false,
+              };
+              if (images) {
+                const imageSrc = [];
+                for (const img of images) {
+                  imageSrc.push(await handleImageUpload(img));
+                }
+                console.log(imageSrc);
+                newMessage.images = imageSrc;
+              }
+              const reverseChatRoomId = chatRoomId.chatRoomId
+                .split("/")
+                .reverse()
+                .join("/");
+              const chatRoom = await ChatRoom.findOneAndUpdate(
+                {
+                  $or: [
+                    { chatRoomId: chatRoomId.chatRoomId },
+                    { chatRoomId: reverseChatRoomId },
+                  ],
+                },
+                { $push: { messages: newMessage } },
+                { new: true, upsert: true }
+              );
+              const newChatRoom = chatRoom.chatRoomId;
+              io.to(chatRoom.chatRoomId).emit("newMessage", {
+                newMessage,
+                newChatRoom,
+              });
+              users[String(targetId)].emit("countMessage", {
+                newMessage,
+                newChatRoom,
+              });
+            } catch (error) {
+              console.error("Error saving message:", error);
+            }
+          }
+        }
+      );
+
+      socket.on("joinRoom", async ({ chatRoomId, targetId, isReadCount }) => {
+        try {
+          const reverseChatRoomId = chatRoomId.split("/").reverse().join("/");
+          const chatRoom = await ChatRoom.findOne({
+            $or: [
+              { chatRoomId: chatRoomId },
+              { chatRoomId: reverseChatRoomId },
+            ],
+          });
+          if (chatRoom) {
+            if (isReadCount) {
+              await ChatRoom.updateMany(
+                {
+                  $or: [
+                    { chatRoomId: chatRoomId },
+                    { chatRoomId: reverseChatRoomId },
+                  ],
+                },
+                {
+                  $set: { "messages.$[].isRead": true },
+                }
+              );
+            }
+            socket.join(chatRoom.chatRoomId);
+            io.to(socket.id).emit("joinOneRoom");
+          } else {
+            const newChatRoomId = `${socket.userId}/${targetId}`;
+            const newChatRoom = new ChatRoom({
+              chatRoomId: newChatRoomId,
+              messages: [],
+              users: [Number(socket.userId), Number(targetId)],
+            });
+            await newChatRoom.save();
+            socket.join(newChatRoomId);
+            io.to(socket.id).emit("roomCreated", { newChatRoomId, targetId });
+          }
+        } catch (error) {
+          console.error("Error joining room:", error);
+        }
+      });
+      socket.on("readMessage", async ({ messageIndex, chatRoomId }) => {
+        const updateQuery = {};
+        updateQuery[`messages.${messageIndex}.isRead`] = true;
+
+        await ChatRoom.findOneAndUpdate(
+          { chatRoomId: chatRoomId },
+          { $set: updateQuery }
+        );
+      });
+    });
+
+    function convertToGMT7(date) {
+      const dateInGMT7 = new Date(date.getTime());
+      return dateInGMT7;
+    }
+
+    function formatDate(date) {
+      return date.toISOString().split("T")[0];
+    }
+
+    function formatTime(date) {
+      return date.toTimeString().split(" ")[0];
+    }
+
+    function addHours(date, hours) {
+      return new Date(date.getTime() + hours * 60 * 60 * 1000);
+    }
+
+    cron.schedule("* * * * *", async () => {
+      try {
+        const currentDate = new Date();
+        const zonedDate = convertToGMT7(currentDate);
+        const targetDate = addHours(zonedDate, 2);
+        const formattedDate = formatDate(targetDate);
+        const formattedTime = formatTime(targetDate);
+
+        const bookings = await sql`
       SELECT * FROM bookings
       WHERE status = 'Waiting for confirm'
       AND booking_date = ${formattedDate}
       AND booking_time_start < ${formattedTime}
     `;
 
-    for (const booking of bookings) {
-      await sql`
+        for (const booking of bookings) {
+          await sql`
         UPDATE bookings
         SET status = 'Canceled'
         WHERE id = ${booking.id}
       `;
-    }
-  } catch (error) {
-    console.error("Error updating booking status:", error);
-  }
-});
+        }
+      } catch (error) {
+        console.error("Error updating booking status:", error);
+      }
+    });
 
-server.listen(port, () => {
-  console.log(`Server is running at ${port}`);
-});
+    server.listen(port, () => {
+      console.log(`Server is running at ${port}`);
+    });
+  } catch (error) {
+    console.error(
+      "Failed to load Swagger document or start the server:",
+      error
+    );
+  }
+}
+
+startServer();
