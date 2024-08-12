@@ -26,7 +26,13 @@ const PetSitterPayoutOption = ({ payoutData }) => {
               <img src={coinIcon} alt="Total Earning" />
               Total Earning
             </span>
-            <span>{parseFloat(payoutData.total_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} THB</span>
+            <span>
+              {parseFloat(payoutData.total_amount).toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}{" "}
+              THB
+            </span>
           </div>
           <div className="flex items-center justify-between basis-1/2 h-[76px] p-6 bg-white rounded-2xl">
             <span className="flex gap-2">
@@ -34,21 +40,31 @@ const PetSitterPayoutOption = ({ payoutData }) => {
               Bank Account
             </span>
             <span className="flex gap-2 text-[#FF7037]">
-              {payoutData.bank_account.bank} {payoutData.bank_account.account_number}
+              {payoutData.bank_account.bank}{" "}
+              {payoutData.bank_account.account_number}
               <Link to="/petsitter/profile">
                 <img src={arrowIcon} alt="Profile" />
               </Link>
             </span>
           </div>
         </div>
-        <TableContainer component={Paper} className="!rounded-[20px] !font-bold">
+        <TableContainer
+          component={Paper}
+          className="!rounded-[20px] !font-bold"
+        >
           <Table sx={{ minWidth: 650 }} aria-label="booking table">
             <TableHead>
               <TableRow className="bg-black">
                 <TableCell className="!text-white">Date</TableCell>
-                <TableCell className="!text-white" align="left">From</TableCell>
-                <TableCell className="!text-white" align="left">Transaction No.</TableCell>
-                <TableCell className="!text-white" align="right">Amount</TableCell>
+                <TableCell className="!text-white" align="left">
+                  From
+                </TableCell>
+                <TableCell className="!text-white" align="left">
+                  Transaction No.
+                </TableCell>
+                <TableCell className="!text-white" align="right">
+                  Amount
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -56,8 +72,17 @@ const PetSitterPayoutOption = ({ payoutData }) => {
                 <TableRow key={booking.transaction_number}>
                   <TableCell>{booking.transaction_date}</TableCell>
                   <TableCell align="left">{booking.petOwnerName}</TableCell>
-                  <TableCell align="left">{booking.transaction_number}</TableCell>
-                  <TableCell align="right" className="!text-[#1CCD83]"> {parseFloat(booking.amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} THB</TableCell>
+                  <TableCell align="left">
+                    {booking.transaction_number.slice(3, 16)}
+                  </TableCell>
+                  <TableCell align="right" className="!text-[#1CCD83]">
+                    {" "}
+                    {parseFloat(booking.amount).toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}{" "}
+                    THB
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

@@ -116,8 +116,8 @@ const PetsitterBookingDetail = () => {
         bookingDetail.booking_time_end
       }`
     );
-    console.log(currentDate)
-    console.log(bookingStartTime)
+    console.log(currentDate);
+    console.log(bookingStartTime);
     switch (status) {
       case "Waiting for confirm":
         return (
@@ -151,12 +151,12 @@ const PetsitterBookingDetail = () => {
               Send Message
             </button>
             {currentDate > bookingStartTime && (
-            <button
-              className="btn-primary whitespace-nowrap"
-              onClick={() => updateBookingStatus("In service")}
-            >
-              In Service
-            </button>
+              <button
+                className="btn-primary whitespace-nowrap"
+                onClick={() => updateBookingStatus("In service")}
+              >
+                In Service
+              </button>
             )}
           </>
         );
@@ -323,7 +323,11 @@ const PetsitterBookingDetail = () => {
           </h4>
           <div className="flex gap-[4px]">
             <p className="text-black text-[16px] leading-[28px] font-medium">
-            {parseFloat(bookingDetail.total_paid).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} THB
+              {parseFloat(bookingDetail.total_paid).toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}{" "}
+              THB
             </p>
           </div>
         </div>
@@ -343,7 +347,7 @@ const PetsitterBookingDetail = () => {
           </h4>
           <div className="flex gap-[4px]">
             <p className="text-black text-[16px] leading-[28px] font-medium">
-              {bookingDetail.transaction_number}
+              {bookingDetail.transaction_number.slice(3, 16)}
             </p>
           </div>
         </div>
