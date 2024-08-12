@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 import coinIcon from "../../../assets/svgs/pet-sitter-management/pet-sitter-coin.svg";
 import bankIcon from "../../../assets/svgs/pet-sitter-management/pet-sitter-bank-account.svg";
 import arrowIcon from "../../../assets/svgs/pet-sitter-management/pet-sitter-arrow.svg";
@@ -11,36 +10,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Link } from "react-router-dom";
-import { SERVER_API_URL } from "../../../core/config.mjs";
 
-const PetSitterPayoutOption = () => {
-  const [payoutData, setPayoutData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchPayoutData = async () => {
-      try {
-        const response = await axios.get(`${SERVER_API_URL}/petsitter/payout-option`);
-        setPayoutData(response.data);
-        setLoading(false);
-      } catch (error) {
-        setError(error);
-        setLoading(false);
-      }
-    };
-
-    fetchPayoutData();
-  }, []);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
-
+const PetSitterPayoutOption = ({ payoutData }) => {
   return (
     <section className="bg-gray-100 px-[40px] pt-[40px] py-[184px] flex flex-col gap-[24px]">
       <header className="flex flex-col items-center gap-[24px] md:flex-row">

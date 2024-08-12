@@ -11,7 +11,7 @@ const HeaderPetSitter = ({chatRoom}) => {
   return (
     <div>
       {isVisible && (
-        <div className="bg-gray-100 flex justify-between items-center py-[24px] px-[40px]">
+        <div className="bg-gray-100 flex justify-between items-center py-[24px] px-[40px] mt-[10px]">
           <div className="flex items-center gap-[12px]">
             <img
               src={chatRoom.image}

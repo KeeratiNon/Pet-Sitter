@@ -32,7 +32,7 @@ const ImageGallery = ({ profiles }) => {
             <div key={index} className="w-[375px] lg:w-[550px] lg:block">
               <img
                 src={slide}
-                className="w-full h-[281px] lg:h-[413px]"
+                className="w-full h-[281px] lg:h-[413px] object-cover"
                 alt={`Slide ${slideIndex + index}`} // ใช้ slideIndex + index เป็น alt text
               />
             </div>

@@ -189,16 +189,18 @@ export const viewPetsitterProfile = async (req, res) => {
     results = await sql`
       SELECT pet_sitters.*, pet_sitter_profiles.profile_image, pet_sitter_profiles.*, pet_sitter_address.*
       FROM pet_sitters
-      INNER JOIN pet_sitter_profiles ON pet_sitter_profiles.pet_sitter_id = pet_sitters.id
-      INNER JOIN pet_sitter_address ON pet_sitter_address.pet_sitter_profile_id = pet_sitter_profiles.id
+      LEFT JOIN pet_sitter_profiles ON pet_sitter_profiles.pet_sitter_id = pet_sitters.id
+      LEFT JOIN pet_sitter_address ON pet_sitter_address.pet_sitter_profile_id = pet_sitter_profiles.id
       WHERE pet_sitters.id = ${petsitterId}
     `;
+    console.log(results);
   } catch (error) {
     return res.status(500).json({
       message: "Internal server error",
       error: error.message,
     });
   }
+  
   if (results.length > 0) {
     return res.status(200).json({
       message: "Petsitter Profile found",

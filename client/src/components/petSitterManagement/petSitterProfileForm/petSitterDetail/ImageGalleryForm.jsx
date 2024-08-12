@@ -8,7 +8,7 @@ const ImageGalleryForm = ({ image_gallery, setFormData, petsitterId }) => {
     if (image_gallery.length < 10) {
       const file = event.target.files[0];
       if (file) {
-        const profileId = petsitterId();
+        const profileId = petsitterId;
         const fileName = `${profileId}/${uuidv4()}`;
         try {
           const { data, error } = await supabase
@@ -67,7 +67,7 @@ const ImageGalleryForm = ({ image_gallery, setFormData, petsitterId }) => {
       <label className="text-[16px] leading-[24px] text-black font-medium">
         Image Gallery* (minimum 3 images, maximum 10 images)
       </label>
-      <div className="container mx-auto">
+      <div className="container">
         <div className="flex gap-[24px] flex-wrap">
           {image_gallery.map((image, index) => (
             <div key={index} className="relative">

@@ -8,6 +8,7 @@ import petSitterOrangeProfile from "../../../assets/svgs/pet-sitter-management/p
 import petSitterGrayPayment from "../../../assets/svgs/pet-sitter-management/pet-sitter-grayPayment.svg";
 import petSitterOrangePayment from "../../../assets/svgs/pet-sitter-management/pet-sitter-orangePayment.svg";
 import petSitterLogout from "../../../assets/svgs/pet-sitter-management/pet-sitter-logout.svg";
+import petSitterOrangeLogout from "../../../assets/svgs/pet-sitter-management/pet-sitter-orangeLogout.svg";
 import petSitterOrangeCircle from "../../../assets/svgs/pet-sitter-management/pet-sitter-orangeCircle.svg";
 import { SERVER_API_URL } from "../../../core/config.mjs";
 import { useAuth } from "../../../contexts/authentication";
@@ -18,11 +19,14 @@ const Sidebar = () => {
   const [hasWaitingForConfirm, setHasWaitingForConfirm] = useState(false);
   const [hoverBooking, setHoverBooking] = useState(false);
   const [hoverPayout, setHoverPayout] = useState(false);
+  const [hoverLogout, setHoverLogout] = useState(false);
 
   useEffect(() => {
     const fetchBookingStatuses = async () => {
       try {
-        const response = await axios.get(`${SERVER_API_URL}/petsitter/booking/status`);
+        const response = await axios.get(
+          `${SERVER_API_URL}/petsitter/booking/status`
+        );
         const bookings = response.data.data;
         setHasWaitingForConfirm(bookings.length > 0);
       } catch (error) {
@@ -46,7 +50,11 @@ const Sidebar = () => {
       </div>
 
       <div className="flex gap-[16px] px-[24px] py-[16px] bg-primaryorange-100 text-primaryorange-500 font-medium">
-        <img src={petSitterOrangeProfile} className="w-[24px] h-[24px]" alt="Profile" />
+        <img
+          src={petSitterOrangeProfile}
+          className="w-[24px] h-[24px]"
+          alt="Profile"
+        />
         <span>Pet Sitter Profile</span>
       </div>
 
@@ -57,12 +65,20 @@ const Sidebar = () => {
         onMouseLeave={() => setHoverBooking(false)}
       >
         <img
-          src={hoverBooking ? petSitterOrangeBookingList : petSitterGrayBookingList}
+          src={
+            hoverBooking ? petSitterOrangeBookingList : petSitterGrayBookingList
+          }
           className="w-[24px] h-[24px] mr-[16px]"
           alt="Booking List"
         />
         <span className="mr-[6px]">Booking List</span>
-        {hasWaitingForConfirm && <img src={petSitterOrangeCircle} className="w-[6px] h-[6px]" alt="Notification" />}
+        {hasWaitingForConfirm && (
+          <img
+            src={petSitterOrangeCircle}
+            className="w-[6px] h-[6px]"
+            alt="Notification"
+          />
+        )}
       </Link>
 
       <Link
@@ -78,12 +94,18 @@ const Sidebar = () => {
         />
         <span>Payout Option</span>
       </Link>
-      
+
       <div
         onClick={logout}
-        className="flex gap-[16px] mt-[664px] pl-[24px] pt-[16px] border-t-[1px] border-primarygray-200 cursor-pointer"
+        className="flex gap-[16px] mt-[664px] pl-[24px] pt-[16px] border-t-[1px] border-primarygray-200 cursor-pointer hover:text-primaryorange-500"
+        onMouseEnter={() => setHoverLogout(true)}
+        onMouseLeave={() => setHoverLogout(false)}
       >
-        <img src={petSitterLogout} className="w-[24px] h-[24px]" alt="Logout" />
+        <img
+          src={hoverLogout ? petSitterOrangeLogout : petSitterLogout}
+          className="w-[24px] h-[24px]"
+          alt="Logout"
+        />
         <span>Logout</span>
       </div>
     </section>

@@ -6,6 +6,7 @@ import petSitterOrangeProfile from "../../../assets/svgs/pet-sitter-management/p
 import petSitterGrayPayment from "../../../assets/svgs/pet-sitter-management/pet-sitter-grayPayment.svg";
 import petSitterOrangePayment from "../../../assets/svgs/pet-sitter-management/pet-sitter-orangePayment.svg";
 import petSitterLogout from "../../../assets/svgs/pet-sitter-management/pet-sitter-logout.svg";
+import petSitterOrangeLogout from "../../../assets/svgs/pet-sitter-management/pet-sitter-orangeLogout.svg"
 import petSitterOrangeCircle from "../../../assets/svgs/pet-sitter-management/pet-sitter-orangeCircle.svg";
 import { useAuth } from "../../../contexts/authentication";
 import { useState, useEffect } from "react";
@@ -16,6 +17,9 @@ const Sidebar = () => {
   const { logout } = useAuth();
 
   const [hasWaitingForConfirm, setHasWaitingForConfirm] = useState(false);
+  const [hoverProfile, setHoverProfile] = useState(false);
+  const [hoverPayout, setHoverPayout] = useState(false);
+  const [hoverLogout, setHoverLogout] = useState(false);
 
   useEffect(() => {
     const fetchBookingStatuses = async () => {
@@ -43,14 +47,16 @@ const Sidebar = () => {
         </Link>
       </div>
 
-      <Link to="/petsitter/profile" className="flex gap-[16px] px-[24px] py-[16px] hover:text-primaryorange-500">
+      <Link
+        to="/petsitter/profile"
+        className="flex gap-[16px] px-[24px] py-[16px] hover:text-primaryorange-500"
+        onMouseEnter={() => setHoverProfile(true)}
+        onMouseLeave={() => setHoverProfile(false)}
+      >
         <img
-          src={petSitterGrayProfile}
-          className="w-[24px] h-[24px] hover:hidden"
-        />
-        <img
-          src={petSitterOrangeProfile}
-          className="w-[24px] h-[24px] hidden hover:inline"
+          src={hoverProfile ? petSitterOrangeProfile : petSitterGrayProfile}
+          className="w-[24px] h-[24px]"
+          alt="Profile"
         />
         <span>Pet Sitter Profile</span>
       </Link>
@@ -70,22 +76,30 @@ const Sidebar = () => {
         )}
       </div>
 
-      <Link to="/petsitter/payout-option" className="flex gap-[16px] px-[24px] py-[16px] hover:text-primaryorange-500">
+      <Link
+        to="/petsitter/payout-option"
+        className="flex gap-[16px] px-[24px] py-[16px] hover:text-primaryorange-500"
+        onMouseEnter={() => setHoverPayout(true)}
+        onMouseLeave={() => setHoverPayout(false)}
+      >
         <img
-          src={petSitterGrayPayment}
-          className="w-[24px] h-[24px] hover:hidden"
-        />
-        <img
-          src={petSitterOrangePayment}
-          className="w-[24px] h-[24px] hidden hover:inline"
+          src={hoverPayout ? petSitterOrangePayment : petSitterGrayPayment}
+          className="w-[24px] h-[24px]"
+          alt="Payout Option"
         />
         <span>Payout Option</span>
       </Link>
       <div
         onClick={logout}
-        className="flex gap-[16px] mt-[664px] pl-[24px] pt-[16px] border-t-[1px] border-primarygray-200 cursor-pointer"
+        className="flex gap-[16px] mt-[664px] pl-[24px] pt-[16px] border-t-[1px] border-primarygray-200 cursor-pointer hover:text-primaryorange-500"
+        onMouseEnter={() => setHoverLogout(true)}
+        onMouseLeave={() => setHoverLogout(false)}
       >
-        <img src={petSitterLogout} className="w-[24px] h-[24px]" />
+        <img
+          src={hoverLogout ? petSitterOrangeLogout : petSitterLogout}
+          className="w-[24px] h-[24px]"
+          alt="Logout"
+        />
         <span>Logout</span>
       </div>
     </section>

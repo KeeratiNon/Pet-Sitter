@@ -3,7 +3,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import prevIcon from "../../../assets/svgs/icons/icon-prev.svg";
 import eyeIcon from "../../../assets/svgs/pet-sitter-management/pet-sitter-eye.svg";
-import petProfile from "../../../assets/svgs/icons/icon-your-pet-white.svg" 
+import petProfile from "../../../assets/svgs/icons/icon-your-pet-white.svg";
 import { SERVER_API_URL } from "../../../core/config.mjs";
 import BookingDetailPopup from "./BookingDetailPopup";
 import BookingPetPopup from "./BookingPetPopup";
@@ -63,7 +63,7 @@ const PetsitterBookingDetail = () => {
     });
     setChatRoomList(newChatRoomList);
   };
- console.log(bookingDetail)
+  console.log(bookingDetail);
   useEffect(() => {
     if (booking_id) {
       const fetchBookingDetail = async () => {
@@ -71,7 +71,7 @@ const PetsitterBookingDetail = () => {
           const response = await axios.get(
             `${SERVER_API_URL}/petsitter/booking/detail/${booking_id}`
           );
-          
+
           setBookingDetail(response.data);
         } catch (error) {
           setError(error.message);
@@ -106,7 +106,18 @@ const PetsitterBookingDetail = () => {
 
   const renderButtons = (status) => {
     const currentDate = new Date();
-    const bookingDateAndTime = new Date(`${bookingDetail.booking_date.split("T")[0]}T${bookingDetail.booking_time_end}`)
+    const bookingStartTime = new Date(
+      `${bookingDetail.booking_date.split("T")[0]}T${
+        bookingDetail.booking_time_start
+      }`
+    );
+    const bookingEndTime = new Date(
+      `${bookingDetail.booking_date.split("T")[0]}T${
+        bookingDetail.booking_time_end
+      }`
+    );
+    console.log(currentDate)
+    console.log(bookingStartTime)
     switch (status) {
       case "Waiting for confirm":
         return (
@@ -139,12 +150,14 @@ const PetsitterBookingDetail = () => {
             >
               Send Message
             </button>
+            {currentDate > bookingStartTime && (
             <button
               className="btn-primary whitespace-nowrap"
               onClick={() => updateBookingStatus("In service")}
             >
               In Service
             </button>
+            )}
           </>
         );
       case "In service":
@@ -161,7 +174,7 @@ const PetsitterBookingDetail = () => {
             >
               Send Message
             </button>
-            {currentDate > bookingDateAndTime && (
+            {currentDate > bookingEndTime && (
               <button
                 className="btn-primary whitespace-nowrap"
                 onClick={() => updateBookingStatus("Success")}
@@ -181,7 +194,7 @@ const PetsitterBookingDetail = () => {
     <div className="bg-[#F6F6F9] flex flex-col pt-[40px] px-[40px] pb-[80px] gap-[24px]">
       <div className="flex items-center gap-[10px]">
         <Link to="/petsitter/booking">
-        <img src={prevIcon} className="w-[24px] h-[24px]" alt="previous" />
+          <img src={prevIcon} className="w-[24px] h-[24px]" alt="previous" />
         </Link>
         <div className="flex w-full gap-[24px]">
           <h3 className="text-black text-[24px] leading-[32px] font-bold">
@@ -242,7 +255,7 @@ const PetsitterBookingDetail = () => {
               return (
                 <div
                   key={index}
-                  className="bg-white border border-primarygray-200 flex flex-col items-center rounded-[16px] p-[24px] gap-[16px]"
+                  className="bg-white border border-primarygray-200 flex flex-col items-center rounded-[16px] p-[24px] gap-[16px] transition-all duration-300 hover:border-orange-500"
                   onClick={() => setSelectedPet(pet)}
                 >
                   <div className="w-[104px] h-[104px] rounded-full bg-[#DCDFED] flex items-center justify-center">
@@ -367,7 +380,6 @@ const PetsitterBookingDetail = () => {
           setShowCancelConfirm(false);
         }}
       />
-      
     </div>
   );
 };
