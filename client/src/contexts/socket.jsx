@@ -109,7 +109,6 @@ const SocketProvider = ({ children }) => {
   };
 
   const joinChatRoom = ({ chatRoomId, targetId, isReadCount }) => {
-    console.log(chatRoomId.targetId)
     let image = null;
     {
       chatRoomList
@@ -122,7 +121,7 @@ const SocketProvider = ({ children }) => {
     socket.emit("joinRoom", { chatRoomId, targetId, isReadCount });
   };
 
-  const sendMessage = ({ chatRoomId, images }) => {
+  const sendMessage = ({chatRoomId,inputMessage,images}) => {
     if (inputMessage.trim() || images) {
       socket.emit("sendMessage", {
         chatRoomId,

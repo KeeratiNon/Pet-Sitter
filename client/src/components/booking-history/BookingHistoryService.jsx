@@ -164,7 +164,7 @@ const BookingHistoryService = ({
                 <img
                   src={booking.profile_image}
                   alt="Profile"
-                  className="w-[36px] h-[36px] xs:w-[64px] xs:h-[64px] rounded-full flex-shrink-0"
+                  className="w-[36px] h-[36px] xs:w-[64px] xs:h-[64px] rounded-full flex-shrink-0 object-cover"
                   onClick={() => {
                     setSelectedBookingId(booking.booking_id); // Set selected booking ID
                     setShowDetail(true); // Show detail popup

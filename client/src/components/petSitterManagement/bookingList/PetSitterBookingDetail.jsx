@@ -262,7 +262,7 @@ const PetsitterBookingDetail = () => {
                     {pet.pet_image ? (
                       <img
                         src={pet.pet_image}
-                        className="w-[104px] h-[104px] rounded-full"
+                        className="w-[104px] h-[104px] rounded-full object-cover"
                         alt={pet.pet_name}
                       />
                     ) : (
@@ -323,7 +323,7 @@ const PetsitterBookingDetail = () => {
           </h4>
           <div className="flex gap-[4px]">
             <p className="text-black text-[16px] leading-[28px] font-medium">
-              {bookingDetail.total_paid} THB
+            {parseFloat(bookingDetail.total_paid).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} THB
             </p>
           </div>
         </div>
