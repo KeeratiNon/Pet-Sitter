@@ -86,7 +86,7 @@ const PetForm = ({ onNext, petData, bookingData, setBookingData }) => {
               <img
                 src={pet.image || petProfile}
                 alt="image-user"
-                className="size-[104px] rounded-full"
+                className="size-[104px] rounded-full object-cover"
               />
             </figure>
 

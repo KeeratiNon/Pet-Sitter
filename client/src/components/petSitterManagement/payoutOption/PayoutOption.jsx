@@ -26,7 +26,7 @@ const PetSitterPayoutOption = ({ payoutData }) => {
               <img src={coinIcon} alt="Total Earning" />
               Total Earning
             </span>
-            <span>{payoutData.total_amount} THB</span>
+            <span>{parseFloat(payoutData.total_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} THB</span>
           </div>
           <div className="flex items-center justify-between basis-1/2 h-[76px] p-6 bg-white rounded-2xl">
             <span className="flex gap-2">
@@ -57,7 +57,7 @@ const PetSitterPayoutOption = ({ payoutData }) => {
                   <TableCell>{booking.transaction_date}</TableCell>
                   <TableCell align="left">{booking.petOwnerName}</TableCell>
                   <TableCell align="left">{booking.transaction_number}</TableCell>
-                  <TableCell align="right" className="!text-[#1CCD83]">{booking.amount} THB</TableCell>
+                  <TableCell align="right" className="!text-[#1CCD83]"> {parseFloat(booking.amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} THB</TableCell>
                 </TableRow>
               ))}
             </TableBody>
