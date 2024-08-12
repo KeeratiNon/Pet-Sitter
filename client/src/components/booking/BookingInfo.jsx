@@ -5,8 +5,6 @@ const BookingInfo = ({ bookingInformation }) => {
   const { duration } = useCalculateBooking();
   const navigate = useNavigate();
 
-  console.log("bookingInformation", bookingInformation);
-
   const bookingTimeStart = parseInt(
     bookingInformation.booking_time_start_minutes
   );
@@ -30,7 +28,8 @@ const BookingInfo = ({ bookingInformation }) => {
               Transaction Date: {bookingInformation.payment_created_at}
             </span>
             <span className="text-[#AEB1C3] text-[14px] leading-[24px]">
-              Transaction No: {bookingInformation.transaction_number}
+              Transaction No:{" "}
+              {bookingInformation.transaction_number.slice(3, 16)}
             </span>
           </li>
           <li className="list-detail">

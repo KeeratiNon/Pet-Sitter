@@ -2,6 +2,7 @@ import iconX from "../../assets/svgs/icons/icon-x.svg";
 
 const BookingConfirm = ({
   open,
+  loading,
   cancelAndClose,
   paymentIntentId,
   handleConfirm,
@@ -47,10 +48,16 @@ const BookingConfirm = ({
               Cancel
             </button>
             <button
-              onClick={() => handleConfirm(paymentIntentId)}
               className="btn-primary"
+              onClick={() => handleConfirm(paymentIntentId)}
             >
-              Yes, I'm sure
+              {loading ? (
+                <div className="w-[24px] h-[24px] rounded-full flex items-center justify-center">
+                  <div className="w-full h-full border-4 border-t-4 border-t-white border-gray-300 rounded-full animate-spin"></div>
+                </div>
+              ) : (
+                "Yes, I'm sure"
+              )}
             </button>
           </div>
         </div>

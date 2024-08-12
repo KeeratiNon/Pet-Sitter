@@ -46,8 +46,6 @@ const BookingConfirmationPage = () => {
     return <span className="loading loading-dots loading-lg"></span>;
   }
 
-  console.log("booking information", bookingInformation);
-
   return (
     <section className="overflow-hidden bg-[#F6F6F9] relative md:shadow-md md:pt-10 md:px-20 md:flex md:flex-col md:gap-10 md:justify-center md:items-center min-h-[calc(100dvh-72px)]">
       <div className="hidden z-0 absolute top-1 left-1 md:w-[288px] md:h-[337px] md:block">

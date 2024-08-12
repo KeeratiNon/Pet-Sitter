@@ -252,3 +252,23 @@ export const cancelPaymentIntent = async (req, res) => {
       .json({ message: `Failed to cancel payment intent: ${error.message}` });
   }
 };
+
+export const refundPaymentIntent = async (req, res) => {
+  const { paymentIntentId } = req.body;
+
+  try {
+    const refund = await stripe.refunds.create({
+      payment_intent: paymentIntentId,
+    });
+
+    res.status(200).json({
+      message: "Payment intent refunded successfully",
+      data: refund,
+    });
+  } catch (error) {
+    console.error("Error refunding payment intent:", error);
+    res.status(500).json({
+      message: `Failed to refund payment intent: ${error.message}`,
+    });
+  }
+};

@@ -126,7 +126,7 @@ const PayMentForm = ({ onPrev, bookingData, setBookingData }) => {
   const saveBookingData = async (paymentIntent) => {
     const newBooking = {
       ...bookingData,
-      transaction_number: paymentIntent.created,
+      transaction_number: paymentIntent.id,
       amount: paymentIntent.amount,
     };
 
@@ -143,10 +143,13 @@ const PayMentForm = ({ onPrev, bookingData, setBookingData }) => {
   };
 
   const handleConfirm = async () => {
+    setLoading(true);
     try {
       const paymentIntent = await confirmPayment(clientSecret);
       if (paymentIntent) {
         await saveBookingData(paymentIntent);
+        setClientSecret("");
+        setPaymentIntentId("");
         navigate("/booking/confirmation");
       } else {
         console.error("Payment confirmation failed.");
@@ -156,6 +159,8 @@ const PayMentForm = ({ onPrev, bookingData, setBookingData }) => {
         "Error during payment confirmation and booking save:",
         error
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -214,7 +219,13 @@ const PayMentForm = ({ onPrev, bookingData, setBookingData }) => {
           Back
         </button>
         <button type="submit" className="btn-primary md:w-[175px]">
-          Confirm Booking
+          {loading ? (
+            <div className="w-[24px] h-[24px] rounded-full flex items-center justify-center">
+              <div className="w-full h-full border-4 border-t-4 border-t-white border-gray-300 rounded-full animate-spin"></div>
+            </div>
+          ) : (
+            "Confirm Booking"
+          )}
         </button>
       </div>
 
@@ -222,6 +233,7 @@ const PayMentForm = ({ onPrev, bookingData, setBookingData }) => {
 
       <BookingConfirm
         open={isModalOpen}
+        loading={loading}
         cancelAndClose={() => setIsModalOpen(false)}
         handleConfirm={() => handleConfirm(clientSecret)}
         paymentIntentId={paymentIntentId}
